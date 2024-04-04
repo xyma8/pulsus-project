@@ -1,2 +1,2 @@
 # pulsus-project
-Web application for tracking sports activity
+Web application (frontend + backend) for tracking sports activity
