@@ -7,6 +7,7 @@ function App() {
     <div className="App">
       Hello pulsus
       Finally hello
+      Check gitignore
     </div>
   );
 }
