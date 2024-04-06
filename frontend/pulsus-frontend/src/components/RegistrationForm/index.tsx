@@ -37,7 +37,7 @@ export default function RegistrationForm() {
                     ...register("name", {
                         required: "Обязательное поле",
                         minLength: {value:2, message:"Минимум 2" },
-                        maxLength: {value:15, message:"Максимум 15"},
+                        maxLength: {value:20, message:"Максимум 30"},
                         pattern: {value:/^[а-яА-ЯёЁ]+$/ , message:"Введите правильное имя"}
                     })
                 }
@@ -126,22 +126,6 @@ export default function RegistrationForm() {
                     <option value="ads">Реклама</option>
                     <option value="blogs">Статьи и блоги</option>
                 </select>
-        </fieldset>
-
-        <fieldset>
-                <legend>Выберите пол:</legend>
-
-                <div>                  
-                <label>
-                    <InputField register={register} type="radio" name="gender" value="0" defaultChecked={true}/>
-                    Мужской
-                </label>
-                <br/>
-                <label>
-                    <InputField register={register} type="radio" name="gender" value="1"/>
-                    Женский
-                </label>
-                </div>
         </fieldset>
 
         <label className="label-checkbox">
