@@ -1,16 +1,16 @@
-.form-registration {
+.registration-form {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 300px;   
   }
 
-  .input-registration {
+  .registration-input {
     width: 100%;
     margin-top: 15px;
   }
 
-  .form-registration button {
+  .registration-form button {
     margin-top: 15px;
   }
 
@@ -18,6 +18,6 @@
     color: var(--text-error-color)
   }
 
-  .form-registration fieldset {
+  .registration-form fieldset {
     margin-top: 15px;
   }

@@ -46,7 +46,7 @@ export default function InputField(props: InputProps) {
         )
     }
 
-    else if(type == 'radio') {
+    else if(type === 'radio') {
         return(
             <input
                 type={type}
