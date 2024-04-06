@@ -1,0 +1,23 @@
+.form-registration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;   
+  }
+
+  .input-registration {
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .form-registration button {
+    margin-top: 15px;
+  }
+
+  .error-message {
+    color: var(--text-error-color)
+  }
+
+  .form-registration fieldset {
+    margin-top: 15px;
+  }
