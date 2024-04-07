@@ -5,7 +5,8 @@ import App from './components/App/App';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import RegistrationPage from './pages/RegistrationPage';
-import AuthPage from './pages/AuthPage';
+import LoginPage from './pages/LoginPage';
+import DashboardPage from './pages/DashboardPage';
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <AuthPage/>
+    element: <LoginPage/>
+  },
+  {
+    path: '/dashboard',
+    element: <DashboardPage/>
   }
 ]);
 

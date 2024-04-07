@@ -7,7 +7,7 @@ type Inputs = {
     password: string
 }
 
-export default function AuthForm() {
+export default function LoginForm() {
     const {
         register,
         handleSubmit,

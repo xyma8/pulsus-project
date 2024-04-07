@@ -25,5 +25,5 @@ public class UserDto {
 
     private Long profile_picture;
 
-    private int role;
+    private Integer role;
 }
