@@ -23,8 +23,16 @@ CREATE TABLE `users` (
     `login` varchar(24) UNIQUE NOT NULL,
 	`password` varchar(254) NOT NULL,
     `profile_picture` INT NULL,
-    `user_role` INT NOT NULL,
-	FOREIGN KEY (profile_picture) REFERENCES files_on_server(id),
-    FOREIGN KEY (user_role) REFERENCES roles(id)
+	FOREIGN KEY (profile_picture) REFERENCES files_on_server(id)
 )
 
+CREATE TABLE `users_roles` (
+	`id` INT AUTO_INCREMENT PRIMARY KEY,
+    `user` INT NOT NULL,
+    `role` INT NOT NULL,
+    FOREIGN KEY (user) REFERENCES users(id),
+    FOREIGN KEY (role) REFERENCES roles(id)
+)
+
+INSERT INTO `roles` (`name`, `description`)
+VALUES('ROLE_USER', 'user');

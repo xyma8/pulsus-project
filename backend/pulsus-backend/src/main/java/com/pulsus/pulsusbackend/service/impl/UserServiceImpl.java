@@ -8,6 +8,8 @@ import com.pulsus.pulsusbackend.repository.UserRepository;
 import com.pulsus.pulsusbackend.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,13 +18,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public Optional<User> findByLogin(String login) {
         return userRepository.findByLogin(login);
@@ -36,7 +39,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new ConflictException(String.format("Login '%s' is already taken", login));
         });
 
-        User user = optionalUser.get();
+        User user = UserMapper.mapToUser(userDto);
 
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -46,23 +49,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return UserMapper.mapToUserDto(savedUser);
     }
 
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
+        //Optional<User> userDetail = findByLogin(username);
+
         User user = findByLogin(username)
                 .orElseThrow(() -> new ConflictException(String.format("User with login '%s' don't exists", username)));
-
-        /**
 
         return new org.springframework.security.core.userdetails.User(
                 user.getLogin(),
                 user.getPassword(),
-                user.getRole().stre
+                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList())
         );
 
-         **/
-        
-        return null;
+        //return null;
     }
 }

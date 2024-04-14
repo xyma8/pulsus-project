@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class UserDto {
-    private Long id;
+    private Integer id;
 
     private String name;
 
@@ -22,8 +22,4 @@ public class UserDto {
     private String login;
 
     private String password;
-
-    private Long profile_picture;
-
-    private Integer role;
 }

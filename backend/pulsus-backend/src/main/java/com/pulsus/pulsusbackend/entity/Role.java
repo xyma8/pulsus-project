@@ -3,19 +3,18 @@ package com.pulsus.pulsusbackend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Collection;
+
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 @Table(name = "roles")
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -23,4 +22,12 @@ public class Role {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @ManyToMany(mappedBy = "roles")
+    Collection<User> users;
+
+    public Role(Integer id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
 }
