@@ -1,20 +1,50 @@
 import "./style.css"
 import InputField from "../InputField"
 import { useForm, SubmitHandler } from "react-hook-form"
+import API from "../../utils/API";
 
 type Inputs = {
     login: string,
     password: string
 }
 
-export default function LoginForm() {
+interface LoginFormProps {
+    onSuccessLogin: (token: string) => void;
+}
+
+export default function LoginForm(props: LoginFormProps) {
     const {
         register,
         handleSubmit,
         formState: { errors }
     } = useForm<Inputs>()
 
-    const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+    const onSubmit: SubmitHandler<Inputs> = (data) => {
+        console.log(data)
+        sendDataLogin(data);
+    }
+
+    //function onSubmit(data: Inputs): void {
+     //   console.log(data);
+     // }
+
+
+    function sendDataLogin(data: Inputs) {
+        API.post("/auth/generateToken", data)
+        .then(response => {
+            console.log(response.data.token)
+            //props.onSuccessLogin(response.data.login);
+        })
+        .catch(error =>{
+            console.error(error);
+            if(error.response.status == 403) {
+                alert("Incorrect login or password");
+            }
+            else if(error.response.status != 200) {
+                alert("Internal error");
+            }
+        })
+    }
 
     return(
     <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
@@ -44,6 +74,8 @@ export default function LoginForm() {
             />
             {errors.password && <div className="error-message">{errors.password.message}</div>}
         </div>
+
+        <button type="submit">Войти</button>
     </form>
     
     )

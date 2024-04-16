@@ -3,6 +3,7 @@ package com.pulsus.pulsusbackend.service.impl;
 import com.pulsus.pulsusbackend.dto.UserDto;
 import com.pulsus.pulsusbackend.entity.User;
 import com.pulsus.pulsusbackend.exception.ConflictException;
+import com.pulsus.pulsusbackend.exception.UnauthorizedException;
 import com.pulsus.pulsusbackend.mapper.UserMapper;
 import com.pulsus.pulsusbackend.repository.UserRepository;
 import com.pulsus.pulsusbackend.service.UserService;
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         //Optional<User> userDetail = findByLogin(username);
 
         User user = findByLogin(username)
-                .orElseThrow(() -> new ConflictException(String.format("User with login '%s' don't exists", username)));
+                .orElseThrow(() -> new UnauthorizedException(String.format("User with login '%s' don't exists", username)));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getLogin(),
