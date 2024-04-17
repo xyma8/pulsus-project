@@ -32,8 +32,7 @@ export default function LoginForm(props: LoginFormProps) {
     function sendDataLogin(data: Inputs) {
         API.post("/auth/generateToken", data)
         .then(response => {
-            console.log(response.data.token)
-            //props.onSuccessLogin(response.data.login);
+            props.onSuccessLogin(response.data.token);
         })
         .catch(error =>{
             console.error(error);

@@ -1,6 +1,7 @@
 package com.pulsus.pulsusbackend.service.impl;
 
 import com.pulsus.pulsusbackend.dto.UserDto;
+import com.pulsus.pulsusbackend.entity.FilesOnServer;
 import com.pulsus.pulsusbackend.entity.User;
 import com.pulsus.pulsusbackend.exception.ConflictException;
 import com.pulsus.pulsusbackend.exception.UnauthorizedException;
@@ -48,6 +49,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPassword(hashedPassword);
         User savedUser = userRepository.save(user);
         return UserMapper.mapToUserDto(savedUser);
+    }
+
+    @Override
+    public FilesOnServer getProfilePicture(String login) {
+        User user = findByLogin(login)
+                .orElseThrow(() -> new UnauthorizedException(String.format("Error", login)));
+
+
     }
 
 

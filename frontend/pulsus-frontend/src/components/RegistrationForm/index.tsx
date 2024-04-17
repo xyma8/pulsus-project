@@ -1,5 +1,5 @@
-import InputField from "../InputField"
 import "./style.css"
+import InputField from "../InputField"
 import { useForm, SubmitHandler } from "react-hook-form"
 
 type Inputs = {
