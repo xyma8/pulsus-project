@@ -29,9 +29,9 @@ export default function DashboardPage() {
     }
 
     function getUserData() {
-        checkCookie();
+        //checkCookie();
 
-        API.get("/users/data", {
+        API.get("/users/profile", {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
             }

@@ -36,3 +36,12 @@ CREATE TABLE `users_roles` (
 
 INSERT INTO `roles` (`name`, `description`)
 VALUES('ROLE_USER', 'user');
+
+INSERT INTO `roles` (`name`, `description`)
+VALUES('ROLE_ADMIN', 'admin');
+
+INSERT INTO `users_roles` (`user`, `role`)
+VALUES(1,1)
+
+INSERT INTO `users_roles` (`user`, `role`)
+VALUES(2,2)

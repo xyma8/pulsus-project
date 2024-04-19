@@ -1,6 +1,7 @@
 package com.pulsus.pulsusbackend.controller;
 
 import com.pulsus.pulsusbackend.dto.AuthTokenDto;
+import com.pulsus.pulsusbackend.dto.FileOnServerDto;
 import com.pulsus.pulsusbackend.dto.UserDto;
 import com.pulsus.pulsusbackend.entity.AuthRequest;
 import com.pulsus.pulsusbackend.exception.ConflictException;
@@ -37,10 +38,13 @@ public class UserController {
    // }
 
     @GetMapping("/profilePicture")
-    public ResponseEntity<ProfilePictureDto> getProfilePicture(Authentication authentication) {
+    public ResponseEntity<FileOnServerDto> getProfilePicture(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String login = userDetails.getUsername();
         userService.getProfilePicture(login);
+
+        System.out.println(login);
+        return null;
     }
 
     @GetMapping("/profile")

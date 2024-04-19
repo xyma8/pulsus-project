@@ -7,22 +7,27 @@ type ProfilePictureProps = {
 
 export default function ProfilePicture(props: ProfilePictureProps) {
 
+    
     function loadProfilePicture() {
-        API.post("/auth/generateToken", data)
+        API.post("/auth/generateToken", {
+            headers: {
+                Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
+            }
+        })
         .then(response => {
-            props.onSuccessLogin(response.data.token);
+            console.log(response.data.path);
         })
         .catch(error =>{
             console.error(error);
             if(error.response.status == 403) {
-                alert("Incorrect login or password");
+                alert("Error");
             }
             else if(error.response.status != 200) {
                 alert("Internal error");
             }
         })
     }
-
+    
     return(
     <div className="profile-picture">
         

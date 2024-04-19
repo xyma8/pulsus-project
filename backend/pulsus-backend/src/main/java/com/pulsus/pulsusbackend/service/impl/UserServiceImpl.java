@@ -55,8 +55,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public FilesOnServer getProfilePicture(String login) {
         User user = findByLogin(login)
                 .orElseThrow(() -> new UnauthorizedException(String.format("Error", login)));
+    //проверка не нужна
 
 
+        return user.getProfile_picture();
     }
 
 
