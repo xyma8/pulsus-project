@@ -5,6 +5,7 @@ import com.pulsus.pulsusbackend.entity.AuthRequest;
 import com.pulsus.pulsusbackend.exception.ConflictException;
 import com.pulsus.pulsusbackend.exception.UnauthorizedException;
 import com.pulsus.pulsusbackend.service.JwtService;
+import com.pulsus.pulsusbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,24 +29,28 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private final UserService userService;
+
     @PostMapping("/generateToken")
     public ResponseEntity<AuthTokenDto> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
-        Authentication authentication = null;
+
+        Long userId = userService.getUserIdByLogin(authRequest.getLogin());
         //try {
-            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getLogin(), authRequest.getPassword()));
-            System.out.println(authentication);
-        //} catch (AuthenticationException e) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userId.toString(), authRequest.getPassword()));
+        //System.out.println("authentication");
+        //} catch (Exception e) {
         //    System.out.println(e);
-        //    throw new UnauthorizedException("Login or password incorrect");
-        //} catch (BadCredentialsException e) {
-        //
-       // }
+        //}
+
 
         if (authentication != null && authentication.isAuthenticated()) {
-            AuthTokenDto authTokenDto = new AuthTokenDto(jwtService.generateToken(authRequest.getLogin()));
+            userId = userService.getUserIdByLogin(authRequest.getLogin());
+            AuthTokenDto authTokenDto = new AuthTokenDto(jwtService.generateToken(userId.toString()));
             return ResponseEntity.ok(authTokenDto);
         } else {
             throw new UnauthorizedException("Login or password incorrect");
         }
+
     }
 }

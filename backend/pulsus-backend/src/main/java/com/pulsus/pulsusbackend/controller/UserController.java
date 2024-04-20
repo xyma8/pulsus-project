@@ -51,6 +51,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public String userProfile(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
         return "Welcome to User Profile " + userDetails.getUsername();
     }
 

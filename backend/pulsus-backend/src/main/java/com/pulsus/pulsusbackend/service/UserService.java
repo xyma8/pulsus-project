@@ -8,4 +8,6 @@ public interface UserService {
     UserDto createUser(UserDto userDto);
 
     FilesOnServer getProfilePicture(String login);
+
+    Long getUserIdByLogin(String login);
 }

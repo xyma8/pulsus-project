@@ -33,6 +33,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findByLogin(login);
     }
 
+    public Optional<User> findById(Long id) { return userRepository.findById(id); }
+
+    @Override
+    public Long getUserIdByLogin(String login) {
+        User user = findByLogin(login)
+                .orElseThrow(() -> new UnauthorizedException(String.format("Error", login)));
+
+        return user.getId();
+    }
+
     @Override
     public UserDto createUser(UserDto userDto) {
         String login = userDto.getLogin();
@@ -42,7 +52,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         });
 
         User user = UserMapper.mapToUser(userDto);
-
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(user.getPassword());
@@ -55,8 +64,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public FilesOnServer getProfilePicture(String login) {
         User user = findByLogin(login)
                 .orElseThrow(() -> new UnauthorizedException(String.format("Error", login)));
-    //проверка не нужна
-
+    //проверка не нужна?
 
         return user.getProfile_picture();
     }
@@ -66,13 +74,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        //Optional<User> userDetail = findByLogin(username);
-
-        User user = findByLogin(username)
+        User user = findById(Long.parseLong(username))
                 .orElseThrow(() -> new UnauthorizedException(String.format("User with login '%s' don't exists", username)));
 
+         //User user = findByLogin(username)
+         //       .orElseThrow(() -> new UnauthorizedException(String.format("User with login '%s' don't exists", username)));
+
         return new org.springframework.security.core.userdetails.User(
-                user.getLogin(),
+                user.getId().toString(),
                 user.getPassword(),
                 user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList())
         );
