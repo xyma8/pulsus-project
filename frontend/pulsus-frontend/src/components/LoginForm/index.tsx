@@ -69,7 +69,7 @@ export default function LoginForm(props: LoginFormProps) {
                 placeholder="Пароль"
                 required="Обязательное поле"
                 minLength={{ value:8, message:"Минимум 8 символов" }}
-                //pattern={{ value:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+\\|[\]{};:'",.<>/?]).{8,}$/ , message:"Необходимо прописные, заглавные буквы, цифры и разрешенные символы" }}
+                //pattern={{ value:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+\\|[\]{};:'",./?]).{8,}$/ , message:"Необходимо прописные, заглавные буквы, цифры и разрешенные символы" }}
             />
             {errors.password && <div className="error-message">{errors.password.message}</div>}
         </div>

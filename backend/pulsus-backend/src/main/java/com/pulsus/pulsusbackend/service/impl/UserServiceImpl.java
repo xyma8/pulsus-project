@@ -1,5 +1,6 @@
 package com.pulsus.pulsusbackend.service.impl;
 
+import com.pulsus.pulsusbackend.dto.FileOnServerDto;
 import com.pulsus.pulsusbackend.dto.UserDto;
 import com.pulsus.pulsusbackend.entity.FilesOnServer;
 import com.pulsus.pulsusbackend.entity.User;
@@ -7,7 +8,9 @@ import com.pulsus.pulsusbackend.exception.ConflictException;
 import com.pulsus.pulsusbackend.exception.UnauthorizedException;
 import com.pulsus.pulsusbackend.mapper.UserMapper;
 import com.pulsus.pulsusbackend.repository.UserRepository;
+import com.pulsus.pulsusbackend.service.FIleService;
 import com.pulsus.pulsusbackend.service.UserService;
+import com.pulsus.pulsusbackend.util.FilePaths;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,26 +22,33 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private FIleService fileService;
+
+    private FilePaths filePaths;
+
     public Optional<User> findByLogin(String login) {
         return userRepository.findByLogin(login);
     }
 
-    public Optional<User> findById(Long id) { return userRepository.findById(id); }
+    public Optional<User> findById(String userId) { return userRepository.findById(Long.parseLong(userId)); }
 
     @Override
     public Long getUserIdByLogin(String login) {
         User user = findByLogin(login)
-                .orElseThrow(() -> new UnauthorizedException(String.format("Error", login)));
+                .orElseThrow(() -> new UnauthorizedException(String.format("User with login '%s' don't exists", login)));
 
         return user.getId();
     }
@@ -61,12 +71,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public FilesOnServer getProfilePicture(String login) {
-        User user = findByLogin(login)
-                .orElseThrow(() -> new UnauthorizedException(String.format("Error", login)));
+    public FileOnServerDto getProfilePicture(String userId) {
+        User user = findById(userId)
+                .orElseThrow(() -> new UnauthorizedException("Login error"));
     //проверка не нужна?
+        String path;
 
-        return user.getProfile_picture();
+        if(!user.getHas_profile_picture()) {
+            path = fileService.getAbsolutePath(filePaths.DEFAULT_PROFILE_PICTURE_M);
+        }
+        else{
+            path = fileService.getAbsolutePath(filePaths.DEFAULT_PROFILE_PICTURE_M);
+        }
+
+        return new FileOnServerDto(path);
     }
 
 
@@ -74,8 +92,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = findById(Long.parseLong(username))
-                .orElseThrow(() -> new UnauthorizedException(String.format("User with login '%s' don't exists", username)));
+        User user = findById(username)
+                .orElseThrow(() -> new UnauthorizedException("Login error"));
 
          //User user = findByLogin(username)
          //       .orElseThrow(() -> new UnauthorizedException(String.format("User with login '%s' don't exists", username)));
@@ -86,6 +104,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList())
         );
 
-        //return null;
     }
 }

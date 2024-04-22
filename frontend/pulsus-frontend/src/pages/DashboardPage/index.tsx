@@ -3,6 +3,8 @@ import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from "../../utils/API";
+import ProfilePicture from "../../components/ProfilePicture";
+import ChangeProfilePicture from "../../components/ChangeProfilePicture";
 
 interface UserData {
     name: string,
@@ -13,7 +15,7 @@ export default function DashboardPage() {
     const navigate = useNavigate();
     const [userData, setUserData] = useState<UserData | null>(null);
     useEffect(() => {
-        getUserData();
+        //getUserData();
 
     }, []); 
 
@@ -47,6 +49,8 @@ export default function DashboardPage() {
     return(
     <div className="dashboard-page">
         hello in your account on dashboard
+        <ProfilePicture type={false} size={50} />
+        <ChangeProfilePicture type={false} size={50} />
         <button onClick={exit}>Exit</button>
     </div>
     )

@@ -1,21 +1,29 @@
 import "./style.css"
 import API from "../../utils/API";
+import { useState, useEffect } from "react";
 
 type ProfilePictureProps = {
-    type: boolean
+    type: boolean,
+    size: number
 }
 
 export default function ProfilePicture(props: ProfilePictureProps) {
+    const [ picture, setPicture ]= useState("");
 
-    
+    useEffect(() => {
+        loadProfilePicture();
+
+    }, []);
+
     function loadProfilePicture() {
-        API.post("/auth/generateToken", {
+        API.get("/users/profilePicture", {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
             }
         })
         .then(response => {
             console.log(response.data.path);
+            setPicture(response.data.path);
         })
         .catch(error =>{
             console.error(error);
@@ -28,9 +36,16 @@ export default function ProfilePicture(props: ProfilePictureProps) {
         })
     }
     
+    if (!picture) {
+        return ( 
+        <div>
+
+        </div>)
+    }
+
     return(
     <div className="profile-picture">
-        
+        <img src={picture} width={props.size} height={props.size} />
     </div>
     )
 }

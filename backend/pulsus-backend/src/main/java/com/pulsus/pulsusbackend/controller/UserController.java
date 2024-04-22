@@ -17,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
@@ -40,11 +41,14 @@ public class UserController {
     @GetMapping("/profilePicture")
     public ResponseEntity<FileOnServerDto> getProfilePicture(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String login = userDetails.getUsername();
-        userService.getProfilePicture(login);
+        String userId = userDetails.getUsername();
+        FileOnServerDto fileOnServerDto = userService.getProfilePicture(userId);
+        return ResponseEntity.ok(fileOnServerDto);
+    }
 
-        System.out.println(login);
-        return null;
+    @PostMapping("/uploadProfilePicture")
+    public void uploadProfilePicture(@RequestParam("file") MultipartFile file) {
+        System.out.println(file.getSize());
     }
 
     @GetMapping("/profile")

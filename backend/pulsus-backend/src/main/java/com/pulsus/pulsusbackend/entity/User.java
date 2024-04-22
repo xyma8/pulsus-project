@@ -35,9 +35,8 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "profile_picture")
-    private FilesOnServer profile_picture;
+    @Column(name = "has_profile_picture", nullable = false,  columnDefinition = "BOOLEAN DEFAULT false")
+    private Boolean has_profile_picture;
 
     @ManyToMany
     @JoinTable(
@@ -54,5 +53,6 @@ public class User {
         this.email = email;
         this.login = login;
         this.password = password;
+        this.has_profile_picture = false;
     }
 }
