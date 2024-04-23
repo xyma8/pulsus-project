@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         });
 
         User user = UserMapper.mapToUser(userDto);
-
+        CreateUserDirectory();
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
