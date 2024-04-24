@@ -5,7 +5,7 @@ USE pulsusdb;
 CREATE TABLE `files_on_server` (
 	`id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `extension` varchar(8) NOT NULL,
-    `size` float NOT NULL,
+    `size` BIGINT NOT NULL,
     `path` varchar(254) NOT NULL
 )
 
@@ -22,8 +22,7 @@ CREATE TABLE `users` (
 	`email` varchar(254) UNIQUE NOT NULL,
     `login` varchar(24) UNIQUE NOT NULL,
 	`password` varchar(254) NOT NULL,
-    `profile_picture` BIGINT NULL,
-	FOREIGN KEY (profile_picture) REFERENCES files_on_server(id)
+    `has_profile_picture` BOOLEAN NOT NULL DEFAULT FALSE
 )
 
 CREATE TABLE `users_roles` (

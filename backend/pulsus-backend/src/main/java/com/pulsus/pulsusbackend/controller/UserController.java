@@ -47,8 +47,13 @@ public class UserController {
     }
 
     @PostMapping("/uploadProfilePicture")
-    public void uploadProfilePicture(@RequestParam("file") MultipartFile file) {
-        System.out.println(file.getSize());
+    public ResponseEntity<FileOnServerDto> uploadProfilePicture(Authentication authentication, @RequestParam("file") MultipartFile file) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        FileOnServerDto fileOnServerDto = userService.uploadProfilePicture(file, userDetails.getUsername());
+
+        System.out.println("file size" + file.getSize());
+
+        return ResponseEntity.ok(fileOnServerDto);
     }
 
     @GetMapping("/profile")

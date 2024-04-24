@@ -5,6 +5,7 @@ import com.pulsus.pulsusbackend.dto.UserDto;
 import com.pulsus.pulsusbackend.entity.FilesOnServer;
 import com.pulsus.pulsusbackend.entity.User;
 import com.pulsus.pulsusbackend.exception.ConflictException;
+import com.pulsus.pulsusbackend.exception.InternalServerException;
 import com.pulsus.pulsusbackend.exception.UnauthorizedException;
 import com.pulsus.pulsusbackend.mapper.UserMapper;
 import com.pulsus.pulsusbackend.repository.UserRepository;
@@ -21,6 +22,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.Optional;
@@ -62,11 +65,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         });
 
         User user = UserMapper.mapToUser(userDto);
-        CreateUserDirectory();
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
         User savedUser = userRepository.save(user);
+        fileService.CreateUserDirs(savedUser.getId());
         return UserMapper.mapToUserDto(savedUser);
     }
 
@@ -75,16 +78,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = findById(userId)
                 .orElseThrow(() -> new UnauthorizedException("Login error"));
     //проверка не нужна?
-        String path;
-
-        if(!user.getHas_profile_picture()) {
-            path = fileService.getAbsolutePath(filePaths.DEFAULT_PROFILE_PICTURE_M);
-        }
-        else{
-            path = fileService.getAbsolutePath(filePaths.DEFAULT_PROFILE_PICTURE_M);
-        }
+        
+        String path = fileService.profilePic(Long.parseLong(userId));
 
         return new FileOnServerDto(path);
+    }
+
+    @Override
+    public FileOnServerDto uploadProfilePicture(MultipartFile file, String userId) {
+        try {
+            fileService.AddUserProfilePic(Long.parseLong(userId), file);
+        } catch (Exception e) {
+            throw new InternalServerException("Internal server exception");
+        }
+
+        FileOnServerDto fileOnServerDto = getProfilePicture(userId);
+
+        return fileOnServerDto;
     }
 
 

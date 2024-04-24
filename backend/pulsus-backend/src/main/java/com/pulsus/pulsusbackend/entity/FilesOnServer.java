@@ -21,7 +21,7 @@ public class FilesOnServer {
     private String extension;
 
     @Column(name = "size", nullable = false)
-    private Float size;
+    private Long size;
 
     @Column(name = "path", nullable = false)
     private String path;

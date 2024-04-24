@@ -6,8 +6,16 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 
 public class FileOnServerDto {
     private String path;
+
+    public void setPath(String path) {
+        this.path = path.substring(path.indexOf("uploads")); //УДАЛИТЬ И ЗАМЕНИТЬ НА path;
+    }
+
+    public String getPath() {
+        path = path.substring(path.indexOf("uploads")); //УДАЛИТЬ
+        return path;
+    }
 }
