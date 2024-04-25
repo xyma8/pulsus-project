@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -44,7 +45,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user"),
             inverseJoinColumns = @JoinColumn(name = "role")
     )
-    private Collection<Role> roles;
+    private Collection<Role> roles = new ArrayList<>();
 
     public User(Long id, String name, String surname, String email, String login, String password) {
         this.id = id;

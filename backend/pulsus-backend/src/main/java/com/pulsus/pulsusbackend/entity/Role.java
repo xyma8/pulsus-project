@@ -3,6 +3,7 @@ package com.pulsus.pulsusbackend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -23,7 +24,7 @@ public class Role {
     private String description;
 
     @ManyToMany(mappedBy = "roles")
-    Collection<User> users;
+    Collection<User> users = new ArrayList<>();
 
     public Role(Integer id, String name, String description) {
         this.id = id;

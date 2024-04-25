@@ -3,6 +3,7 @@ package com.pulsus.pulsusbackend.service.impl;
 import com.pulsus.pulsusbackend.dto.FileOnServerDto;
 import com.pulsus.pulsusbackend.dto.UserDto;
 import com.pulsus.pulsusbackend.entity.FilesOnServer;
+import com.pulsus.pulsusbackend.entity.Role;
 import com.pulsus.pulsusbackend.entity.User;
 import com.pulsus.pulsusbackend.exception.ConflictException;
 import com.pulsus.pulsusbackend.exception.InternalServerException;
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private FilePaths filePaths;
 
+
     public Optional<User> findByLogin(String login) {
         return userRepository.findByLogin(login);
     }
@@ -68,6 +70,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
+        Role userRole = new Role();
+        userRole.setId(1);
+        user.getRoles().add(userRole);
         User savedUser = userRepository.save(user);
         fileService.CreateUserDirs(savedUser.getId());
         return UserMapper.mapToUserDto(savedUser);
@@ -77,8 +82,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public FileOnServerDto getProfilePicture(String userId) {
         User user = findById(userId)
                 .orElseThrow(() -> new UnauthorizedException("Login error"));
-    //проверка не нужна?
-        
+        //проверка не нужна?
+
         String path = fileService.profilePic(Long.parseLong(userId));
 
         return new FileOnServerDto(path);
@@ -93,7 +98,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         FileOnServerDto fileOnServerDto = getProfilePicture(userId);
-
         return fileOnServerDto;
     }
 

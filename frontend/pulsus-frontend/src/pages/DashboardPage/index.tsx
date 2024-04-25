@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import API from "../../utils/API";
 import ProfilePicture from "../../components/ProfilePicture";
 import ChangeProfilePicture from "../../components/ChangeProfilePicture";
+import UploadTrackFile from "../../components/UploadTrackFile";
 
 interface UserData {
     name: string,
@@ -51,6 +52,7 @@ export default function DashboardPage() {
         hello in your account on dashboard
         <ProfilePicture type={false} size={50} />
         <ChangeProfilePicture type={false} size={50} />
+        <UploadTrackFile />
         <button onClick={exit}>Exit</button>
     </div>
     )

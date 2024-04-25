@@ -1,6 +1,8 @@
 package com.pulsus.pulsusbackend.service;
 
 import com.pulsus.pulsusbackend.config.FileStorageConfig;
+import com.pulsus.pulsusbackend.exception.InternalServerException;
+import com.pulsus.pulsusbackend.service.impl.FileOnServerServiceImpl;
 import com.pulsus.pulsusbackend.util.FilePaths;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,6 +23,8 @@ public class FIleService {
 
     @Autowired
     private FileStorageConfig fileStorageConfig;
+
+    private FileOnServerService fileOnServerService;
 
     FilePaths filePaths;
 
@@ -55,7 +62,7 @@ public class FIleService {
         String filename = file.getOriginalFilename();
         String extension = filename.substring(filename.lastIndexOf(".") + 1);
 
-        String filePath = directoryPath + "/" + userId + "." + extension;
+        String filePath = directoryPath + "/" + userId + ".jpg";
 
         File newFile = new File(filePath);
         file.transferTo(newFile);
@@ -72,8 +79,17 @@ public class FIleService {
         return finalPath;
     }
 
-    private String normalizePicExtension(String extension) {
+    private String normalizePicExtension(MultipartFile file) throws IOException {
+        BufferedImage image = ImageIO.read(file.getInputStream());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "jpg", baos);
+        byte[] imageBytes = baos.toByteArray();
+
         return null;
+    }
+
+    private void addFileInfoToDB() {
+
     }
 
     private String createPath(String relativePath) {
@@ -95,6 +111,7 @@ public class FIleService {
                 System.out.println("Папка создана успешно");
             } else {
                 System.out.println("Не удалось создать папку");
+                throw new InternalServerException("Internal error");
             }
         } else {
             System.out.println("Папка уже существует");
