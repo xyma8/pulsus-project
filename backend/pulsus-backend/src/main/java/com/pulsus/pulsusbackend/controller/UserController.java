@@ -1,9 +1,6 @@
 package com.pulsus.pulsusbackend.controller;
 
-import com.pulsus.pulsusbackend.dto.AuthTokenDto;
-import com.pulsus.pulsusbackend.dto.FileOnServerDto;
-import com.pulsus.pulsusbackend.dto.GPXInfoDto;
-import com.pulsus.pulsusbackend.dto.UserDto;
+import com.pulsus.pulsusbackend.dto.*;
 import com.pulsus.pulsusbackend.entity.AuthRequest;
 import com.pulsus.pulsusbackend.exception.ConflictException;
 import com.pulsus.pulsusbackend.service.FileOnServerService;
@@ -64,11 +61,22 @@ public class UserController {
 
     @PostMapping("/uploadGPXFile")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<GPXInfoDto> uploadGPXFile(Authentication authentication, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<GPXFileDto> uploadGPXFile(Authentication authentication, @RequestParam("file") MultipartFile file) {
         System.out.println(file.getOriginalFilename());
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        GPXInfoDto gpxInfoDto = fileOnServerService.ReadGPX(file);
+        GPXFileDto gpxInfoDto = fileOnServerService.readGPX(file);
+
         return null;
+    }
+
+    @PostMapping("uploadFITFile")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<FITFileDto> uploadFITFile(Authentication authentication, @RequestParam("file") MultipartFile file) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        FITFileDto fitFileDto = fileOnServerService.readFIT(file);
+
+        return ResponseEntity.ok(fitFileDto);
+        //return null;
     }
 
     @GetMapping("/profile")

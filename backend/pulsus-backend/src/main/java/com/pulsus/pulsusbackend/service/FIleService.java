@@ -2,11 +2,8 @@ package com.pulsus.pulsusbackend.service;
 
 import com.pulsus.pulsusbackend.config.FileStorageConfig;
 import com.pulsus.pulsusbackend.exception.InternalServerException;
-import com.pulsus.pulsusbackend.service.impl.FileOnServerServiceImpl;
 import com.pulsus.pulsusbackend.util.FilePaths;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -2,7 +2,6 @@ package com.pulsus.pulsusbackend.service.impl;
 
 import com.pulsus.pulsusbackend.dto.FileOnServerDto;
 import com.pulsus.pulsusbackend.dto.UserDto;
-import com.pulsus.pulsusbackend.entity.FilesOnServer;
 import com.pulsus.pulsusbackend.entity.Role;
 import com.pulsus.pulsusbackend.entity.User;
 import com.pulsus.pulsusbackend.exception.ConflictException;
@@ -23,17 +22,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImp implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;

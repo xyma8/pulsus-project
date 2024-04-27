@@ -1,7 +1,7 @@
 package com.pulsus.pulsusbackend.filter;
 
 import com.pulsus.pulsusbackend.service.JwtService;
-import com.pulsus.pulsusbackend.service.impl.UserServiceImpl;
+import com.pulsus.pulsusbackend.service.impl.UserServiceImp;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    private UserServiceImpl userDetailsService;
+    private UserServiceImp userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

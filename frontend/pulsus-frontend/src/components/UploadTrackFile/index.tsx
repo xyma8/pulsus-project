@@ -6,14 +6,18 @@ export default function UploadTrackFile() {
     const formData = new FormData();
 
     function uploadTrackFile() {
-        API.post("/users/uploadGPXFile", formData, {
+        API.post("/users/uploadFITFile", formData, {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken'),
                 'Content-Type': 'multipart/form-data',  
             }
         })
         .then(response => {
-            //console.log(response.data.path);
+            //console.log(response.data);
+            for (let i = 0; i < response.data.fitTrackData.length; i++) {
+                const item = response.data.fitTrackData[i];
+                console.log(item);
+            }
         })
         .catch(error => {
             console.error(error);
