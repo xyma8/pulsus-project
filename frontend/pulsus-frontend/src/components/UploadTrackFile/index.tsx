@@ -1,9 +1,11 @@
 import "./style.css"
 import API from "../../utils/API";
 import { useState, useEffect } from "react";
+import { Coordinates } from "../../utils/projectTypes";
 
 export default function UploadTrackFile() {
     const formData = new FormData();
+    const coordinates: Coordinates = [];
 
     function uploadTrackFile() {
         API.post("/users/uploadFITFile", formData, {
@@ -17,7 +19,9 @@ export default function UploadTrackFile() {
             for (let i = 0; i < response.data.fitTrackData.length; i++) {
                 const item = response.data.fitTrackData[i];
                 console.log(item);
+                coordinates.push([item.positionLat, item.positionLong]);
             }
+            console.log(coordinates);
         })
         .catch(error => {
             console.error(error);

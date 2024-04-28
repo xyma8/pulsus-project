@@ -76,7 +76,7 @@ public class FileOnServerServiceImp implements FileOnServerService {
         InputStream isFile;
         FitDecoder fitDecoder = new FitDecoder();
         FitMessages fitMessages;
-        
+
         try {
             isFile = file.getInputStream();
             fitMessages = fitDecoder.decode(isFile);

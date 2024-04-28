@@ -6,6 +6,7 @@ import API from "../../utils/API";
 import ProfilePicture from "../../components/ProfilePicture";
 import ChangeProfilePicture from "../../components/ChangeProfilePicture";
 import UploadTrackFile from "../../components/UploadTrackFile";
+import TrackMap from "../../components/TrackMap";
 
 interface UserData {
     name: string,
