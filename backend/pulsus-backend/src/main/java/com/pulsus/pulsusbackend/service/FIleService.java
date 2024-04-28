@@ -47,7 +47,7 @@ public class FIleService {
     public void CreateUserDirs(Long userId) {
         String userPath = createPath(String.format("users/%s", userId));
         String picturesPath = createPath(String.format("users/%s/pictures", userId));
-        String activitiesPath = createPath(String.format("users/%s/activities", userId));
+        String activitiesPath = createPath(String.format("users/%s/workouts", userId));
 
         CreateDir(userPath);
         CreateDir(picturesPath);

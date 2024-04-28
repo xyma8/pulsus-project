@@ -47,6 +47,9 @@ public class User {
     )
     private Collection<Role> roles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Collection<Workout> workouts = new ArrayList<>();
+
     public User(Long id, String name, String surname, String email, String login, String password) {
         this.id = id;
         this.name = name;

@@ -33,6 +33,26 @@ CREATE TABLE `users_roles` (
     FOREIGN KEY (role) REFERENCES roles(id)
 )
 
+CREATE TABLE `workouts` (
+	`id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+    `user` BIGINT NOT NULL,
+    `name` varchar(254) NOT NULL,
+    `description` varchar(254) NOT NULL,
+    `type_sport` INT NOT NULL,
+    `file_workout` BIGINT NOT NULL,
+    `access_type` INT NOT NULL,
+    `timestamp` DATETIME NOT NULL,
+    FOREIGN KEY (user) REFERENCES users(id),
+	FOREIGN KEY (type_sport) REFERENCES types_sports(id),
+    FOREIGN KEY (file_workout) REFERENCES files_on_server(id)
+)
+
+CREATE TABLE `types_sports` (
+	`id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` varchar(100) NOT NULL,
+    `description` varchar(254) NOT NULL
+)
+
 INSERT INTO `roles` (`name`, `description`)
 VALUES('ROLE_USER', 'user');
 

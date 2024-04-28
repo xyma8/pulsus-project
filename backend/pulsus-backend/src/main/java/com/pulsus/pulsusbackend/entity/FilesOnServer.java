@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 @Table(name = "files_on_server")
 public class FilesOnServer {
@@ -25,4 +24,7 @@ public class FilesOnServer {
 
     @Column(name = "path", nullable = false)
     private String path;
+
+    @OneToOne(mappedBy = "filesOnServer")
+    private Workout workout;
 }

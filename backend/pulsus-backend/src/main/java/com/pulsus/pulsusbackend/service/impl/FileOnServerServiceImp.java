@@ -50,7 +50,7 @@ public class FileOnServerServiceImp implements FileOnServerService {
         FileInputStream in;
         GPX gpxFile;
         try {
-            in = new FileInputStream("C:/Users/basce/Desktop/pulsus-project/frontend/pulsus-frontend/public/uploads/users/14/activities/2024_04_25Ride.gpx");
+            in = new FileInputStream("C:/Users/basce/Desktop/pulsus-project/frontend/pulsus-frontend/public/uploads/users/14/workouts/2024_04_25Ride.gpx");
             gpxFile = gpxParser.parseGPX(in);
         }catch (Exception e) {
             System.out.println(e);
