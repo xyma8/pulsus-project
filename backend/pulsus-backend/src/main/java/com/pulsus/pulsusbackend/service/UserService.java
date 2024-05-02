@@ -2,8 +2,10 @@ package com.pulsus.pulsusbackend.service;
 
 import com.pulsus.pulsusbackend.dto.FileOnServerDto;
 import com.pulsus.pulsusbackend.dto.UserDto;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+@Service
 public interface UserService {
     UserDto createUser(UserDto userDto);
 

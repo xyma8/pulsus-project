@@ -9,7 +9,7 @@ import com.pulsus.pulsusbackend.exception.InternalServerException;
 import com.pulsus.pulsusbackend.exception.UnauthorizedException;
 import com.pulsus.pulsusbackend.mapper.UserMapper;
 import com.pulsus.pulsusbackend.repository.UserRepository;
-import com.pulsus.pulsusbackend.service.FIleService;
+import com.pulsus.pulsusbackend.service.FileService;
 import com.pulsus.pulsusbackend.service.UserService;
 import com.pulsus.pulsusbackend.util.FilePaths;
 import jakarta.transaction.Transactional;
@@ -29,13 +29,13 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImp implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private FIleService fileService;
+    private FileService fileService;
 
     private FilePaths filePaths;
 
@@ -88,7 +88,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Override
     public FileOnServerDto uploadProfilePicture(MultipartFile file, String userId) {
         try {
-            fileService.AddUserProfilePic(Long.parseLong(userId), file);
+            fileService.uploadUserProfilePic(Long.parseLong(userId), file);
         } catch (Exception e) {
             throw new InternalServerException("Internal server exception");
         }

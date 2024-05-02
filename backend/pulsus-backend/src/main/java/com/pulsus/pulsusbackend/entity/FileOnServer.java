@@ -1,7 +1,6 @@
 package com.pulsus.pulsusbackend.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Table(name = "files_on_server")
-public class FilesOnServer {
+public class FileOnServer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +26,12 @@ public class FilesOnServer {
 
     @OneToOne(mappedBy = "filesOnServer")
     private Workout workout;
+
+    public FileOnServer(Long id, String extension, Long size, String path) {
+        this.id = id;
+        this.extension = extension;
+        this.size = size;
+        this.path = path;
+    }
 }
+

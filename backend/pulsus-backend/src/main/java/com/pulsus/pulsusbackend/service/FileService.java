@@ -14,9 +14,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
+import java.util.UUID;
 
 @Service
-public class FIleService {
+public class FileService {
 
     @Autowired
     private FileStorageConfig fileStorageConfig;
@@ -54,7 +55,7 @@ public class FIleService {
         CreateDir(activitiesPath);
     }
 
-    public void AddUserProfilePic(Long userId, MultipartFile file) throws IOException {
+    public void uploadUserProfilePic(Long userId, MultipartFile file) throws IOException {
         String directoryPath = createPath(String.format("users/%s/pictures", userId));
         String filename = file.getOriginalFilename();
         String extension = filename.substring(filename.lastIndexOf(".") + 1);
@@ -65,8 +66,22 @@ public class FIleService {
         file.transferTo(newFile);
     }
 
-    public void AddUserPic(Long userId) {
+    public void uploadUserPic(Long userId) {
 
+    }
+
+    public String uploadTrackFile(Long userId, MultipartFile file) throws IOException{
+        String directoryPath = createPath(String.format("users/%s/workouts", userId));
+        String filename = file.getOriginalFilename();
+        String extension = filename.substring(filename.lastIndexOf(".") + 1);
+        String randomName = userId + UUID.randomUUID().toString();
+
+        String filePath = directoryPath + "/" + randomName +  "." + extension;
+
+        File newFile = new File(filePath);
+        file.transferTo(newFile);
+
+        return filePath;
     }
 
     private String getAbsolutePath(String relative) {

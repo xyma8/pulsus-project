@@ -1,13 +1,15 @@
 package com.pulsus.pulsusbackend.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -35,12 +37,11 @@ public class Workout {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_workout", referencedColumnName = "id")
-    private FilesOnServer filesOnServer;
+    private FileOnServer filesOnServer;
 
     @Column(name = "access_type", nullable = false)
     private Integer accessType;
 
     @Column(name = "timestamp", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 }

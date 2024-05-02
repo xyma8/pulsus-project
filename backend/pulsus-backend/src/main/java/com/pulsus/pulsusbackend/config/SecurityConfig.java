@@ -1,7 +1,7 @@
 package com.pulsus.pulsusbackend.config;
 
 import com.pulsus.pulsusbackend.filter.JwtAuthFilter;
-import com.pulsus.pulsusbackend.service.impl.UserServiceImp;
+import com.pulsus.pulsusbackend.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +30,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserServiceImp();
+        return new UserServiceImpl();
     }
 
     /*
