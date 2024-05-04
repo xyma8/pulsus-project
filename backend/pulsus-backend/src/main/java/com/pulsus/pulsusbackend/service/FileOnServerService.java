@@ -12,4 +12,6 @@ public interface FileOnServerService {
     GPXFileDto readGPX(MultipartFile multipartFile);
 
     FITFileDto readFIT(MultipartFile multipartFile);
+
+    String getTypeSport(MultipartFile multipartFile);
 }

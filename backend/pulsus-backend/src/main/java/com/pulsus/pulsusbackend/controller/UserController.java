@@ -6,6 +6,7 @@ import com.pulsus.pulsusbackend.exception.ConflictException;
 import com.pulsus.pulsusbackend.service.FileOnServerService;
 import com.pulsus.pulsusbackend.service.JwtService;
 import com.pulsus.pulsusbackend.service.UserService;
+import com.pulsus.pulsusbackend.service.WorkoutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,8 @@ public class UserController {
     private final UserService userService;
 
     private final FileOnServerService fileOnServerService;
+
+    private final WorkoutService workoutService; //del
 
     @PostMapping("/signup")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
@@ -69,14 +72,26 @@ public class UserController {
         return null;
     }
 
-    @PostMapping("uploadFITFile")
+    @PostMapping("/uploadFITFile")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<FITFileDto> uploadFITFile(Authentication authentication, @RequestParam("file") MultipartFile file) {
+        System.out.println("uploadFITFile");
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         FITFileDto fitFileDto = fileOnServerService.readFIT(file);
 
         return ResponseEntity.ok(fitFileDto);
         //return null;
+    }
+
+    @PostMapping("/addWorkout")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<WorkoutDto> addWorkout(Authentication authentication, @RequestParam("file") MultipartFile file) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Long userId = Long.parseLong(userDetails.getUsername());
+        WorkoutDto workoutDto = workoutService.createWorkout(file, userId);
+
+
+        return ResponseEntity.ok(workoutDto);
     }
 
     @GetMapping("/profile")

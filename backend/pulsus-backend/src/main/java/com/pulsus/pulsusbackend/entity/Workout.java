@@ -28,12 +28,11 @@ public class Workout {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = true)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "type_sport", nullable = false)
-    private TypeSport typeSports;
+    @Column(name = "type_sport", nullable = false)
+    private String typeSports;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_workout", referencedColumnName = "id")

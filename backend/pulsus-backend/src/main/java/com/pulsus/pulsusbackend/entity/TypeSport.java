@@ -24,8 +24,8 @@ public class TypeSport {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "typeSports", cascade = CascadeType.ALL)
-    private Collection<Workout> workouts = new ArrayList<>();
+    //@OneToMany(mappedBy = "typeSports", cascade = CascadeType.ALL)
+    //private Collection<Workout> workouts = new ArrayList<>();
 
     public TypeSport(Integer id, String description) {
         this.id = id;

@@ -88,13 +88,14 @@ public class FileOnServerServiceImpl implements FileOnServerService {
         try {
             isFile = file.getInputStream();
             fitMessages = fitDecoder.decode(isFile);
+            //isFile.close();
         }catch (Exception e){
             System.out.println(e);
             throw new InternalServerException("Internal error");
         }
 
         if(fitMessages.getRecordMesgs().isEmpty()) {
-            throw new InternalServerException("Internal error");
+            throw new InternalServerException(".fit file is empty");
         }
 
         List<SessionMesg> sessionMesgs = fitMessages.getSessionMesgs();
@@ -118,6 +119,29 @@ public class FileOnServerServiceImpl implements FileOnServerService {
         fitFileDto.setFitTrackData(fitTrackDataList);
 
         return fitFileDto;
+    }
+
+    @Override
+    public String getTypeSport(MultipartFile file) {
+        InputStream isFile;
+        FitDecoder fitDecoder = new FitDecoder();
+        FitMessages fitMessages;
+
+        try {
+            isFile = file.getInputStream();
+            fitMessages = fitDecoder.decode(isFile);
+        }catch (Exception e){
+            System.out.println(e);
+            throw new InternalServerException("Internal error");
+        }
+
+        if(fitMessages.getRecordMesgs().isEmpty()) {
+            throw new InternalServerException(".fit file is empty");
+        }
+
+        String typeSport = fitMessages.getSessionMesgs().get(0).getSport().toString();
+
+        return typeSport;
     }
 
     private void checkExtensionTrackFile(String extension) {

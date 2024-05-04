@@ -8,20 +8,23 @@ export default function UploadTrackFile() {
     const coordinates: Coordinates = [];
 
     function uploadTrackFile() {
-        API.post("/users/uploadFITFile", formData, {
+        API.post("/users/addWorkout", formData, {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken'),
                 'Content-Type': 'multipart/form-data',  
             }
         })
         .then(response => {
-            //console.log(response.data);
+            console.log(response.data);
+            /*
             for (let i = 0; i < response.data.fitTrackData.length; i++) {
                 const item = response.data.fitTrackData[i];
                 console.log(item);
                 coordinates.push([item.positionLat, item.positionLong]);
             }
             console.log(coordinates);
+            */
+
         })
         .catch(error => {
             console.error(error);
@@ -44,7 +47,7 @@ export default function UploadTrackFile() {
 
     return(
     <div className="upload-track-file">
-        <input type="file" onChange={selectFile}/>
+        <input type="file" accept=".fit,.gpx" onChange={selectFile}/>
     </div>
     )
 }

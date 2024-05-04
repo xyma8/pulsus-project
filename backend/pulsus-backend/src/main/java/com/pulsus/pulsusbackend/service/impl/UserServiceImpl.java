@@ -44,7 +44,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findByLogin(login);
     }
 
-    public Optional<User> findById(String userId) { return userRepository.findById(Long.parseLong(userId)); }
+    @Override
+    public Optional<User> findById(Long userId) { return userRepository.findById(userId); }
 
     @Override
     public Long getUserIdByLogin(String login) {
@@ -76,7 +77,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public FileOnServerDto getProfilePicture(String userId) {
-        User user = findById(userId)
+        User user = findById(Long.parseLong(userId))
                 .orElseThrow(() -> new UnauthorizedException("Login error"));
         //проверка не нужна?
 
@@ -102,7 +103,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = findById(username)
+        User user = findById(Long.parseLong(username))
                 .orElseThrow(() -> new UnauthorizedException("Login error"));
 
          //User user = findByLogin(username)
