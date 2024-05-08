@@ -57,10 +57,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        String login = userDto.getLogin();
-        Optional<User> optionalUser = findByLogin(login);
-        optionalUser.ifPresent(user -> {
-            throw new ConflictException(String.format("Login '%s' is already taken", login));
+        Optional<User> checkLogin = findByLogin(userDto.getLogin());
+        checkLogin.ifPresent(user -> {
+            throw new ConflictException("Login or Email is already taken");
+        });
+
+        Optional<User> checkEmail = userRepository.findByEmail(userDto.getEmail());
+        checkEmail.ifPresent(user -> {
+            throw new ConflictException("Login or Email is already taken");
         });
 
         User user = UserMapper.mapToUser(userDto);

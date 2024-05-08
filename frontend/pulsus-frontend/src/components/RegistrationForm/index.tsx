@@ -1,6 +1,7 @@
 import "./style.css"
 import InputField from "../InputField"
 import { useForm, SubmitHandler } from "react-hook-form"
+import API from "../../utils/API";
 
 type Inputs = {
     name: string,
@@ -13,6 +14,14 @@ type Inputs = {
     acceptCB: boolean
 }
 
+type UserData = {
+    name: string,
+    surname: string,
+    email: string,
+    login: string,
+    password: string
+}
+
 export default function RegistrationForm() {
     const {
         register,
@@ -21,7 +30,32 @@ export default function RegistrationForm() {
         getValues
     } = useForm<Inputs>({mode: 'onBlur'})
 
-    const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+    const onSubmit: SubmitHandler<Inputs> = (data) => {
+        console.log(data);
+        const user_data = {
+            name: data.name,
+            surname: data.surname,
+            email: data.email,
+            login: data.login,
+            password: data.password
+        }
+        sendDataRegistration(user_data);
+    }
+
+    function sendDataRegistration(data: UserData) {
+        API.post("/users/signup", data)
+        .then(response => {
+            alert('Registration success!');
+        })
+        .catch(error => {
+            if(error.response.status==409) {
+                alert("This login or email is already taken!");
+            }
+            else if(error.response.status != 200) {
+                alert("Error!");
+            }
+        })
+    }
 
     return (
     <form className="registration-form" onSubmit={handleSubmit(onSubmit)}>

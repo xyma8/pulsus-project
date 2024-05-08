@@ -15,7 +15,7 @@ export default function UploadTrackFile() {
             }
         })
         .then(response => {
-            //console.log(response.data);
+            console.log(response.data);
             /*
             for (let i = 0; i < response.data.fitTrackData.length; i++) {
                 const item = response.data.fitTrackData[i];
@@ -28,17 +28,13 @@ export default function UploadTrackFile() {
         })
         .catch(error => {
             console.error(error);
-            console.error(error.response.status);
-            console.error(error.message);
-            if(error.response.status == 403) {
-                alert("Error");
-            }
+
             if(error.response.status == 409) {
                 alert("This track file already exists");
             }
-            //else if(error.response.status != 200) {
-            //    alert("Internal error");
-            //}
+            else if(error.response.status != 200) {
+                alert("Internal error");
+            }
         })
     }
 
