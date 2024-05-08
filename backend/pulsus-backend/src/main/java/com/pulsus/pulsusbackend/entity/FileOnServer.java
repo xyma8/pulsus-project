@@ -15,6 +15,9 @@ public class FileOnServer {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "filehash", nullable = false)
+    private String filehash;
+
     @Column(name = "extension", nullable = false)
     private String extension;
 
@@ -27,8 +30,9 @@ public class FileOnServer {
     @OneToOne(mappedBy = "filesOnServer")
     private Workout workout;
 
-    public FileOnServer(Long id, String extension, Long size, String path) {
+    public FileOnServer(Long id, String filehash, String extension, Long size, String path) {
         this.id = id;
+        this.filehash = filehash;
         this.extension = extension;
         this.size = size;
         this.path = path;

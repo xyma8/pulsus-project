@@ -9,11 +9,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.io.File;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 @Service
@@ -84,6 +84,25 @@ public class FileService {
         return filePath;
     }
 
+    public String getSHA256(MultipartFile file) throws IOException, NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        InputStream inputStream = file.getInputStream();
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            digest.update(buffer, 0, bytesRead);
+        }
+
+        byte[] hash = digest.digest();
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hash) {
+            sb.append(String.format("%02X", b));
+        }
+
+        return sb.toString();
+    }
+
     private String getAbsolutePath(String relative) {
         Path relativePath = Paths.get(relative);
         Path path = absolutePath.resolve(relativePath);
@@ -130,6 +149,5 @@ public class FileService {
         }
 
     }
-
 
 }

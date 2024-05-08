@@ -19,8 +19,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -76,16 +76,20 @@ public class UserController {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<FITFileDto> uploadFITFile(Authentication authentication, @RequestParam("file") MultipartFile file) {
         System.out.println("uploadFITFile");
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        FITFileDto fitFileDto = fileOnServerService.readFIT(file);
+        //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        //FITFileDto fitFileDto = fileOnServerService.readFIT(file);
 
-        return ResponseEntity.ok(fitFileDto);
-        //return null;
+        //return ResponseEntity.ok(fitFileDto);
+        //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        //Long userId = Long.parseLong(userDetails.getUsername());
+        //WorkoutDto workoutDto = workoutService.createWorkout(file, userId);
+        return null;
     }
 
-    @PostMapping("/addWorkout")
+    @PostMapping("/addNewWorkout")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<WorkoutDto> addWorkout(Authentication authentication, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<WorkoutDto> addNewWorkout(Authentication authentication, @RequestParam("file") MultipartFile file) {
+        System.out.println("aaa");
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Long userId = Long.parseLong(userDetails.getUsername());
         WorkoutDto workoutDto = workoutService.createWorkout(file, userId);

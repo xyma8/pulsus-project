@@ -4,6 +4,7 @@ USE pulsusdb;
 
 CREATE TABLE `files_on_server` (
 	`id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+    `filehash` CHAR(64) NOT NULL,
     `extension` VARCHAR(8) NOT NULL,
     `size` BIGINT NOT NULL,
     `path` VARCHAR(254) NOT NULL

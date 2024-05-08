@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/workouts")
 public class WorkoutController {
@@ -22,11 +22,12 @@ public class WorkoutController {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<WorkoutDto> addWorkout(Authentication authentication, @RequestParam("file") MultipartFile file) {
         System.out.println("aaa");
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long userId = Long.parseLong(userDetails.getUsername());
-        WorkoutDto workoutDto = workoutService.createWorkout(file, userId);
+        //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        //Long userId = Long.parseLong(userDetails.getUsername());
+        //WorkoutDto workoutDto = workoutService.createWorkout(file, userId);
 
 
-        return ResponseEntity.ok(workoutDto);
+        //return ResponseEntity.ok(workoutDto);
+        return null;
     }
 }

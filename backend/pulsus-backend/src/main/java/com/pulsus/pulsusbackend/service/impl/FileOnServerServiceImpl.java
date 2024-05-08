@@ -4,7 +4,9 @@ import com.garmin.fit.*;
 import com.pulsus.pulsusbackend.dto.FITFileDto;
 import com.pulsus.pulsusbackend.dto.GPXFileDto;
 import com.pulsus.pulsusbackend.entity.FileOnServer;
+import com.pulsus.pulsusbackend.exception.ConflictException;
 import com.pulsus.pulsusbackend.exception.InternalServerException;
+import com.pulsus.pulsusbackend.exception.UnauthorizedException;
 import com.pulsus.pulsusbackend.mapper.FITSessionDataMapper;
 import com.pulsus.pulsusbackend.mapper.FITTrackDataMapper;
 import com.pulsus.pulsusbackend.model.FITSessionData;
@@ -34,6 +36,20 @@ public class FileOnServerServiceImpl implements FileOnServerService {
     @Override
     public FileOnServer addTrackFile(MultipartFile file, Long userId) {
         FileOnServer fileOnServer = new FileOnServer();
+        String filehash;
+        try{
+            filehash = fileService.getSHA256(file);
+        }catch (Exception e) {
+            System.out.println(e);
+            throw new InternalServerException("Internal error");
+        }
+        Optional<FileOnServer> checkHash = fileOnServerRepository.findByFilehash(filehash);
+        if(checkHash.isPresent()){
+            System.out.println("This track file already exists");
+            throw new ConflictException("This track file already exists");
+        };
+
+        fileOnServer.setFilehash(filehash);
         String filename = file.getOriginalFilename();
         String extension = filename.substring(filename.lastIndexOf(".") + 1);
         checkExtensionTrackFile(extension);
@@ -130,11 +146,11 @@ public class FileOnServerServiceImpl implements FileOnServerService {
         try {
             isFile = file.getInputStream();
             fitMessages = fitDecoder.decode(isFile);
+            isFile.close();
         }catch (Exception e){
             System.out.println(e);
             throw new InternalServerException("Internal error");
         }
-
         if(fitMessages.getRecordMesgs().isEmpty()) {
             throw new InternalServerException(".fit file is empty");
         }

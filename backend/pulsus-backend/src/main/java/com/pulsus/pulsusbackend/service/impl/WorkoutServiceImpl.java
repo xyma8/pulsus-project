@@ -34,7 +34,6 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public WorkoutDto createWorkout(MultipartFile file, Long userId) {
         Workout newWorkout = new Workout();
-        FileOnServer fileOnServer = fileOnServerService.addTrackFile(file, userId);
         User user = userService.findById(userId)
                 .orElseThrow(() -> new UnauthorizedException("Login error"));
 
@@ -47,6 +46,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         }
         newWorkout.setTypeSports(typeSport);
         newWorkout.setUser(user);
+        FileOnServer fileOnServer = fileOnServerService.addTrackFile(file, userId); // файл сохраняем после всех проверок
         newWorkout.setFilesOnServer(fileOnServer);
 
         Workout savedWorkout = workoutRepository.save(newWorkout);

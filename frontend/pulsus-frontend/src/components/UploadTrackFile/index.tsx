@@ -8,14 +8,14 @@ export default function UploadTrackFile() {
     const coordinates: Coordinates = [];
 
     function uploadTrackFile() {
-        API.post("/users/addWorkout", formData, {
+        API.post("/users/addNewWorkout", formData, {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken'),
                 'Content-Type': 'multipart/form-data',  
             }
         })
         .then(response => {
-            console.log(response.data);
+            //console.log(response.data);
             /*
             for (let i = 0; i < response.data.fitTrackData.length; i++) {
                 const item = response.data.fitTrackData[i];
@@ -28,12 +28,17 @@ export default function UploadTrackFile() {
         })
         .catch(error => {
             console.error(error);
+            console.error(error.response.status);
+            console.error(error.message);
             if(error.response.status == 403) {
                 alert("Error");
             }
-            else if(error.response.status != 200) {
-                alert("Internal error");
+            if(error.response.status == 409) {
+                alert("This track file already exists");
             }
+            //else if(error.response.status != 200) {
+            //    alert("Internal error");
+            //}
         })
     }
 
