@@ -3,7 +3,7 @@ import API from "../../utils/API";
 import { useState, useEffect } from "react";
 
 type WorkoutId = {
-    id: bigint
+    id: string | undefined
 }
 
 export default function WorkoutInfo(props: WorkoutId) {
@@ -13,7 +13,7 @@ export default function WorkoutInfo(props: WorkoutId) {
     }, []);
 
     function loadWorkoutInfo() {
-        API.get("/users/workouts/${WorkoutId.id}", {
+        API.get(`/users/workouts/${props.id}`, {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
             }

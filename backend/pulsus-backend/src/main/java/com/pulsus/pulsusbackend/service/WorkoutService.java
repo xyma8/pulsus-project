@@ -11,5 +11,5 @@ public interface WorkoutService {
 
     WorkoutDto getInfoWorkout(Long userId, Long workoutId);
 
-    void getTrackWorkout(Long userId, Long workoutId);
+    //void getTrackWorkout(Long userId, Long workoutId);
 }

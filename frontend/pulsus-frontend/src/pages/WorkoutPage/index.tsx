@@ -1,3 +1,4 @@
+import WorkoutInfo from "../../components/WorkoutInfo";
 import "./style.css"
 import { useParams } from 'react-router-dom';
 
@@ -6,7 +7,7 @@ export default function WorkoutPage() {
 
     return(
     <div className="workout-page">
-        console.log({workoutId});
+        <WorkoutInfo id={workoutId}/>
     </div>
     )
 }
