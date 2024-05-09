@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import RegistrationPage from './pages/RegistrationPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
+import WorkoutPage from './pages/WorkoutPage';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: '/dashboard',
     element: <DashboardPage/>
+  },
+  {
+    path: '/workouts/:workoutId',
+    element: <WorkoutPage/>
   }
 ]);
 

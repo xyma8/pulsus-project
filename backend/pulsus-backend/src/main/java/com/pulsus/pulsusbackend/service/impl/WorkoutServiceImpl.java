@@ -56,7 +56,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public WorkoutDto getWorkout(Long userId, Long workoutId) {
+    public WorkoutDto getInfoWorkout(Long userId, Long workoutId) {
         Workout workout = workoutRepository.findById(workoutId)
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));
 

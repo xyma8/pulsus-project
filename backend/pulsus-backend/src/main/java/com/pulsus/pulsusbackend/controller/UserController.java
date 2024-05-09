@@ -112,10 +112,10 @@ public class UserController {
     public ResponseEntity<WorkoutDto> getTrackWorkout(Authentication authentication, @PathVariable Long workoutId) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Long userId = Long.parseLong(userDetails.getUsername());
-        WorkoutDto workoutDto = workoutService.getTrackWorkout(userId, workoutId);
+        //WorkoutDto workoutDto = workoutService.getTrackWorkout(userId, workoutId);
 
 
-        return ResponseEntity.ok(workoutDto);
+        return null;
     }
 
     @GetMapping("/profile")
