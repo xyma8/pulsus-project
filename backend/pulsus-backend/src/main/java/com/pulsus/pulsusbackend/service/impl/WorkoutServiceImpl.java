@@ -3,7 +3,9 @@ import com.pulsus.pulsusbackend.dto.WorkoutDto;
 import com.pulsus.pulsusbackend.entity.FileOnServer;
 import com.pulsus.pulsusbackend.entity.User;
 import com.pulsus.pulsusbackend.entity.Workout;
+import com.pulsus.pulsusbackend.exception.ForbiddenException;
 import com.pulsus.pulsusbackend.exception.InternalServerException;
+import com.pulsus.pulsusbackend.exception.NotFoundException;
 import com.pulsus.pulsusbackend.exception.UnauthorizedException;
 import com.pulsus.pulsusbackend.mapper.WorkoutMapper;
 import com.pulsus.pulsusbackend.repository.WorkoutRepository;
@@ -51,6 +53,22 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         Workout savedWorkout = workoutRepository.save(newWorkout);
         return WorkoutMapper.mapToWorkoutDto(savedWorkout);
+    }
+
+    @Override
+    public WorkoutDto getWorkout(Long userId, Long workoutId) {
+        Workout workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new NotFoundException("This workout does not exists"));
+
+        Integer accessType = workout.getAccessType();
+
+        if(accessType==2 && workout.getUser().getId() != userId) {
+            System.out.println("This workout does not exists");
+            throw new NotFoundException("This workout does not exists");
+        }
+
+        WorkoutDto workoutDto = WorkoutMapper.mapToWorkoutDto(workout);
+        return workoutDto;
     }
 
     private Boolean allowedTypeSport(String typeSport) {

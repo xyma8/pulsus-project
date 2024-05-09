@@ -75,7 +75,6 @@ public class UserController {
     @PostMapping("/uploadFITFile")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<FITFileDto> uploadFITFile(Authentication authentication, @RequestParam("file") MultipartFile file) {
-        System.out.println("uploadFITFile");
         //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         //FITFileDto fitFileDto = fileOnServerService.readFIT(file);
 
@@ -89,10 +88,31 @@ public class UserController {
     @PostMapping("/addNewWorkout")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<WorkoutDto> addNewWorkout(Authentication authentication, @RequestParam("file") MultipartFile file) {
-        System.out.println("aaa");
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Long userId = Long.parseLong(userDetails.getUsername());
         WorkoutDto workoutDto = workoutService.createWorkout(file, userId);
+
+
+        return ResponseEntity.ok(workoutDto);
+    }
+
+    @GetMapping("/workouts/{workoutId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<WorkoutDto> getInfoWorkout(Authentication authentication, @PathVariable Long workoutId) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Long userId = Long.parseLong(userDetails.getUsername());
+        WorkoutDto workoutDto = workoutService.getInfoWorkout(userId, workoutId);
+
+
+        return ResponseEntity.ok(workoutDto);
+    }
+
+    @GetMapping("/workouts/{workoutId}/track")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<WorkoutDto> getTrackWorkout(Authentication authentication, @PathVariable Long workoutId) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Long userId = Long.parseLong(userDetails.getUsername());
+        WorkoutDto workoutDto = workoutService.getTrackWorkout(userId, workoutId);
 
 
         return ResponseEntity.ok(workoutDto);

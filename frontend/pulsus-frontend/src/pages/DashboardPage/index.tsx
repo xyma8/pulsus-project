@@ -23,6 +23,7 @@ export default function DashboardPage() {
 
     function exit() {
         Cookies.remove('token');
+        localStorage.removeItem('jwtToken');
         navigate('/login');
     }
 

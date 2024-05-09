@@ -76,14 +76,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.getRoles().add(userRole);
         User savedUser = userRepository.save(user);
         fileService.CreateUserDirs(savedUser.getId());
+
         return UserMapper.mapToUserDto(savedUser);
     }
 
     @Override
     public FileOnServerDto getProfilePicture(String userId) {
         User user = findById(Long.parseLong(userId))
-                .orElseThrow(() -> new UnauthorizedException("Login error"));
-        //проверка не нужна?
+                .orElseThrow(() -> new UnauthorizedException("Login error")); //проверка не нужна?
 
         String path = fileService.profilePic(Long.parseLong(userId));
 
@@ -99,6 +99,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         FileOnServerDto fileOnServerDto = getProfilePicture(userId);
+
         return fileOnServerDto;
     }
 

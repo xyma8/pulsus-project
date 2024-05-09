@@ -8,4 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public interface WorkoutService {
     WorkoutDto createWorkout(MultipartFile file, Long userId);
+
+    WorkoutDto getInfoWorkout(Long userId, Long workoutId);
+
+    void getTrackWorkout(Long userId, Long workoutId);
 }
