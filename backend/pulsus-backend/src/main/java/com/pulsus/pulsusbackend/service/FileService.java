@@ -27,7 +27,7 @@ public class FileService {
     FilePaths filePaths;
 
     //private final Path absolutePath = Paths.get(fileStorageConfig.getPath());
-    private final Path absolutePath = Paths.get("C:\\Users\\basce\\Desktop\\pulsus-project\\frontend\\pulsus-frontend\\public\\uploads");
+    private final Path absolutePath = Paths.get("C:\\Users\\nikita\\Desktop\\pulsus-project\\frontend\\pulsus-frontend\\public\\uploads");
 
     public String defaultProfilePic() {
         String path = getAbsolutePath(filePaths.DEFAULT_PROFILE_PICTURE_M);

@@ -8,6 +8,7 @@ import RegistrationPage from './pages/RegistrationPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import WorkoutPage from './pages/WorkoutPage';
+import EditWorkoutPage from './pages/EditWorkoutPage';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: '/workouts/:workoutId',
     element: <WorkoutPage/>
+  },
+  {
+    path: '/workouts/:workoutId/edit',
+    element: <EditWorkoutPage/>
   }
 ]);
 

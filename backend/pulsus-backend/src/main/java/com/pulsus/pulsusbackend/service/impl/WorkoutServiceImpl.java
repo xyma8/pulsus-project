@@ -39,7 +39,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         User user = userService.findById(userId)
                 .orElseThrow(() -> new UnauthorizedException("Login error"));
 
-        newWorkout.setName("Тренировка");
+        newWorkout.setName("Новая тренировка");
         newWorkout.setAccessType(2);
         newWorkout.setTimestamp(getTimestamp());
         String typeSport = fileOnServerService.getTypeSport(file);
