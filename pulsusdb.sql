@@ -53,6 +53,9 @@ CREATE TABLE `types_sports` (
     `description` VARCHAR(254) NOT NULL
 )
 
+INSERT INTO `types_sports` (`name`, `description`)
+VALUES('CYCLING', 'cycling')
+
 INSERT INTO `roles` (`name`, `description`)
 VALUES('ROLE_USER', 'user');
 

@@ -1,13 +1,17 @@
 package com.pulsus.pulsusbackend.service.impl;
+import com.pulsus.pulsusbackend.dto.TypeSportDto;
 import com.pulsus.pulsusbackend.dto.WorkoutDto;
 import com.pulsus.pulsusbackend.entity.FileOnServer;
+import com.pulsus.pulsusbackend.entity.TypeSport;
 import com.pulsus.pulsusbackend.entity.User;
 import com.pulsus.pulsusbackend.entity.Workout;
 import com.pulsus.pulsusbackend.exception.ForbiddenException;
 import com.pulsus.pulsusbackend.exception.InternalServerException;
 import com.pulsus.pulsusbackend.exception.NotFoundException;
 import com.pulsus.pulsusbackend.exception.UnauthorizedException;
+import com.pulsus.pulsusbackend.mapper.TypeSportMapper;
 import com.pulsus.pulsusbackend.mapper.WorkoutMapper;
+import com.pulsus.pulsusbackend.repository.TypeSportRepository;
 import com.pulsus.pulsusbackend.repository.WorkoutRepository;
 import com.pulsus.pulsusbackend.service.FileOnServerService;
 import com.pulsus.pulsusbackend.service.UserService;
@@ -18,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +32,9 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Autowired
     WorkoutRepository workoutRepository;
+
+    @Autowired
+    TypeSportRepository typeSportRepository;
 
     @Autowired
     private FileOnServerService fileOnServerService;
@@ -69,6 +78,36 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         WorkoutDto workoutDto = WorkoutMapper.mapToWorkoutDto(workout);
         return workoutDto;
+    }
+
+    @Override
+    public WorkoutDto editInfoWorkout(Long userId, Long workoutId, WorkoutDto editedData) {
+        Workout workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new NotFoundException("This workout does not exists"));
+
+        if(workout.getUser().getId() != userId) {
+            throw new ForbiddenException("Access denied");
+        }
+
+        // ПРОВЕРКИ НУЖНЫ !!!
+        workout.setName(editedData.getName());
+        workout.setDescription(editedData.getDescription());
+        workout.setAccessType(editedData.getAccessType());
+        workout.setTypeSports(editedData.getTypeSport());
+
+        Workout savedWorkout = workoutRepository.save(workout);
+        return WorkoutMapper.mapToWorkoutDto(savedWorkout);
+    }
+
+    @Override
+    public List<TypeSportDto> getTypesSport() {
+        List<TypeSport> list = typeSportRepository.findAll();
+        List<TypeSportDto> listDto = new ArrayList<>();
+        for(TypeSport type: list) {
+            listDto.add(TypeSportMapper.mapToTypeSportDto(type));
+        }
+
+        return listDto;
     }
 
     private Boolean allowedTypeSport(String typeSport) {

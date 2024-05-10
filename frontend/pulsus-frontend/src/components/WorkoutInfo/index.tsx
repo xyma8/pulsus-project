@@ -32,6 +32,9 @@ export default function WorkoutInfo(props: WorkoutId) {
         })
     }
 
+    //return <div/>
+
+    
     return(
     <div className="workout-info">
         

@@ -19,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController
@@ -103,8 +105,17 @@ public class UserController {
         Long userId = Long.parseLong(userDetails.getUsername());
         WorkoutDto workoutDto = workoutService.getInfoWorkout(userId, workoutId);
 
-
         return ResponseEntity.ok(workoutDto);
+    }
+
+    @PostMapping("/workouts/{workoutId}/edit")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<WorkoutDto> editInfoWorkout(Authentication authentication, @PathVariable Long workoutId, @RequestBody WorkoutDto editedData) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Long userId = Long.parseLong(userDetails.getUsername());
+        WorkoutDto updatedWorkout = workoutService.editInfoWorkout(userId, workoutId, editedData);
+
+        return ResponseEntity.ok(updatedWorkout);//можно возвращать просто OK
     }
 
     @GetMapping("/workouts/{workoutId}/track")
@@ -114,8 +125,15 @@ public class UserController {
         Long userId = Long.parseLong(userDetails.getUsername());
         //WorkoutDto workoutDto = workoutService.getTrackWorkout(userId, workoutId);
 
-
         return null;
+    }
+
+    @GetMapping("/workouts/typesSport")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<List<TypeSportDto>> getTypesSport() {
+        List<TypeSportDto> typeSportDtoList = workoutService.getTypesSport();
+
+        return ResponseEntity.ok(typeSportDtoList);
     }
 
     @GetMapping("/profile")

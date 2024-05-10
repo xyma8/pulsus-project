@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { useParams } from 'react-router-dom';
 import API from "../../utils/API";
 import EditInfoWorkoutForm from "../../components/EditInfoWorkoutForm";
+import ListTypesSport from "../../components/ListTypesSport";
 
 type Inputs = {
     name: string,
@@ -40,6 +41,30 @@ export default function EditWorkoutPage() {
         })
     }
 
+    function updateWorkoutInfo() {
+        API.post(`/users/workouts/${workoutId}/edit`, {
+            headers: {
+                Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
+            }
+        })
+        .then(response => {
+            console.log(response.data);
+            
+        })
+        .catch(error =>{
+            console.error(error);
+            if(error.response.status == 404) {
+                alert("Workout not found");
+            }
+            if(error.response.status == 403) {
+                alert("Access denied");
+            }
+            else if(error.response.status != 200) {
+                alert("Internal error");
+            }
+        })
+    }
+
     function handleInputChange(newInputs: Inputs) {
         setInputs(newInputs);
         console.log(inputs);
@@ -55,6 +80,7 @@ export default function EditWorkoutPage() {
     <div className="edit-workout-page">
         Редактировать тренировку
         <EditInfoWorkoutForm inputs={inputs} onInputChange={handleInputChange}/>
+        <ListTypesSport workoutId={workoutId}/>
     </div>
     )
 }
