@@ -54,7 +54,7 @@ export default function LoginForm(props: LoginFormProps) {
                 type="text"
                 placeholder="Логин"
                 required="Введите логин"
-                minLength={{ value:2, message:"Минимум 4 символа" }}
+                minLength={{ value:4, message:"Минимум 4 символа" }}
                 maxLength={{ value:24, message:"Максимум 24 символа" }}
                 pattern={{ value:/^[a-zA-Z0-9_]+$/ , message:"Неправильный логин" }}
             />

@@ -5,7 +5,7 @@ type InputProps = {
     register: any,
     name: string,
     type: string,
-    value?: string | number,
+    defaultValue?: string | number,
     placeholder?: string,
     autoComplete?: string,
     defaultChecked?: boolean,
@@ -13,6 +13,7 @@ type InputProps = {
     minLength?: { value: number, message: string }
     maxLength?: { value: number, message: string }
     pattern?: { value: RegExp, message: string }
+    onChange?: (value: string) => void
     validate?: RegisterOptions['validate']
 }
 
@@ -21,7 +22,7 @@ export default function InputField(props: InputProps) {
         register,
         name,
         type,
-        value,
+        defaultValue,
         placeholder,
         autoComplete,
         defaultChecked,
@@ -29,6 +30,7 @@ export default function InputField(props: InputProps) {
         minLength, 
         maxLength, 
         pattern,
+        onChange,
         validate } = props;
 
     if(type === 'ckeckbox') {
@@ -50,7 +52,6 @@ export default function InputField(props: InputProps) {
         return(
             <input
                 type={type}
-                value={value}
                 defaultChecked={defaultChecked}
                 {
                     ...register(name, {
@@ -68,7 +69,7 @@ export default function InputField(props: InputProps) {
                 type={type}
                 placeholder={placeholder} 
                 autoComplete={autoComplete || "off"}
-                value={value}
+                defaultValue={defaultValue || ""}
                 {
                     ...register(name, {
                         required,

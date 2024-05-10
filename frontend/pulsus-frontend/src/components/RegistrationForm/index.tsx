@@ -65,7 +65,7 @@ export default function RegistrationForm() {
                     ...register("name", {
                         required: "Обязательное поле",
                         minLength: {value:2, message:"Минимум 2" },
-                        maxLength: {value:20, message:"Максимум 30"},
+                        maxLength: {value:20, message:"Максимум 20"},
                         pattern: {value:/^[а-яА-ЯёЁ]+$/ , message:"Введите правильное имя"}
                     })
                 }
