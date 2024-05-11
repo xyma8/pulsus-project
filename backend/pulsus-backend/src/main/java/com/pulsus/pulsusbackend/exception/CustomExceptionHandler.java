@@ -45,4 +45,11 @@ public class CustomExceptionHandler {
         log.error(exception.getMessage(), exception);
         return new ResponseError(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseError badRequestError(BadRequestException exception) {
+        log.error(exception.getMessage(), exception);
+        return new ResponseError(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

@@ -5,10 +5,7 @@ import com.pulsus.pulsusbackend.entity.FileOnServer;
 import com.pulsus.pulsusbackend.entity.TypeSport;
 import com.pulsus.pulsusbackend.entity.User;
 import com.pulsus.pulsusbackend.entity.Workout;
-import com.pulsus.pulsusbackend.exception.ForbiddenException;
-import com.pulsus.pulsusbackend.exception.InternalServerException;
-import com.pulsus.pulsusbackend.exception.NotFoundException;
-import com.pulsus.pulsusbackend.exception.UnauthorizedException;
+import com.pulsus.pulsusbackend.exception.*;
 import com.pulsus.pulsusbackend.mapper.TypeSportMapper;
 import com.pulsus.pulsusbackend.mapper.WorkoutMapper;
 import com.pulsus.pulsusbackend.repository.TypeSportRepository;
@@ -16,6 +13,7 @@ import com.pulsus.pulsusbackend.repository.WorkoutRepository;
 import com.pulsus.pulsusbackend.service.FileOnServerService;
 import com.pulsus.pulsusbackend.service.UserService;
 import com.pulsus.pulsusbackend.service.WorkoutService;
+import com.pulsus.pulsusbackend.validator.WorkoutValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,11 +87,31 @@ public class WorkoutServiceImpl implements WorkoutService {
             throw new ForbiddenException("Access denied");
         }
 
-        // ПРОВЕРКИ НУЖНЫ !!!
-        workout.setName(editedData.getName());
-        workout.setDescription(editedData.getDescription());
-        workout.setAccessType(editedData.getAccessType());
-        workout.setTypeSports(editedData.getTypeSport());
+        String name = editedData.getName();
+        String description = editedData.getDescription();
+        Integer accessType = editedData.getAccessType();
+        String typeSport = editedData.getTypeSport();
+
+        if(!WorkoutValidator.isValidName(name)) {
+            throw new BadRequestException("Invalid name field");
+        }
+
+        if(!WorkoutValidator.isValidDescription(description)) {
+            throw new BadRequestException("Invalid description field");
+        }
+
+        if(!WorkoutValidator.isValidAccessType(accessType)) {
+            accessType = 2; // правильнее будет вобще не изменять и не трогать
+        }
+
+        if(!WorkoutValidator.isValidTypeSport(typeSport, typeSportRepository.findAll())) {
+            typeSport = "CYCLING"; // тут тоже правильнее будет не трогать
+        }
+
+        workout.setName(name);
+        workout.setDescription(description);
+        workout.setAccessType(accessType);
+        workout.setTypeSports(typeSport);
 
         Workout savedWorkout = workoutRepository.save(workout);
         return WorkoutMapper.mapToWorkoutDto(savedWorkout);

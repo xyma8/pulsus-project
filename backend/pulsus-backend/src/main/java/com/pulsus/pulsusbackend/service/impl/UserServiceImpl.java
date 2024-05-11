@@ -4,6 +4,7 @@ import com.pulsus.pulsusbackend.dto.FileOnServerDto;
 import com.pulsus.pulsusbackend.dto.UserDto;
 import com.pulsus.pulsusbackend.entity.Role;
 import com.pulsus.pulsusbackend.entity.User;
+import com.pulsus.pulsusbackend.exception.BadRequestException;
 import com.pulsus.pulsusbackend.exception.ConflictException;
 import com.pulsus.pulsusbackend.exception.InternalServerException;
 import com.pulsus.pulsusbackend.exception.UnauthorizedException;
@@ -12,6 +13,7 @@ import com.pulsus.pulsusbackend.repository.UserRepository;
 import com.pulsus.pulsusbackend.service.FileService;
 import com.pulsus.pulsusbackend.service.UserService;
 import com.pulsus.pulsusbackend.util.FilePaths;
+import com.pulsus.pulsusbackend.validator.UserValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         checkEmail.ifPresent(user -> {
             throw new ConflictException("Login or Email is already taken");
         });
+
+        if(!UserValidator.isValidName(userDto.getName())) {
+            throw new BadRequestException("Invalid name field");
+        }
+
+        if(!UserValidator.isValidSurname(userDto.getSurname())) {
+            throw new BadRequestException("Invalid surname field");
+        }
+
+        if(!UserValidator.isValidEmail(userDto.getEmail())) {
+            throw new BadRequestException("Invalid email field");
+        }
+
+        if(!UserValidator.isValidLogin(userDto.getLogin())) {
+            throw new BadRequestException("Invalid login field");
+        }
+
+        if(!UserValidator.isValidPassword(userDto.getPassword())) {
+            throw new BadRequestException("Invalid password field");
+        }
 
         User user = UserMapper.mapToUser(userDto);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

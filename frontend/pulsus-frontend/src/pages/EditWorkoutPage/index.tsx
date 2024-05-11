@@ -75,7 +75,6 @@ export default function EditWorkoutPage() {
 
     function handleInputChange(newInputs: Partial<Inputs>) {
         setInputs(prevInputs => ({ ...prevInputs, ...newInputs }));
-        //setWorkoutInfo({inputs: inputs})
     }
 
     function handleTypeSportChange(typeSport: string) {
