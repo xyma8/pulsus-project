@@ -6,11 +6,12 @@ import { getValue } from "@testing-library/user-event/dist/utils"
 type Inputs = {
     name: string,
     description: string,
-    accessType: number
+    accessType: number,
+    typeSport: string
 }
 
 type Props = {
-    inputs: Inputs,
+    inputs: Partial<Inputs>,
     onInputChange: (inputs: Inputs) => void
 }
 
@@ -71,18 +72,21 @@ export default function EditInfoWorkoutForm(props: Props) {
                 register={register}
                 name="accessType"
                 type="radio"
+                value="0"
                 defaultChecked={props.inputs.accessType == 0 ? true: false}
             /> Публичный
             <InputField
                 register={register}
                 name="accessType"
                 type="radio"
+                value="1"
                 defaultChecked={props.inputs.accessType == 1 ? true: false}
             /> Для подписчиков
             <InputField
                 register={register}
                 name="accessType"
                 type="radio"
+                value="2"
                 defaultChecked={props.inputs.accessType == 2 ? true: false}
             /> Скрытый
             {errors.accessType && <div className="error-message">{errors.accessType.message}</div>}

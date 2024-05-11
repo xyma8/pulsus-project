@@ -8,17 +8,24 @@ import ListTypesSport from "../../components/ListTypesSport";
 type Inputs = {
     name: string,
     description: string,
-    accessType: number
+    accessType: number,
+    typeSport: string
 }
 
 export default function EditWorkoutPage() {
     const { workoutId } = useParams();
-    const [inputs, setInputs] = useState<Inputs>()
+    const [inputs, setInputs] = useState<Partial<Inputs>>()
 
     useEffect(() => {
         loadWorkoutInfo();
 
     }, []);
+
+    useEffect(() => {
+        console.log("Inputs changed:", inputs);
+        
+    }, [inputs]); // Этот эффект сработает каждый раз, когда изменится inputs
+
 
     function loadWorkoutInfo() {
         API.get(`/users/workouts/${workoutId}`, {
@@ -28,7 +35,8 @@ export default function EditWorkoutPage() {
         })
         .then(response => {
             //console.log(response.data);
-            setInputs({name: response.data.name, description: response.data.description, accessType: response.data.accessType})
+            setInputs({name: response.data.name, description: response.data.description, accessType: response.data.accessType, typeSport: response.data.typeSport})
+            //setWorkoutInfo({inputs: inputs, typeSport: response.data.typeSport})
         })
         .catch(error =>{
             console.error(error);
@@ -42,7 +50,7 @@ export default function EditWorkoutPage() {
     }
 
     function updateWorkoutInfo() {
-        API.post(`/users/workouts/${workoutId}/edit`, {
+        API.post(`/users/workouts/${workoutId}/edit`, inputs, {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
             }
@@ -65,9 +73,13 @@ export default function EditWorkoutPage() {
         })
     }
 
-    function handleInputChange(newInputs: Inputs) {
-        setInputs(newInputs);
-        console.log(inputs);
+    function handleInputChange(newInputs: Partial<Inputs>) {
+        setInputs(prevInputs => ({ ...prevInputs, ...newInputs }));
+        //setWorkoutInfo({inputs: inputs})
+    }
+
+    function handleTypeSportChange(typeSport: string) {
+        setInputs(prevInputs => ({ ...prevInputs, typeSport }));
     }
 
     if (!inputs) {
@@ -80,7 +92,8 @@ export default function EditWorkoutPage() {
     <div className="edit-workout-page">
         Редактировать тренировку
         <EditInfoWorkoutForm inputs={inputs} onInputChange={handleInputChange}/>
-        <ListTypesSport workoutId={workoutId}/>
+        <ListTypesSport defaultTypeSport={inputs.typeSport} onSelectChange={handleTypeSportChange}/>
+        <button onClick={updateWorkoutInfo}>Сохранить</button>
     </div>
     )
 }

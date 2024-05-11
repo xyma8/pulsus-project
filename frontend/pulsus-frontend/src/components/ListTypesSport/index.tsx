@@ -3,10 +3,12 @@ import API from "../../utils/API";
 import { useState, useEffect } from "react";
 
 interface ListTypesSportProps {
-    workoutId: string | undefined
+    defaultTypeSport: string | undefined,
+    onSelectChange: (selectedTypeSport: string) => void
 }
 
 type ListItem = {
+    id: number,
     name: string
 }
 
@@ -25,15 +27,15 @@ export default function ListTypesSport(props: ListTypesSportProps) {
             }
         })
         .then(response => {
-            console.log(response.data);
-            /*
-            for (let i = 0; i < response.data.fitTrackData.length; i++) {
-                const item = response.data.fitTrackData[i];
+            const list: ListItem[] = response.data;
+            console.log(list);
+            setListTypesSport(list);
+
+            for (let i = 0; i < list.length; i++) {
+                const item = list[i];
                 console.log(item);
-                coordinates.push([item.positionLat, item.positionLong]);
             }
-            setListTypesSport({name: response.data.name})
-            */
+            
         })
         .catch(error =>{
             console.error(error);
@@ -46,11 +48,38 @@ export default function ListTypesSport(props: ListTypesSportProps) {
         })
     }
 
-    // return <div/>??????
+    function formatName(name: string): string {
+        if(name == "CYCLING") {
+            return "Заезд";
+        }
+        if(name == "RUNNING") {
+            return "Забег"
+        }
+        else{
+            return ""
+        }
+    }
+
+    function handleSelectChange(selectedValue: string) {
+        props.onSelectChange(selectedValue);
+    }
+
+    if (!setListTypesSport) {
+        return ( 
+        <div>
+        </div>)
+    }
     
     return(
     <div className="list-types-sport">
-        
+       Вид спорта
+        <select defaultValue={props.defaultTypeSport} onChange={(e) => handleSelectChange(e.target.value)}>
+        {listTypesSport.map((item, index) => (
+          <option key={index} value={item.name}>
+             {item.name}
+          </option>
+        ))}
+      </select>
     </div>
     )
 }

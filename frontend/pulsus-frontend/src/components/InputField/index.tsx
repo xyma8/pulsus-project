@@ -8,6 +8,7 @@ type InputProps = {
     defaultValue?: string | number,
     placeholder?: string,
     autoComplete?: string,
+    value?: string,
     defaultChecked?: boolean,
     required?: string,
     minLength?: { value: number, message: string }
@@ -25,6 +26,7 @@ export default function InputField(props: InputProps) {
         defaultValue,
         placeholder,
         autoComplete,
+        value,
         defaultChecked,
         required, 
         minLength, 
@@ -53,6 +55,7 @@ export default function InputField(props: InputProps) {
             <input
                 type={type}
                 defaultChecked={defaultChecked}
+                value={value}
                 {
                     ...register(name, {
                         required,
