@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRole.setId(1);
         user.getRoles().add(userRole);
         User savedUser = userRepository.save(user);
-        fileService.CreateUserDirs(savedUser.getId());
+        fileService.createUserDirs(savedUser.getId());
 
         return UserMapper.mapToUserDto(savedUser);
     }

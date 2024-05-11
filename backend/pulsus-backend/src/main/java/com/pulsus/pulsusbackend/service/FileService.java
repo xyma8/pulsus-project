@@ -45,7 +45,7 @@ public class FileService {
         return path;
     }
 
-    public void CreateUserDirs(Long userId) {
+    public void createUserDirs(Long userId) {
         String userPath = createPath(String.format("users/%s", userId));
         String picturesPath = createPath(String.format("users/%s/pictures", userId));
         String activitiesPath = createPath(String.format("users/%s/workouts", userId));
@@ -57,16 +57,17 @@ public class FileService {
 
     public void uploadUserProfilePic(Long userId, MultipartFile file) throws IOException {
         String directoryPath = createPath(String.format("users/%s/pictures", userId));
-        String filename = file.getOriginalFilename();
-        String extension = filename.substring(filename.lastIndexOf(".") + 1);
 
         String filePath = directoryPath + "/" + userId + ".jpg";
 
-        File newFile = new File(filePath);
-        file.transferTo(newFile);
+        BufferedImage resizedProfilePic = resizeImage(file, 300, 300);
+        byte[] compressedProfilePic = compressAndConvertPic(resizedProfilePic);
+        FileOutputStream fos = new FileOutputStream(filePath);
+        fos.write(compressedProfilePic);
+        fos.close();
     }
 
-    public void uploadUserPic(Long userId) {
+    public void uploadUserPic(Long userId, MultipartFile file) throws IOException {
 
     }
 
@@ -77,6 +78,7 @@ public class FileService {
         String randomName = userId + UUID.randomUUID().toString();
 
         String filePath = directoryPath + "/" + randomName +  "." + extension;
+
 
         File newFile = new File(filePath);
         file.transferTo(newFile);
@@ -110,17 +112,41 @@ public class FileService {
         return finalPath;
     }
 
-    private String normalizePicExtension(MultipartFile file) throws IOException {
-        BufferedImage image = ImageIO.read(file.getInputStream());
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", baos);
-        byte[] imageBytes = baos.toByteArray();
-
-        return null;
-    }
-
+    /*
     private void addFileInfoToDB() {
 
+    }
+    */
+
+    private byte[] compressAndConvertPic(MultipartFile multipartFile) throws IOException {
+        byte[] bytes = multipartFile.getBytes();
+        BufferedImage image = ImageIO.read(new ByteArrayInputStream(bytes));
+
+        // Сжать изображение в формат JPG
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "jpg", baos);
+        byte[] compressedBytes = baos.toByteArray();
+
+        return compressedBytes;
+    }
+
+    private byte[] compressAndConvertPic(BufferedImage bufferedImage) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, "jpg", baos);
+        byte[] compressedBytes = baos.toByteArray();
+
+        return compressedBytes;
+    }
+
+    private BufferedImage resizeImage(MultipartFile file, int targetWidth, int targetHeight) throws IOException {
+        byte[] bytes = file.getBytes();
+        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        BufferedImage originalBufferedImage = ImageIO.read(bais);
+
+        BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
+        resizedImage.createGraphics().drawImage(originalBufferedImage, 0, 0, targetWidth, targetHeight, null);
+
+        return resizedImage;
     }
 
     private String createPath(String relativePath) {
