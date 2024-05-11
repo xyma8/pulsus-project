@@ -110,13 +110,21 @@ public class UserController {
 
     @PostMapping("/workouts/{workoutId}/edit")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<WorkoutDto> editInfoWorkout(Authentication authentication, @PathVariable Long workoutId, @RequestBody WorkoutDto editedData) {
+    public ResponseEntity<WorkoutDto> editInfoWorkout(Authentication authentication, @PathVariable Long workoutId,
+                                                      @RequestBody WorkoutDto editedData, @RequestParam("files") MultipartFile[] files) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Long userId = Long.parseLong(userDetails.getUsername());
         WorkoutDto updatedWorkout = workoutService.editInfoWorkout(userId, workoutId, editedData);
 
+        for (MultipartFile file : files) {
+            // Делаем что-то с каждым файлом
+            System.out.println(file.getSize());
+        }
+
         return ResponseEntity.ok(updatedWorkout);//можно возвращать просто OK
     }
+
+    @PostMapping("/workouts/{workoutId}/")
 
     @GetMapping("/workouts/{workoutId}/track")
     @PreAuthorize("hasAuthority('ROLE_USER')")

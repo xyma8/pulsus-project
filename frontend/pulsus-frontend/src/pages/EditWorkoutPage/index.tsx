@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import API from "../../utils/API";
 import EditInfoWorkoutForm from "../../components/EditInfoWorkoutForm";
 import ListTypesSport from "../../components/ListTypesSport";
+import UploadImage from "../../components/UploadImage";
 
 type Inputs = {
     name: string,
@@ -14,7 +15,8 @@ type Inputs = {
 
 export default function EditWorkoutPage() {
     const { workoutId } = useParams();
-    const [inputs, setInputs] = useState<Partial<Inputs>>()
+    const [inputs, setInputs] = useState<Partial<Inputs>>();
+    const [workoutData, setWorkoutData] = useState<FormData>();
 
     useEffect(() => {
         loadWorkoutInfo();
@@ -50,9 +52,10 @@ export default function EditWorkoutPage() {
     }
 
     function updateWorkoutInfo() {
-        API.post(`/users/workouts/${workoutId}/edit`, inputs, {
+        API.post(`/users/workouts/${workoutId}/edit`, inputs, images, {
             headers: {
-                Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
+                Authorization: 'Bearer '+ localStorage.getItem('jwtToken'),
+                'Content-Type': 'multipart/form-data'
             }
         })
         .then(response => {
@@ -81,6 +84,12 @@ export default function EditWorkoutPage() {
         setInputs(prevInputs => ({ ...prevInputs, typeSport }));
     }
 
+    function handleImagesChange(formData: FormData) {
+        setWorkoutData({'files', formData})
+        setWorkoutData({formData.append('files', formData)})
+        console.log(formData);
+    }
+
     if (!inputs) {
         return ( 
         <div>
@@ -92,6 +101,7 @@ export default function EditWorkoutPage() {
         Редактировать тренировку
         <EditInfoWorkoutForm inputs={inputs} onInputChange={handleInputChange}/>
         <ListTypesSport defaultTypeSport={inputs.typeSport} onSelectChange={handleTypeSportChange}/>
+        <UploadImage onDropChange={handleImagesChange}/>
         <button onClick={updateWorkoutInfo}>Сохранить</button>
     </div>
     )
