@@ -5,6 +5,7 @@ import API from "../../utils/API";
 import EditInfoWorkoutForm from "../../components/EditInfoWorkoutForm";
 import ListTypesSport from "../../components/ListTypesSport";
 import UploadImage from "../../components/UploadImage";
+import { workerData } from "worker_threads";
 
 type Inputs = {
     name: string,
@@ -16,7 +17,8 @@ type Inputs = {
 export default function EditWorkoutPage() {
     const { workoutId } = useParams();
     const [inputs, setInputs] = useState<Partial<Inputs>>();
-    const [workoutData, setWorkoutData] = useState<FormData>();
+    //const [workoutData, setWorkoutData] = useState<FormData>();
+    const workoutPhotos = new FormData();
 
     useEffect(() => {
         loadWorkoutInfo();
@@ -25,7 +27,6 @@ export default function EditWorkoutPage() {
 
     useEffect(() => {
         console.log("Inputs changed:", inputs);
-        
     }, [inputs]); // Этот эффект сработает каждый раз, когда изменится inputs
 
 
@@ -52,15 +53,41 @@ export default function EditWorkoutPage() {
     }
 
     function updateWorkoutInfo() {
-        API.post(`/users/workouts/${workoutId}/edit`, inputs, images, {
+        API.post(`/users/workouts/${workoutId}/edit`, inputs, {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken'),
-                'Content-Type': 'multipart/form-data'
             }
         })
         .then(response => {
             console.log(response.data);
-            
+            uploadWorkoutPhotos();
+        })
+        .catch(error =>{
+            console.error(error);
+            if(error.response.status == 404) {
+                alert("Workout not found");
+            }
+            if(error.response.status == 403) {
+                alert("Access denied");
+            }
+            else if(error.response.status != 200) {
+                alert("Internal error");
+            }
+        })
+    }
+
+    function uploadWorkoutPhotos() {
+        if(!workoutPhotos.has("images")) return;
+
+        console.log(workoutPhotos?.get("images"));
+        API.post(`/users/workouts/${workoutId}/uploadPhotos`, workoutPhotos, {
+            headers: {
+                Authorization: 'Bearer '+ localStorage.getItem('jwtToken'),
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+        .then(response => {
+            console.log(response.data);
         })
         .catch(error =>{
             console.error(error);
@@ -84,10 +111,11 @@ export default function EditWorkoutPage() {
         setInputs(prevInputs => ({ ...prevInputs, typeSport }));
     }
 
-    function handleImagesChange(formData: FormData) {
-        setWorkoutData({'files', formData})
-        setWorkoutData({formData.append('files', formData)})
-        console.log(formData);
+    function handleImagesChange(images: FileList) {
+        for (let i = 0; i < images.length; i++) {
+            workoutPhotos.append('images', images[i]);
+        }
+       
     }
 
     if (!inputs) {

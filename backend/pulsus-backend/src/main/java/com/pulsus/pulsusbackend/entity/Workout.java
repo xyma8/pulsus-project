@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -43,4 +46,12 @@ public class Workout {
 
     @Column(name = "timestamp", nullable = false)
     private Date timestamp;
+
+    @ManyToMany
+    @JoinTable(
+            name = "workouts_photos",
+            joinColumns = @JoinColumn(name = "workout"),
+            inverseJoinColumns = @JoinColumn(name = "photo")
+    )
+    private Collection<FileOnServer> photos = new ArrayList<>();
 }

@@ -3,7 +3,7 @@ import API from "../../utils/API";
 import React, { useState } from 'react';
 
 interface UploadImageProps {
-    onDropChange: (formData: FormData) => void
+    onDropChange: (images: FileList) => void
 }
 
 export default function UploadImage(props: UploadImageProps) {
@@ -24,12 +24,7 @@ export default function UploadImage(props: UploadImageProps) {
         
         if(!files) return;
 
-        const formData = new FormData();
-        for (let i = 0; i < files.length; i++) {
-            formData.append('files', files[i]);
-        }
-        
-        props.onDropChange(formData);
+        props.onDropChange(files);
     }
     
     return(

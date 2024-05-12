@@ -1,5 +1,6 @@
 package com.pulsus.pulsusbackend.dto;
 
+import com.pulsus.pulsusbackend.entity.FileOnServer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,4 +25,5 @@ public class WorkoutDto {
     private Integer accessType;
 
     private Date timestamp;
+
 }

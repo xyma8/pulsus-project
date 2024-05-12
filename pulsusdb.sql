@@ -53,6 +53,14 @@ CREATE TABLE `types_sports` (
     `description` VARCHAR(254) NOT NULL
 )
 
+CREATE TABLE `workouts_photos` (
+	`id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+	`workout` BIGINT NOT NULL,
+    `photo` BIGINT NOT NULL,
+    FOREIGN KEY (photo) REFERENCES files_on_server(id),
+    FOREIGN KEY (workout) REFERENCES workouts(id)
+)
+
 INSERT INTO `types_sports` (`name`, `description`)
 VALUES('CYCLING', 'cycling')
 

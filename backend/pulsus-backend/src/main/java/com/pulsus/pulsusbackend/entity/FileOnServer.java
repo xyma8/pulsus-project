@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 @Entity
 @NoArgsConstructor
 @Data
@@ -29,6 +32,9 @@ public class FileOnServer {
 
     @OneToOne(mappedBy = "filesOnServer")
     private Workout workout;
+
+    @ManyToMany(mappedBy = "photos")
+    private Collection<Workout> workouts = new ArrayList<>();
 
     public FileOnServer(Long id, String filehash, String extension, Long size, String path) {
         this.id = id;
