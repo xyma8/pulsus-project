@@ -7,4 +7,4 @@ uploads/assets/profile_picture
 
 uploads/users/{userId}/pictures
 
-                      /workouts
+uploads/users/{userId}/workouts
