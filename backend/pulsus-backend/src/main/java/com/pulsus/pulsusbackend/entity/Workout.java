@@ -9,7 +9,6 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -39,7 +38,7 @@ public class Workout {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_workout", referencedColumnName = "id")
-    private FileOnServer filesOnServer;
+    private FileOnServer fileOnServer;
 
     @Column(name = "access_type", nullable = false)
     private Integer accessType;

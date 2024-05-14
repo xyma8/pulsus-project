@@ -108,6 +108,16 @@ public class UserController {
         return ResponseEntity.ok(workoutDto);
     }
 
+    @GetMapping("/workouts/{workoutId}/track")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<FITFileDto> getTrackWorkoutController(Authentication authentication, @PathVariable Long workoutId) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Long userId = Long.parseLong(userDetails.getUsername());
+        FITFileDto fitFileDto = workoutService.getTrackWorkout(userId, workoutId);
+
+        return ResponseEntity.ok(fitFileDto);
+    }
+
     @PostMapping("/workouts/{workoutId}/edit")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<WorkoutDto> editInfoWorkout(Authentication authentication, @PathVariable Long workoutId, @RequestBody WorkoutDto workoutData) {

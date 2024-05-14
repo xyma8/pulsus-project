@@ -1,4 +1,5 @@
 package com.pulsus.pulsusbackend.service.impl;
+import com.pulsus.pulsusbackend.dto.FITFileDto;
 import com.pulsus.pulsusbackend.dto.TypeSportDto;
 import com.pulsus.pulsusbackend.dto.WorkoutDto;
 import com.pulsus.pulsusbackend.entity.FileOnServer;
@@ -56,7 +57,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         newWorkout.setTypeSports(typeSport);
         newWorkout.setUser(user);
         FileOnServer fileOnServer = fileOnServerService.addTrackFile(file, userId); // файл сохраняем после всех проверок
-        newWorkout.setFilesOnServer(fileOnServer);
+        newWorkout.setFileOnServer(fileOnServer);
 
         Workout savedWorkout = workoutRepository.save(newWorkout);
         return WorkoutMapper.mapToWorkoutDto(savedWorkout);
@@ -115,6 +116,23 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         Workout savedWorkout = workoutRepository.save(workout);
         return WorkoutMapper.mapToWorkoutDto(savedWorkout);
+    }
+
+    @Override
+    public FITFileDto getTrackWorkout(Long userId, Long workoutId) {
+        Workout workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new NotFoundException("This workout does not exists"));
+
+        Integer accessType = workout.getAccessType();
+
+        if(accessType==2 && workout.getUser().getId() != userId) {
+            System.out.println("This workout does not exists");
+            throw new NotFoundException("This workout does not exists");
+        }
+
+        FileOnServer fileOnServer = workout.getFileOnServer();
+
+        return null;
     }
 
     @Override
