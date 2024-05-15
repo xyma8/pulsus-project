@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css"
 import { MapContainer, Polyline, TileLayer } from "react-leaflet"
 import { Coordinates } from "../../utils/projectTypes";
 
-interface TrackMapProps {
+type TrackMapProps = {
     coordinates: Coordinates;
 }
 

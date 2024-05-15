@@ -2,7 +2,7 @@ import "./style.css"
 import API from "../../services/API";
 import { useState, useEffect } from "react";
 
-interface ListTypesSportProps {
+type ListTypesSportProps = {
     defaultTypeSport: string | undefined,
     onSelectChange: (selectedTypeSport: string) => void
 }

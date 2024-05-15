@@ -1,5 +1,6 @@
 package com.pulsus.pulsusbackend.service.impl;
 import com.pulsus.pulsusbackend.dto.FITFileDto;
+import com.pulsus.pulsusbackend.dto.TrackSummaryDto;
 import com.pulsus.pulsusbackend.dto.TypeSportDto;
 import com.pulsus.pulsusbackend.dto.WorkoutDto;
 import com.pulsus.pulsusbackend.entity.FileOnServer;
@@ -134,6 +135,24 @@ public class WorkoutServiceImpl implements WorkoutService {
         FITFileDto fitFileDto = fileOnServerService.readTrack(fileOnServer);
 
         return fitFileDto;
+    }
+
+    @Override
+    public TrackSummaryDto getTrackSummaryWorkout(Long userId, Long workoutId) {
+        Workout workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new NotFoundException("This workout does not exists"));
+
+        Integer accessType = workout.getAccessType();
+
+        if(accessType==2 && workout.getUser().getId() != userId) {
+            System.out.println("This workout does not exists");
+            throw new NotFoundException("This workout does not exists");
+        } //вынести в отдельную функцию
+
+        FileOnServer fileOnServer = workout.getFilesOnServer();
+        TrackSummaryDto trackSummaryDto = fileOnServerService.readTrackSummary(fileOnServer);
+
+        return trackSummaryDto;
     }
 
     @Override

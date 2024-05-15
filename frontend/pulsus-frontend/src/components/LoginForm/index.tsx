@@ -8,7 +8,7 @@ type Inputs = {
     password: string
 }
 
-interface LoginFormProps {
+type LoginFormProps = {
     onSuccessLogin: (token: string) => void;
 }
 

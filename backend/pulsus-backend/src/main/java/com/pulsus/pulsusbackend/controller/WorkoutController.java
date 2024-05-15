@@ -1,6 +1,7 @@
 package com.pulsus.pulsusbackend.controller;
 
 import com.pulsus.pulsusbackend.dto.FITFileDto;
+import com.pulsus.pulsusbackend.dto.TrackSummaryDto;
 import com.pulsus.pulsusbackend.dto.TypeSportDto;
 import com.pulsus.pulsusbackend.dto.WorkoutDto;
 import com.pulsus.pulsusbackend.service.WorkoutService;
@@ -25,10 +26,7 @@ public class WorkoutController {
     @PostMapping("/addNewWorkout")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<WorkoutDto> addNewWorkout(Authentication authentication, @RequestParam("file") MultipartFile file) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long userId = Long.parseLong(userDetails.getUsername());
-        WorkoutDto workoutDto = workoutService.createWorkout(file, userId);
-
+        WorkoutDto workoutDto = workoutService.createWorkout(file, getUserId(authentication));
 
         return ResponseEntity.ok(workoutDto);
     }
@@ -36,19 +34,23 @@ public class WorkoutController {
     @GetMapping("/{workoutId}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<WorkoutDto> getInfoWorkout(Authentication authentication, @PathVariable Long workoutId) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long userId = Long.parseLong(userDetails.getUsername());
-        WorkoutDto workoutDto = workoutService.getInfoWorkout(userId, workoutId);
+        WorkoutDto workoutDto = workoutService.getInfoWorkout(getUserId(authentication), workoutId);
 
         return ResponseEntity.ok(workoutDto);
+    }
+
+    @GetMapping("/{workoutId}/trackSummary")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<TrackSummaryDto> getTrackSummaryWorkout(Authentication authentication, @PathVariable Long workoutId) {
+        TrackSummaryDto trackSummaryDto = workoutService.getTrackSummaryWorkout(getUserId(authentication), workoutId);
+
+        return ResponseEntity.ok(trackSummaryDto);
     }
 
     @GetMapping("/{workoutId}/track")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<FITFileDto> getTrackWorkout(Authentication authentication, @PathVariable Long workoutId) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long userId = Long.parseLong(userDetails.getUsername());
-        FITFileDto fitFileDto = workoutService.getTrackWorkout(userId, workoutId);
+        FITFileDto fitFileDto = workoutService.getTrackWorkout(getUserId(authentication), workoutId);
 
         return ResponseEntity.ok(fitFileDto);
     }
@@ -56,9 +58,7 @@ public class WorkoutController {
     @PostMapping("/{workoutId}/edit")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<WorkoutDto> editInfoWorkout(Authentication authentication, @PathVariable Long workoutId, @RequestBody WorkoutDto workoutData) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long userId = Long.parseLong(userDetails.getUsername());
-        WorkoutDto updatedWorkout = workoutService.editInfoWorkout(userId, workoutId, workoutData);
+        WorkoutDto updatedWorkout = workoutService.editInfoWorkout(getUserId(authentication), workoutId, workoutData);
 
         return ResponseEntity.ok(updatedWorkout);//можно возвращать просто OK
     }
@@ -66,9 +66,6 @@ public class WorkoutController {
     @PostMapping("/{workoutId}/uploadPhotos")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<String> uploadWorkoutPhotos(Authentication authentication, @PathVariable Long workoutId, @RequestParam("images") MultipartFile[] files) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long userId = Long.parseLong(userDetails.getUsername());
-
         System.out.println(files.length);
         for (MultipartFile file : files) {
             // Делаем что-то с каждым файлом
@@ -84,5 +81,12 @@ public class WorkoutController {
         List<TypeSportDto> typeSportDtoList = workoutService.getTypesSport();
 
         return ResponseEntity.ok(typeSportDtoList);
+    }
+
+    private Long getUserId(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Long userId = Long.parseLong(userDetails.getUsername());
+
+        return userId;
     }
 }

@@ -2,18 +2,18 @@ import "./style.css"
 import API from "../../services/API";
 import { useState, useEffect } from "react";
 
-type WorkoutId = {
-    id: string | undefined
+type WorkoutInfoProps = {
+    workoutId: string | undefined
 }
 
-export default function WorkoutInfo(props: WorkoutId) {
+export default function WorkoutInfo(props: WorkoutInfoProps) {
     useEffect(() => {
         loadWorkoutInfo();
 
     }, []);
 
     function loadWorkoutInfo() {
-        API.get(`/workouts/${props.id}`, {
+        API.get(`/workouts/${props.workoutId}`, {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
             }

@@ -3,6 +3,7 @@ package com.pulsus.pulsusbackend.service.impl;
 import com.garmin.fit.*;
 import com.pulsus.pulsusbackend.dto.FITFileDto;
 import com.pulsus.pulsusbackend.dto.GPXFileDto;
+import com.pulsus.pulsusbackend.dto.TrackSummaryDto;
 import com.pulsus.pulsusbackend.entity.FileOnServer;
 import com.pulsus.pulsusbackend.exception.ConflictException;
 import com.pulsus.pulsusbackend.exception.InternalServerException;
@@ -70,7 +71,57 @@ public class FileOnServerServiceImpl implements FileOnServerService {
     }
 
     @Override
-    public GPXFileDto readTrackGPX(MultipartFile file) {
+    public FITFileDto readTrack(FileOnServer fileOnServer) {
+        FITFileDto fitFileDto;
+
+        if(fileOnServer.getExtension().equals("fit")) {
+            fitFileDto = readTrackFIT(fileOnServer.getPath());
+        }
+        else{
+            fitFileDto = readTrackFIT(fileOnServer.getPath());
+        }
+
+        return fitFileDto;
+    }
+
+    @Override
+    public TrackSummaryDto readTrackSummary(FileOnServer fileOnServer) {
+        TrackSummaryDto trackSummaryDto;
+
+        if(fileOnServer.getExtension().equals("fit")) {
+            trackSummaryDto = readTrackSummaryFIT(fileOnServer.getPath());
+        }
+        else{
+            trackSummaryDto = readTrackSummaryFIT(fileOnServer.getPath());
+        }
+
+        return trackSummaryDto;
+    }
+
+    @Override
+    public String getTypeSport(MultipartFile file) {
+        InputStream isFile;
+        FitDecoder fitDecoder = new FitDecoder();
+        FitMessages fitMessages;
+
+        try {
+            isFile = file.getInputStream();
+            fitMessages = fitDecoder.decode(isFile);
+            isFile.close();
+        }catch (Exception e){
+            System.out.println(e);
+            throw new InternalServerException("Internal error");
+        }
+        if(fitMessages.getRecordMesgs().isEmpty()) {
+            throw new InternalServerException(".fit file is empty");
+        }
+
+        String typeSport = fitMessages.getSessionMesgs().get(0).getSport().toString();
+
+        return typeSport;
+    }
+
+    private GPXFileDto readTrackGPX(MultipartFile file) {
         /*
         GPXParser gpxParser = new GPXParser();
         FileInputStream in;
@@ -97,8 +148,49 @@ public class FileOnServerServiceImpl implements FileOnServerService {
         return null;
     }
 
-    @Override
-    public FITFileDto readTrackFIT(String filePath) {
+    private FITFileDto readTrackFIT(String filePath) {
+        FitMessages fitMessages = getFitMessages(filePath);
+
+        if(fitMessages.getRecordMesgs().isEmpty()) {
+            throw new InternalServerException(".fit file is empty");
+        }
+
+        FITFileDto fitFileDto = new FITFileDto();
+        List<RecordMesg> recordMesgs = fitMessages.getRecordMesgs();
+        List<FITTrackData> fitTrackDataList = new ArrayList<>();
+
+        for(RecordMesg elem : recordMesgs) {
+            FITTrackData fitTrackData = FITTrackDataMapper.mapToFITTrackData(elem);
+            fitTrackDataList.add(fitTrackData);
+        }
+
+        fitFileDto.setFitTrackData(fitTrackDataList);
+
+        return fitFileDto;
+    }
+
+    private TrackSummaryDto readTrackSummaryFIT(String filePath) {
+        FitMessages fitMessages = getFitMessages(filePath);
+
+        if(fitMessages.getRecordMesgs().isEmpty()) {
+            throw new InternalServerException(".fit file is empty");
+        }
+
+        TrackSummaryDto trackSummaryDto = new TrackSummaryDto();
+        List<SessionMesg> sessionMesgs = fitMessages.getSessionMesgs();
+        List<FITSessionData> fitSessionDataList = new ArrayList<>();
+        
+        for(SessionMesg elem : sessionMesgs) {
+            FITSessionData fitSessionData = FITSessionDataMapper.mapToFITSessionData(elem);
+            fitSessionDataList.add(fitSessionData);
+        }
+
+        trackSummaryDto.setFitSessionData(fitSessionDataList);
+
+        return trackSummaryDto;
+    }
+
+    private FitMessages getFitMessages(String filePath) {
         InputStream inputStream;
         FitDecoder fitDecoder = new FitDecoder();
         FitMessages fitMessages;
@@ -112,68 +204,7 @@ public class FileOnServerServiceImpl implements FileOnServerService {
             throw new InternalServerException("Internal error");
         }
 
-        if(fitMessages.getRecordMesgs().isEmpty()) {
-            throw new InternalServerException(".fit file is empty");
-        }
-
-        List<SessionMesg> sessionMesgs = fitMessages.getSessionMesgs();
-        List<RecordMesg> recordMesgs = fitMessages.getRecordMesgs();
-
-        FITFileDto fitFileDto = new FITFileDto();
-        List<FITSessionData> fitSessionDataList = new ArrayList<>();
-        List<FITTrackData> fitTrackDataList = new ArrayList<>();
-
-        for(SessionMesg elem : sessionMesgs) {
-            FITSessionData fitSessionData = FITSessionDataMapper.mapToFITSessionData(elem);
-            fitSessionDataList.add(fitSessionData);
-        }
-
-        for(RecordMesg elem : recordMesgs) {
-            FITTrackData fitTrackData = FITTrackDataMapper.mapToFITTrackData(elem);
-            fitTrackDataList.add(fitTrackData);
-        }
-
-        fitFileDto.setFitSessionData(fitSessionDataList);
-        fitFileDto.setFitTrackData(fitTrackDataList);
-
-        return fitFileDto;
-    }
-
-    @Override
-    public FITFileDto readTrack(FileOnServer fileOnServer) {
-        FITFileDto fitFileDto;
-
-        if(fileOnServer.getExtension().equals("fit")) {
-            fitFileDto = readTrackFIT(fileOnServer.getPath());
-        }
-        else{
-            fitFileDto = readTrackFIT(fileOnServer.getPath());
-        }
-
-        return fitFileDto;
-    }
-
-    @Override
-    public String getTypeSport(MultipartFile file) {
-        InputStream isFile;
-        FitDecoder fitDecoder = new FitDecoder();
-        FitMessages fitMessages;
-
-        try {
-            isFile = file.getInputStream();
-            fitMessages = fitDecoder.decode(isFile);
-            isFile.close();
-        }catch (Exception e){
-            System.out.println(e);
-            throw new InternalServerException("Internal error");
-        }
-        if(fitMessages.getRecordMesgs().isEmpty()) {
-            throw new InternalServerException(".fit file is empty");
-        }
-
-        String typeSport = fitMessages.getSessionMesgs().get(0).getSport().toString();
-
-        return typeSport;
+        return fitMessages;
     }
 
     private void checkExtensionTrackFile(String extension) {

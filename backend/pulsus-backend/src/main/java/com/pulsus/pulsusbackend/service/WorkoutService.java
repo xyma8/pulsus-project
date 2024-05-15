@@ -1,6 +1,7 @@
 package com.pulsus.pulsusbackend.service;
 
 import com.pulsus.pulsusbackend.dto.FITFileDto;
+import com.pulsus.pulsusbackend.dto.TrackSummaryDto;
 import com.pulsus.pulsusbackend.dto.TypeSportDto;
 import com.pulsus.pulsusbackend.dto.WorkoutDto;
 import com.pulsus.pulsusbackend.entity.TypeSport;
@@ -21,5 +22,7 @@ public interface WorkoutService {
     List<TypeSportDto> getTypesSport();
 
     FITFileDto getTrackWorkout(Long userId, Long workoutId);
+
+    TrackSummaryDto getTrackSummaryWorkout(Long userId, Long workoutId);
 
 }

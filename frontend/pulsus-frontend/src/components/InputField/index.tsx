@@ -1,7 +1,7 @@
 import "./style.css"
 import { UseFormRegister, FieldValues, RegisterOptions } from "react-hook-form"
 
-type InputProps = {
+type InputFieldProps = {
     register: any,
     name: string,
     type: string,
@@ -18,7 +18,7 @@ type InputProps = {
     validate?: RegisterOptions['validate']
 }
 
-export default function InputField(props: InputProps) {
+export default function InputField(props: InputFieldProps) {
     const {
         register,
         name,

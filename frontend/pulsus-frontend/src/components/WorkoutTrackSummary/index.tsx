@@ -1,22 +1,19 @@
-import InformationChart from "../../components/InformationChart";
-import LandscapeChart from "../../components/LandscapeChart";
-import WorkoutInfo from "../../components/WorkoutInfo";
 import "./style.css"
-import { useParams } from 'react-router-dom';
 import { useEffect } from "react";
-import { getWorkoutTrack } from "../../services/workoutService";
-import WorkoutTrackSummary from "../../components/WorkoutTrackSummary";
+import { getWorkoutTrackSummary } from "../../services/workoutService";
 
-export default function WorkoutPage() {
-    const { workoutId } = useParams();
+type WorkoutTrackSummaryProps = {
+    workoutId: string | undefined
+}
+export default function WorkoutTrackSummary(props: WorkoutTrackSummaryProps) {
 
     useEffect(() => {
-        getTrackInfo();
+        getSummary();
 
     }, []);
 
-    function getTrackInfo() {
-        getWorkoutTrack(workoutId)
+    function getSummary() {
+        getWorkoutTrackSummary(props.workoutId)
         .then(response => {
             console.log(response.data);
             /*
@@ -42,10 +39,8 @@ export default function WorkoutPage() {
     }
 
     return(
-    <div className="workout-page">
-        <WorkoutInfo workoutId={workoutId} />
-        <WorkoutTrackSummary workoutId={workoutId} />
-        <InformationChart />
+    <div className="workout-track-summmary">
+
     </div>
     )
 }

@@ -103,19 +103,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public FileOnServerDto getProfilePicture(String userId) {
-        User user = findById(Long.parseLong(userId))
+    public FileOnServerDto getProfilePicture(Long userId) {
+        User user = findById(userId)
                 .orElseThrow(() -> new UnauthorizedException("Login error")); //проверка не нужна?
 
-        String path = fileService.profilePic(Long.parseLong(userId));
+        String path = fileService.profilePic(userId);
 
         return new FileOnServerDto(path);
     }
 
     @Override
-    public FileOnServerDto uploadProfilePicture(MultipartFile file, String userId) {
+    public FileOnServerDto uploadProfilePicture(Long userId, MultipartFile file) {
         try {
-            fileService.uploadUserProfilePic(Long.parseLong(userId), file);
+            fileService.uploadUserProfilePic(userId, file);
         } catch (Exception e) {
             throw new InternalServerException("Internal server exception");
         }

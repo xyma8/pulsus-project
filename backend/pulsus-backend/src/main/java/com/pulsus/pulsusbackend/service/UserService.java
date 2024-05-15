@@ -12,9 +12,9 @@ import java.util.Optional;
 public interface UserService {
     UserDto createUser(UserDto userDto);
 
-    FileOnServerDto getProfilePicture(String userId);
+    FileOnServerDto getProfilePicture(Long userId);
 
-    FileOnServerDto uploadProfilePicture(MultipartFile file, String userId);
+    FileOnServerDto uploadProfilePicture(Long userId, MultipartFile file);
 
     Long getUserIdByLogin(String login);
 

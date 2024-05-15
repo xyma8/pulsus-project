@@ -45,17 +45,14 @@ public class UserController {
     @GetMapping("/profilePicture")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<FileOnServerDto> getProfilePicture(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String userId = userDetails.getUsername();
-        FileOnServerDto fileOnServerDto = userService.getProfilePicture(userId);
+        FileOnServerDto fileOnServerDto = userService.getProfilePicture(getUserId(authentication));
         return ResponseEntity.ok(fileOnServerDto);
     }
 
     @PostMapping("/uploadProfilePicture")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<FileOnServerDto> uploadProfilePicture(Authentication authentication, @RequestParam("file") MultipartFile file) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        FileOnServerDto fileOnServerDto = userService.uploadProfilePicture(file, userDetails.getUsername());
+        FileOnServerDto fileOnServerDto = userService.uploadProfilePicture(getUserId(authentication), file);
 
         System.out.println("file size " + file.getSize());
 
@@ -66,8 +63,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<GPXFileDto> uploadGPXFile(Authentication authentication, @RequestParam("file") MultipartFile file) {
         System.out.println(file.getOriginalFilename());
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        GPXFileDto gpxInfoDto = fileOnServerService.readTrackGPX(file);
+        //GPXFileDto gpxInfoDto = fileOnServerService.readTrackGPX(file);
 
         return null;
     }
@@ -91,6 +87,13 @@ public class UserController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         return "Welcome to User Profile " + userDetails.getUsername();
+    }
+
+    private Long getUserId(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Long userId = Long.parseLong(userDetails.getUsername());
+
+        return userId;
     }
 
 }
