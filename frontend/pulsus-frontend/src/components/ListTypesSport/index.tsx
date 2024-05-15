@@ -1,5 +1,5 @@
 import "./style.css"
-import API from "../../utils/API";
+import API from "../../services/API";
 import { useState, useEffect } from "react";
 
 interface ListTypesSportProps {
@@ -21,7 +21,7 @@ export default function ListTypesSport(props: ListTypesSportProps) {
     }, []);
 
     function getListTypesSport() {
-        API.get(`/users/workouts/typesSport`, {
+        API.get(`/workouts/typesSport`, {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
             }

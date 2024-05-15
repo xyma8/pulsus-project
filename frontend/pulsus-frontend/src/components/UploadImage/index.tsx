@@ -1,5 +1,5 @@
 import "./style.css"
-import API from "../../utils/API";
+import API from "../../services/API";
 import React, { useState } from 'react';
 
 interface UploadImageProps {

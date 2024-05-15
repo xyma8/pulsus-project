@@ -2,7 +2,7 @@ import "./style.css"
 import Cookies from 'js-cookie'
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import API from "../../utils/API";
+import API from "../../services/API";
 import ProfilePicture from "../../components/ProfilePicture";
 import ChangeProfilePicture from "../../components/ChangeProfilePicture";
 import UploadTrackFile from "../../components/UploadTrackFile";

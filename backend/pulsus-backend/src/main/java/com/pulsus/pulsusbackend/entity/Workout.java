@@ -38,7 +38,7 @@ public class Workout {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_workout", referencedColumnName = "id")
-    private FileOnServer fileOnServer;
+    private FileOnServer filesOnServer;
 
     @Column(name = "access_type", nullable = false)
     private Integer accessType;

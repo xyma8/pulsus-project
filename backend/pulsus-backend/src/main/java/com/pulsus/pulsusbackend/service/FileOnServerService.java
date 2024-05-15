@@ -9,9 +9,11 @@ public interface FileOnServerService {
 
     FileOnServer addTrackFile(MultipartFile multipartFile, Long userId);
 
-    GPXFileDto readGPX(MultipartFile multipartFile);
+    GPXFileDto readTrackGPX(MultipartFile multipartFile);
 
-    FITFileDto readFIT(MultipartFile multipartFile);
+    FITFileDto readTrackFIT(String filePath);
 
     String getTypeSport(MultipartFile multipartFile);
+
+    FITFileDto readTrack(FileOnServer fileOnServer);
 }

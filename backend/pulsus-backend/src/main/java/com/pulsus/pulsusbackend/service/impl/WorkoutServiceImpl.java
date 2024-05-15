@@ -57,7 +57,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         newWorkout.setTypeSports(typeSport);
         newWorkout.setUser(user);
         FileOnServer fileOnServer = fileOnServerService.addTrackFile(file, userId); // файл сохраняем после всех проверок
-        newWorkout.setFileOnServer(fileOnServer);
+        newWorkout.setFilesOnServer(fileOnServer);
 
         Workout savedWorkout = workoutRepository.save(newWorkout);
         return WorkoutMapper.mapToWorkoutDto(savedWorkout);
@@ -130,9 +130,10 @@ public class WorkoutServiceImpl implements WorkoutService {
             throw new NotFoundException("This workout does not exists");
         }
 
-        FileOnServer fileOnServer = workout.getFileOnServer();
+        FileOnServer fileOnServer = workout.getFilesOnServer();
+        FITFileDto fitFileDto = fileOnServerService.readTrack(fileOnServer);
 
-        return null;
+        return fitFileDto;
     }
 
     @Override

@@ -1,5 +1,5 @@
 import "./style.css"
-import API from "../../utils/API";
+import API from "../../services/API";
 import { useState, useEffect } from "react";
 
 type WorkoutId = {
@@ -13,7 +13,7 @@ export default function WorkoutInfo(props: WorkoutId) {
     }, []);
 
     function loadWorkoutInfo() {
-        API.get(`/users/workouts/${props.id}`, {
+        API.get(`/workouts/${props.id}`, {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
             }

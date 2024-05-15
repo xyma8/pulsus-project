@@ -1,5 +1,5 @@
 import "./style.css"
-import API from "../../utils/API";
+import API from "../../services/API";
 import { useState, useEffect } from "react";
 import { Coordinates } from "../../utils/projectTypes";
 
@@ -8,7 +8,7 @@ export default function UploadTrackFile() {
     const coordinates: Coordinates = [];
 
     function uploadTrackFile() {
-        API.post("/users/addNewWorkout", formData, {
+        API.post("/workouts/addNewWorkout", formData, {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken'),
                 'Content-Type': 'multipart/form-data',  

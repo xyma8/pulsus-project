@@ -31,8 +31,6 @@ public class UserController {
 
     private final FileOnServerService fileOnServerService;
 
-    private final WorkoutService workoutService; //del
-
     @PostMapping("/signup")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
         userService.createUser(userDto);
@@ -69,7 +67,7 @@ public class UserController {
     public ResponseEntity<GPXFileDto> uploadGPXFile(Authentication authentication, @RequestParam("file") MultipartFile file) {
         System.out.println(file.getOriginalFilename());
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        GPXFileDto gpxInfoDto = fileOnServerService.readGPX(file);
+        GPXFileDto gpxInfoDto = fileOnServerService.readTrackGPX(file);
 
         return null;
     }
@@ -85,88 +83,6 @@ public class UserController {
         //Long userId = Long.parseLong(userDetails.getUsername());
         //WorkoutDto workoutDto = workoutService.createWorkout(file, userId);
         return null;
-    }
-
-    @PostMapping("/addNewWorkout")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<WorkoutDto> addNewWorkout(Authentication authentication, @RequestParam("file") MultipartFile file) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long userId = Long.parseLong(userDetails.getUsername());
-        WorkoutDto workoutDto = workoutService.createWorkout(file, userId);
-
-
-        return ResponseEntity.ok(workoutDto);
-    }
-
-    @GetMapping("/workouts/{workoutId}")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<WorkoutDto> getInfoWorkout(Authentication authentication, @PathVariable Long workoutId) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long userId = Long.parseLong(userDetails.getUsername());
-        WorkoutDto workoutDto = workoutService.getInfoWorkout(userId, workoutId);
-
-        return ResponseEntity.ok(workoutDto);
-    }
-
-    @GetMapping("/workouts/{workoutId}/track")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<FITFileDto> getTrackWorkoutController(Authentication authentication, @PathVariable Long workoutId) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long userId = Long.parseLong(userDetails.getUsername());
-        FITFileDto fitFileDto = workoutService.getTrackWorkout(userId, workoutId);
-
-        return ResponseEntity.ok(fitFileDto);
-    }
-
-    @PostMapping("/workouts/{workoutId}/edit")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<WorkoutDto> editInfoWorkout(Authentication authentication, @PathVariable Long workoutId, @RequestBody WorkoutDto workoutData) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long userId = Long.parseLong(userDetails.getUsername());
-        WorkoutDto updatedWorkout = workoutService.editInfoWorkout(userId, workoutId, workoutData);
-
-        /*
-        System.out.println(files.length);
-        for (MultipartFile file : files) {
-            // Делаем что-то с каждым файлом
-            System.out.println(file.getSize());
-        }
-*/
-        return ResponseEntity.ok(updatedWorkout);//можно возвращать просто OK
-    }
-
-    @PostMapping("workouts/{workoutId}/uploadPhotos")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<String> uploadWorkoutPhotos(Authentication authentication, @PathVariable Long workoutId, @RequestParam("images") MultipartFile[] files) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long userId = Long.parseLong(userDetails.getUsername());
-
-
-        System.out.println(files.length);
-        for (MultipartFile file : files) {
-            // Делаем что-то с каждым файлом
-            System.out.println(file.getSize());
-        }
-
-        return ResponseEntity.ok("uploads");//можно возвращать просто OK
-    }
-
-    @GetMapping("/workouts/{workoutId}/track")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<WorkoutDto> getTrackWorkout(Authentication authentication, @PathVariable Long workoutId) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long userId = Long.parseLong(userDetails.getUsername());
-        //WorkoutDto workoutDto = workoutService.getTrackWorkout(userId, workoutId);
-
-        return null;
-    }
-
-    @GetMapping("/workouts/typesSport")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<List<TypeSportDto>> getTypesSport() {
-        List<TypeSportDto> typeSportDtoList = workoutService.getTypesSport();
-
-        return ResponseEntity.ok(typeSportDtoList);
     }
 
     @GetMapping("/profile")

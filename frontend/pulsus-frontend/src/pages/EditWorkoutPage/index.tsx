@@ -1,7 +1,7 @@
 import "./style.css"
 import { useState, useEffect } from "react"
 import { useParams } from 'react-router-dom';
-import API from "../../utils/API";
+import API from "../../services/API";
 import EditInfoWorkoutForm from "../../components/EditInfoWorkoutForm";
 import ListTypesSport from "../../components/ListTypesSport";
 import UploadImage from "../../components/UploadImage";
@@ -31,7 +31,7 @@ export default function EditWorkoutPage() {
 
 
     function loadWorkoutInfo() {
-        API.get(`/users/workouts/${workoutId}`, {
+        API.get(`/workouts/${workoutId}`, {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
             }
@@ -53,7 +53,7 @@ export default function EditWorkoutPage() {
     }
 
     function updateWorkoutInfo() {
-        API.post(`/users/workouts/${workoutId}/edit`, inputs, {
+        API.post(`/workouts/${workoutId}/edit`, inputs, {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken'),
             }
@@ -80,7 +80,7 @@ export default function EditWorkoutPage() {
         if(!workoutPhotos.has("images")) return;
 
         console.log(workoutPhotos?.get("images"));
-        API.post(`/users/workouts/${workoutId}/uploadPhotos`, workoutPhotos, {
+        API.post(`/workouts/${workoutId}/uploadPhotos`, workoutPhotos, {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken'),
                 'Content-Type': 'multipart/form-data',

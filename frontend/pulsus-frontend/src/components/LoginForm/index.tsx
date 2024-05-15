@@ -1,7 +1,7 @@
 import "./style.css"
 import InputField from "../InputField"
 import { useForm, SubmitHandler } from "react-hook-form"
-import API from "../../utils/API";
+import API from "../../services/API";
 
 type Inputs = {
     login: string,

@@ -4,7 +4,8 @@ import WorkoutInfo from "../../components/WorkoutInfo";
 import "./style.css"
 import { useParams } from 'react-router-dom';
 import { useEffect } from "react";
-import API from "../../utils/API";
+import API from "../../services/API";
+import { getWorkoutTrack } from "../../services/workoutService";
 
 export default function WorkoutPage() {
     const { workoutId } = useParams();
@@ -15,12 +16,7 @@ export default function WorkoutPage() {
     }, []);
 
     function getTrackInfo() {
-        API.post("/users/addNewWorkout", workoutId, {
-            headers: {
-                Authorization: 'Bearer '+ localStorage.getItem('jwtToken'),
-                'Content-Type': 'multipart/form-data',  
-            }
-        })
+        getWorkoutTrack(workoutId)
         .then(response => {
             console.log(response.data);
             /*

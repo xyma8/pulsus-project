@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
@@ -68,7 +70,7 @@ public class FileOnServerServiceImpl implements FileOnServerService {
     }
 
     @Override
-    public GPXFileDto readGPX(MultipartFile file) {
+    public GPXFileDto readTrackGPX(MultipartFile file) {
         /*
         GPXParser gpxParser = new GPXParser();
         FileInputStream in;
@@ -96,16 +98,16 @@ public class FileOnServerServiceImpl implements FileOnServerService {
     }
 
     @Override
-    public FITFileDto readFIT(MultipartFile file) {
-        InputStream isFile;
+    public FITFileDto readTrackFIT(String filePath) {
+        InputStream inputStream;
         FitDecoder fitDecoder = new FitDecoder();
         FitMessages fitMessages;
 
         try {
-            isFile = file.getInputStream();
-            fitMessages = fitDecoder.decode(isFile);
-            //isFile.close();
-        }catch (Exception e){
+            inputStream = new FileInputStream(filePath);
+            fitMessages = fitDecoder.decode(inputStream);
+            inputStream.close();
+        } catch (IOException e) {
             System.out.println(e);
             throw new InternalServerException("Internal error");
         }
@@ -133,6 +135,20 @@ public class FileOnServerServiceImpl implements FileOnServerService {
 
         fitFileDto.setFitSessionData(fitSessionDataList);
         fitFileDto.setFitTrackData(fitTrackDataList);
+
+        return fitFileDto;
+    }
+
+    @Override
+    public FITFileDto readTrack(FileOnServer fileOnServer) {
+        FITFileDto fitFileDto;
+
+        if(fileOnServer.getExtension().equals("fit")) {
+            fitFileDto = readTrackFIT(fileOnServer.getPath());
+        }
+        else{
+            fitFileDto = readTrackFIT(fileOnServer.getPath());
+        }
 
         return fitFileDto;
     }

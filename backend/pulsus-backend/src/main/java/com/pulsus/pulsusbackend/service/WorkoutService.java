@@ -22,5 +22,4 @@ public interface WorkoutService {
 
     FITFileDto getTrackWorkout(Long userId, Long workoutId);
 
-    //void getTrackWorkout(Long userId, Long workoutId);
 }
