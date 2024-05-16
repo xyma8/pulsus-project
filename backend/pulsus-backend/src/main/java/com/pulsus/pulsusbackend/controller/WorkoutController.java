@@ -26,7 +26,7 @@ public class WorkoutController {
     @PostMapping("/addNewWorkout")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<WorkoutDto> addNewWorkout(Authentication authentication, @RequestParam("file") MultipartFile file) {
-        WorkoutDto workoutDto = workoutService.createWorkout(file, getUserId(authentication));
+        WorkoutDto workoutDto = workoutService.createWorkout(getUserId(authentication), file);
 
         return ResponseEntity.ok(workoutDto);
     }

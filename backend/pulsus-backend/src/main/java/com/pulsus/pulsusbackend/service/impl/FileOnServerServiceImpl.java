@@ -179,7 +179,7 @@ public class FileOnServerServiceImpl implements FileOnServerService {
         TrackSummaryDto trackSummaryDto = new TrackSummaryDto();
         List<SessionMesg> sessionMesgs = fitMessages.getSessionMesgs();
         List<FITSessionData> fitSessionDataList = new ArrayList<>();
-        
+
         for(SessionMesg elem : sessionMesgs) {
             FITSessionData fitSessionData = FITSessionDataMapper.mapToFITSessionData(elem);
             fitSessionDataList.add(fitSessionData);

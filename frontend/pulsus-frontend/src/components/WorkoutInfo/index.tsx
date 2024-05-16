@@ -1,6 +1,6 @@
 import "./style.css"
 import API from "../../services/API";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 type WorkoutInfoProps = {
     workoutId: string | undefined

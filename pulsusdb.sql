@@ -7,7 +7,8 @@ CREATE TABLE `files_on_server` (
     `filehash` CHAR(64) NOT NULL,
     `extension` VARCHAR(8) NOT NULL,
     `size` BIGINT NOT NULL,
-    `path` VARCHAR(254) NOT NULL
+    `path` VARCHAR(254) NOT NULL,
+	`timestamp` DATETIME NOT NULL
 )
 
 CREATE TABLE `roles` (
@@ -42,9 +43,19 @@ CREATE TABLE `workouts` (
     `type_sport` VARCHAR(100) NOT NULL,
     `file_workout` BIGINT NOT NULL,
     `access_type` INT NOT NULL,
-    `timestamp` DATETIME NOT NULL,
     FOREIGN KEY (user) REFERENCES users(id),
     FOREIGN KEY (file_workout) REFERENCES files_on_server(id)
+)
+
+CREATE TABLE `workouts_summary` (
+	`id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+    `workout` BIGINT NOT NULL,
+    `total_distance` FLOAT,
+	`total_ellapsed_time` FLOAT,
+    `total_timer_time` FLOAT,
+    `total_ascent` BIGINT,
+    `start_time` DATETIME NOT NULL,
+    FOREIGN KEY (workout) REFERENCES workouts(id)
 )
 
 CREATE TABLE `types_sports` (

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 public interface WorkoutService {
-    WorkoutDto createWorkout(MultipartFile file, Long userId);
+    WorkoutDto createWorkout(Long userId, MultipartFile file);
 
     WorkoutDto getInfoWorkout(Long userId, Long workoutId);
 

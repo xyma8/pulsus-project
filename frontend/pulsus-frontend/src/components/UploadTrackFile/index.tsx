@@ -32,6 +32,9 @@ export default function UploadTrackFile() {
             if(error.response.status == 409) {
                 alert("This track file already exists");
             }
+            else if(error.response.status == 400) {
+                alert("This type sport not allowed");
+            }
             else if(error.response.status != 200) {
                 alert("Internal error");
             }

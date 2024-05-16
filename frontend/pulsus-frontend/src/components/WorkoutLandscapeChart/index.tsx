@@ -1,7 +1,7 @@
 import "./style.css"
 import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
-export default function LandscapeChart() {
+export default function WorkoutLandscapeChart() {
 
     const data = [
         {

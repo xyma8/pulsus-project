@@ -1,7 +1,11 @@
 import "./style.css"
 import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
+import { InformationChart } from "../../utils/projectTypes";
 
-export default function InformationChart() {
+type WorkoutInformationChartProps = {
+    data: InformationChart
+}
+export default function WorkoutInformationChart(props: WorkoutInformationChartProps) {
 
     const data = [
         {
@@ -50,9 +54,9 @@ export default function InformationChart() {
       
     return(
     <div className="information-chart">
-        <LineChart width={600} height={400} data={data}>
-            <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-                <XAxis dataKey="name" />
+        <LineChart width={900} height={400} data={props.data}>
+            <Line type="monotone" dataKey="YAxis" stroke="#8884d8" />
+                <XAxis dataKey="XAxis" />
                 <YAxis />
                 <Tooltip />
         </LineChart>

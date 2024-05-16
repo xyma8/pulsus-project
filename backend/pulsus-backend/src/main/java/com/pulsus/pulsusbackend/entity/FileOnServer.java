@@ -30,7 +30,7 @@ public class FileOnServer {
     @Column(name = "path", nullable = false)
     private String path;
 
-    @OneToOne(mappedBy = "filesOnServer")
+    @OneToOne(mappedBy = "fileWorkout")
     private Workout workout;
 
     @ManyToMany(mappedBy = "photos")

@@ -43,7 +43,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     private UserService userService;
 
     @Override
-    public WorkoutDto createWorkout(MultipartFile file, Long userId) {
+    public WorkoutDto createWorkout(Long userId, MultipartFile file) {
         Workout newWorkout = new Workout();
         User user = userService.findById(userId)
                 .orElseThrow(() -> new UnauthorizedException("Login error"));
@@ -53,12 +53,12 @@ public class WorkoutServiceImpl implements WorkoutService {
         newWorkout.setTimestamp(getTimestamp());
         String typeSport = fileOnServerService.getTypeSport(file);
         if(!allowedTypeSport(typeSport)) {
-            throw new InternalServerException("This type sport not allowed");
+            throw new BadRequestException("This type sport not allowed");
         }
         newWorkout.setTypeSports(typeSport);
         newWorkout.setUser(user);
         FileOnServer fileOnServer = fileOnServerService.addTrackFile(file, userId); // файл сохраняем после всех проверок
-        newWorkout.setFilesOnServer(fileOnServer);
+        newWorkout.setFileWorkout(fileOnServer);
 
         Workout savedWorkout = workoutRepository.save(newWorkout);
         return WorkoutMapper.mapToWorkoutDto(savedWorkout);
@@ -97,23 +97,20 @@ public class WorkoutServiceImpl implements WorkoutService {
         if(!WorkoutValidator.isValidName(name)) {
             throw new BadRequestException("Invalid name field");
         }
+        workout.setName(name);
 
         if(!WorkoutValidator.isValidDescription(description)) {
             throw new BadRequestException("Invalid description field");
         }
+        workout.setDescription(description);
 
-        if(!WorkoutValidator.isValidAccessType(accessType)) {
-            accessType = 2; // правильнее будет вобще не изменять и не трогать
+        if(WorkoutValidator.isValidAccessType(accessType)) {
+            workout.setAccessType(accessType); // если валидный то меняем, если нет то не трогаем
         }
 
         if(!WorkoutValidator.isValidTypeSport(typeSport, typeSportRepository.findAll())) {
-            typeSport = "CYCLING"; // тут тоже правильнее будет не трогать
+            workout.setTypeSports(typeSport); // тут тоже
         }
-
-        workout.setName(name);
-        workout.setDescription(description);
-        workout.setAccessType(accessType);
-        workout.setTypeSports(typeSport);
 
         Workout savedWorkout = workoutRepository.save(workout);
         return WorkoutMapper.mapToWorkoutDto(savedWorkout);
@@ -131,7 +128,7 @@ public class WorkoutServiceImpl implements WorkoutService {
             throw new NotFoundException("This workout does not exists");
         }
 
-        FileOnServer fileOnServer = workout.getFilesOnServer();
+        FileOnServer fileOnServer = workout.getFileWorkout();
         FITFileDto fitFileDto = fileOnServerService.readTrack(fileOnServer);
 
         return fitFileDto;
@@ -149,7 +146,7 @@ public class WorkoutServiceImpl implements WorkoutService {
             throw new NotFoundException("This workout does not exists");
         } //вынести в отдельную функцию
 
-        FileOnServer fileOnServer = workout.getFilesOnServer();
+        FileOnServer fileOnServer = workout.getFileWorkout();
         TrackSummaryDto trackSummaryDto = fileOnServerService.readTrackSummary(fileOnServer);
 
         return trackSummaryDto;

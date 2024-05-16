@@ -5,20 +5,21 @@ import { Coordinates } from "../../utils/projectTypes";
 
 type TrackMapProps = {
     coordinates: Coordinates;
+    center: [number, number]
 }
 
-export default function TrackMap(props: TrackMapProps) {
+export default function WorkoutTrackMap(props: TrackMapProps) {
 
     return(
     <div className="track-map">
-        <MapContainer center={[57.767918, 40.926894]} zoom={13}>
+        <MapContainer center={props.center} zoom={13}>
             <TileLayer 
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
             <Polyline
-                pathOptions={{ fillColor: 'red', color: 'blue' }}
+                pathOptions={{ fillColor: 'darkred', color: 'blue' }}
                 positions={props.coordinates}
             />
         </MapContainer>
