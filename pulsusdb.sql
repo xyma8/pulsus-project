@@ -39,7 +39,7 @@ CREATE TABLE `workouts` (
 	`id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `user` BIGINT NOT NULL,
     `name` VARCHAR(254) NOT NULL,
-    `description` VARCHAR(254),
+    `description` TEXT,
     `type_sport` VARCHAR(100) NOT NULL,
     `file_workout` BIGINT NOT NULL,
     `access_type` INT NOT NULL,

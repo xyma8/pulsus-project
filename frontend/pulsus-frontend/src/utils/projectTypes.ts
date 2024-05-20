@@ -1,2 +1,8 @@
 export type Coordinates = [number, number][];
-export type InformationChart = {XAxis: number; YAxis: number}[]
+
+interface DataPoint {
+    XAxis: number;
+    YAxis: number;
+}
+
+export type InformationChart = DataPoint[]

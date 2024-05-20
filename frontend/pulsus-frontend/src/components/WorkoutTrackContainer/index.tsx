@@ -12,7 +12,7 @@ type WorkoutTrackContainerProps = {
 type TrackData = {
     coordinates: Coordinates,
     distance: number[],
-    speed: number[]
+    speed: number[],
 }
 
 export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps) {
@@ -26,7 +26,7 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
     function loadData() {
         getWorkoutTrack(props.workoutId)
         .then(response => {
-            console.log(response.data);
+            //console.log(response.data);
             const initialCoordinates: Coordinates = [];
             const initialDistance: number[] = [];
             const initialSpeed: number[] = [];
@@ -36,16 +36,14 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
                 //console.log(item);
                 initialCoordinates.push([item.positionLat, item.positionLong]);
                 initialDistance.push(item.distance);
-                initialDistance.push(item.enhancedSpeed);
+                initialSpeed.push(item.enhancedSpeed);
             }
-            console.log(initialCoordinates);
-            
+            //console.log(initialCoordinates);
             const initialDataTrack: TrackData = {
                 coordinates: initialCoordinates,
                 distance: initialDistance,
                 speed: initialSpeed
             }
-
             setTrackData(initialDataTrack);
         })
         .catch(error => {
@@ -78,7 +76,9 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
     return(
     <div className="workout-container">
         {trackData?.coordinates && <WorkoutTrackMap coordinates={trackData.coordinates} center={trackData.coordinates[0]} />}
-        {trackData?.distance && trackData?.speed && <WorkoutInformationChart data={getDataForChart(trackData.distance, trackData.speed)}/>}
+        {trackData?.distance && trackData?.speed &&
+         <WorkoutInformationChart data={getDataForChart(trackData.distance, trackData.speed)}
+            width={1000} height={150} XLabel="Расстояние" YLabel="Скорость" colorStroke="#8884d8"/>}
     </div>
     )
 }
