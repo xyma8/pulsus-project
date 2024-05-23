@@ -14,7 +14,11 @@ public class FITTrackDataMapper {
         fitTrackData.setDistance(recordMesg.getDistance());
         fitTrackData.setGrade(recordMesg.getGrade());
         fitTrackData.setTemperature(recordMesg.getTemperature());
-        fitTrackData.setEnhancedSpeed(NormalizeTrackData.speedMStoKPH(recordMesg.getEnhancedSpeed()));
+
+        Float speedKPH = NormalizeTrackData.speedMStoKPH(recordMesg.getEnhancedSpeed());
+        Float roundedSpeedKPH = NormalizeTrackData.roundFloat(speedKPH, 1);
+        fitTrackData.setEnhancedSpeed(roundedSpeedKPH);
+
         fitTrackData.setEnhancedAltitude(recordMesg.getEnhancedAltitude());
         fitTrackData.setCadence(recordMesg.getCadence());
         fitTrackData.setPower(recordMesg.getPower());

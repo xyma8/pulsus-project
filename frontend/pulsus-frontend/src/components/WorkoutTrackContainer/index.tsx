@@ -26,7 +26,7 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
     function loadData() {
         getWorkoutTrack(props.workoutId)
         .then(response => {
-            //console.log(response.data);
+            console.log(response.data);
             const initialCoordinates: Coordinates = [];
             const initialDistance: number[] = [];
             const initialSpeed: number[] = [];
