@@ -1,7 +1,7 @@
 import "./style.css"
 import { useState, useEffect } from "react";
 import { getWorkoutTrack } from "../../services/workoutService";
-import { Coordinates, InformationChart } from "../../utils/projectTypes";
+import { Coordinates, InformationChart, TrackData, Coordinate } from "../../utils/projectTypes";
 import WorkoutTrackMap from "../WorkoutTrackMap";
 import WorkoutInformationChart from "../WorkoutInformationChart";
 
@@ -9,14 +9,21 @@ type WorkoutTrackContainerProps = {
     workoutId: string | undefined
 }
 
-type TrackData = {
+
+type TrackDataArrays = {
+    id: TrackData["id"][],
     coordinates: Coordinates,
-    distance: number[],
-    speed: number[],
+    distance: TrackData["distance"][],
+    speed: TrackData["speed"][],
+    cadence: TrackData["cadence"][],
+    temperature: TrackData["temperature"][]
 }
 
+
 export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps) {
-    const [trackData, setTrackData] = useState<TrackData>();
+    const [trackDataArrays, setTrackDataArrays] = useState<TrackDataArrays>();
+    const [currentChartCoordindate, setCurrentChartCoordinate] = useState<Coordinate | undefined>();
+    const [tooltipChartsActive, setTooltipChartsActive] = useState<boolean>(false);
 
     useEffect(() => {
         loadData();
@@ -26,25 +33,53 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
     function loadData() {
         getWorkoutTrack(props.workoutId)
         .then(response => {
-            console.log(response.data);
-            const initialCoordinates: Coordinates = [];
-            const initialDistance: number[] = [];
-            const initialSpeed: number[] = [];
+            //console.log(response.data);
+            //const trackData: TrackData[] = [];
+            /*
+            const initialId: TrackDataArrays["id"] = []
+            const initialCoordinates: TrackDataArrays["coordinates"] = []
+            const initialDistance: TrackDataArrays["distance"] = []
+            const initialSpeed: TrackDataArrays["speed"] = []
+            const initialCadence: TrackDataArrays["cadence"] = []
+            */
+
+            const initialTrackData: TrackDataArrays = {
+                id: [],
+                coordinates: [],
+                distance: [],
+                speed: [],
+                cadence: [],
+                temperature: []
+            }
 
             for (let i = 0; i < response.data.fitTrackData.length; i++) {
                 const item = response.data.fitTrackData[i];
                 //console.log(item);
+                initialTrackData.id.push(i)
+                initialTrackData.coordinates.push([item.positionLat, item.positionLong])
+                initialTrackData.distance.push(item.distance)
+                initialTrackData.speed.push(item.enhancedSpeed)
+                initialTrackData.cadence.push(item.cadence)
+                initialTrackData.temperature.push(item.temperature)
+
+                /*
+                initialId.push(i)
                 initialCoordinates.push([item.positionLat, item.positionLong]);
                 initialDistance.push(item.distance);
                 initialSpeed.push(item.enhancedSpeed);
+                initialCadence.push(item.cadence);
+                /*
+                const initialDataTrack: TrackData = {
+                    id: i,
+                    coordinate: [item.positionLat, item.positionLong],
+                    distance: item.distance,
+                    speed: item.speed
+                }
+                */
+                //trackData.push(initialDataTrack)
             }
-            //console.log(initialCoordinates);
-            const initialDataTrack: TrackData = {
-                coordinates: initialCoordinates,
-                distance: initialDistance,
-                speed: initialSpeed
-            }
-            setTrackData(initialDataTrack);
+
+            setTrackDataArrays(initialTrackData);
         })
         .catch(error => {
             console.error(error);
@@ -67,7 +102,26 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
         return informationChartData;
     }
 
-    if(!setTrackData) {
+    function getCoordinateById(id: string | undefined) {
+        //console.log(trackDataArrays?.coordinates[Number(id)])
+        const point: Coordinate | undefined = trackDataArrays?.coordinates[Number(id)]
+        setCurrentChartCoordinate(point)
+    }
+
+    function handleValueChange(id: string | undefined) {
+        getCoordinateById(id)
+    }
+
+    function handleMouseEnter() {
+        setTooltipChartsActive(true);
+    }
+
+    function handleMouseLeave() {
+        setTooltipChartsActive(false);
+        getCoordinateById(undefined);
+    }
+
+    if(!setTrackDataArrays) {
         return(
         <div></div>
         )
@@ -75,10 +129,34 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
 
     return(
     <div className="workout-container">
-        {trackData?.coordinates && <WorkoutTrackMap coordinates={trackData.coordinates} center={trackData.coordinates[0]} />}
-        {trackData?.distance && trackData?.speed &&
-         <WorkoutInformationChart data={getDataForChart(trackData.distance, trackData.speed)}
-            width={1000} height={150} XLabel="Расстояние" YLabel="Скорость" colorStroke="#8884d8"/>}
+        {trackDataArrays?.coordinates && <WorkoutTrackMap coordinates={trackDataArrays.coordinates} center={trackDataArrays.coordinates[0]} point={currentChartCoordindate}/>}
+        <div className="workout-container-charts" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            {trackDataArrays?.id && trackDataArrays?.speed &&
+            <WorkoutInformationChart
+                data={getDataForChart(trackDataArrays.id, trackDataArrays.speed)}
+                width={1000}
+                height={150}
+                XLabel="Расстояние"
+                YLabel="Скорость"
+                colorStroke="#8884d8"
+                syncId="trackChart"
+                unit="км/ч"
+                tooltipActive = {tooltipChartsActive}
+                onValueChange={handleValueChange}/>}
+
+            {trackDataArrays?.id && trackDataArrays?.temperature &&
+            <WorkoutInformationChart
+                data={getDataForChart(trackDataArrays.id, trackDataArrays.temperature)}
+                width={1000}
+                height={150}
+                XLabel="Расстояние"
+                YLabel="Температура"
+                colorStroke="#008000"
+                syncId="trackChart"
+                unit="℃"
+                tooltipActive = {tooltipChartsActive}
+                onValueChange={handleValueChange}/>}
+        </div>
     </div>
     )
 }
