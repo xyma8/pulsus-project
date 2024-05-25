@@ -160,6 +160,7 @@ public class FileOnServerServiceImpl implements FileOnServerService {
         List<FITTrackData> fitTrackDataList = new ArrayList<>();
 
         for(RecordMesg elem : recordMesgs) {
+            Float dt = elem.getStanceTime();
             FITTrackData fitTrackData = FITTrackDataMapper.mapToFITTrackData(elem);
             fitTrackDataList.add(fitTrackData);
         }

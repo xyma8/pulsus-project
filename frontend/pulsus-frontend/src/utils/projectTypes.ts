@@ -10,7 +10,9 @@ export type TrackData = {
     distance: number,
     speed: number,
     cadence: number,
-    temperature: number
+    temperature: number,
+    altitude: number,
+    grade: number
 }
 
 interface DataPoint {

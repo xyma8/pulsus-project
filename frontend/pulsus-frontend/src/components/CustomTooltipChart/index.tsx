@@ -3,7 +3,7 @@ import { TooltipProps } from 'recharts';
 
 type CustomTooltipChartProps = {
     value: string | undefined
-    label: string
+    label?: string
 }
 
 export default function CustomTooltipChart(props: CustomTooltipChartProps) {

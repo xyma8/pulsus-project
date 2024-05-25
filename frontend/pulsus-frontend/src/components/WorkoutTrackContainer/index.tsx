@@ -9,14 +9,21 @@ type WorkoutTrackContainerProps = {
     workoutId: string | undefined
 }
 
-
 type TrackDataArrays = {
     id: TrackData["id"][],
     coordinates: Coordinates,
     distance: TrackData["distance"][],
     speed: TrackData["speed"][],
     cadence: TrackData["cadence"][],
-    temperature: TrackData["temperature"][]
+    temperature: TrackData["temperature"][],
+    altitude: TrackData["altitude"][],
+    grade: TrackData["grade"][]
+}
+
+type MainChartInfo = {
+    distance: number | undefined,
+    altitude: number | undefined,
+    grade?: number | undefined
 }
 
 
@@ -24,6 +31,7 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
     const [trackDataArrays, setTrackDataArrays] = useState<TrackDataArrays>();
     const [currentChartCoordindate, setCurrentChartCoordinate] = useState<Coordinate | undefined>();
     const [tooltipChartsActive, setTooltipChartsActive] = useState<boolean>(false);
+    const [mainChartInfo, setMainChartInfo] = useState<MainChartInfo>();
 
     useEffect(() => {
         loadData();
@@ -33,50 +41,28 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
     function loadData() {
         getWorkoutTrack(props.workoutId)
         .then(response => {
-            //console.log(response.data);
-            //const trackData: TrackData[] = [];
-            /*
-            const initialId: TrackDataArrays["id"] = []
-            const initialCoordinates: TrackDataArrays["coordinates"] = []
-            const initialDistance: TrackDataArrays["distance"] = []
-            const initialSpeed: TrackDataArrays["speed"] = []
-            const initialCadence: TrackDataArrays["cadence"] = []
-            */
-
             const initialTrackData: TrackDataArrays = {
                 id: [],
                 coordinates: [],
                 distance: [],
                 speed: [],
                 cadence: [],
-                temperature: []
+                temperature: [],
+                altitude: [],
+                grade: []
             }
 
             for (let i = 0; i < response.data.fitTrackData.length; i++) {
                 const item = response.data.fitTrackData[i];
-                //console.log(item);
+                console.log(item);
                 initialTrackData.id.push(i)
                 initialTrackData.coordinates.push([item.positionLat, item.positionLong])
                 initialTrackData.distance.push(item.distance)
                 initialTrackData.speed.push(item.enhancedSpeed)
                 initialTrackData.cadence.push(item.cadence)
                 initialTrackData.temperature.push(item.temperature)
-
-                /*
-                initialId.push(i)
-                initialCoordinates.push([item.positionLat, item.positionLong]);
-                initialDistance.push(item.distance);
-                initialSpeed.push(item.enhancedSpeed);
-                initialCadence.push(item.cadence);
-                /*
-                const initialDataTrack: TrackData = {
-                    id: i,
-                    coordinate: [item.positionLat, item.positionLong],
-                    distance: item.distance,
-                    speed: item.speed
-                }
-                */
-                //trackData.push(initialDataTrack)
+                initialTrackData.altitude.push(item.enhancedAltitude)
+                initialTrackData.grade.push(item.grade)
             }
 
             setTrackDataArrays(initialTrackData);
@@ -103,13 +89,24 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
     }
 
     function getCoordinateById(id: string | undefined) {
-        //console.log(trackDataArrays?.coordinates[Number(id)])
         const point: Coordinate | undefined = trackDataArrays?.coordinates[Number(id)]
         setCurrentChartCoordinate(point)
     }
 
     function handleValueChange(id: string | undefined) {
-        getCoordinateById(id)
+        getCoordinateById(id);
+        updateMainChartInfo(id);
+    }
+
+    function updateMainChartInfo(id: string | undefined) {
+        const mainChartInfo: MainChartInfo = {
+            distance: trackDataArrays?.distance[Number(id)],
+            altitude: trackDataArrays?.altitude[Number(id)],
+            grade: trackDataArrays?.grade[Number(id)]
+
+        }
+
+        setMainChartInfo(mainChartInfo)
     }
 
     function handleMouseEnter() {
@@ -120,6 +117,22 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
         setTooltipChartsActive(false);
         getCoordinateById(undefined);
     }
+
+    function findMaxArray(arr: number[]): number {
+        if (arr.length === 0) {
+          throw new Error("The array should not be empty.");
+        }
+      
+        let max = 0
+      
+        for (let i = 1; i < arr.length; i++) {
+          if (arr[i] > max) {
+            max = arr[i];
+          }
+        }
+      
+        return max;
+      }
 
     if(!setTrackDataArrays) {
         return(
@@ -133,10 +146,24 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
         <div className="workout-container-charts" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             {trackDataArrays?.id && trackDataArrays?.speed &&
             <WorkoutInformationChart
+                type="area"
+                data={getDataForChart(trackDataArrays.id, trackDataArrays.altitude)}
+                width={1000}
+                height={150}
+                YLabel="Высота"
+                colorStroke="#808080"
+                syncId="trackChart"
+                yDomain={[0, findMaxArray(trackDataArrays.altitude) * 2]}
+                unit="м"
+                tooltipActive = {tooltipChartsActive}
+                onValueChange={handleValueChange}/>}
+
+            {trackDataArrays?.id && trackDataArrays?.speed &&
+            <WorkoutInformationChart
+                type="line"
                 data={getDataForChart(trackDataArrays.id, trackDataArrays.speed)}
                 width={1000}
                 height={150}
-                XLabel="Расстояние"
                 YLabel="Скорость"
                 colorStroke="#8884d8"
                 syncId="trackChart"
@@ -146,10 +173,10 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
 
             {trackDataArrays?.id && trackDataArrays?.temperature &&
             <WorkoutInformationChart
+                type="line"
                 data={getDataForChart(trackDataArrays.id, trackDataArrays.temperature)}
                 width={1000}
                 height={150}
-                XLabel="Расстояние"
                 YLabel="Температура"
                 colorStroke="#008000"
                 syncId="trackChart"
