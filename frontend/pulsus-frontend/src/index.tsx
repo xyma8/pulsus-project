@@ -9,6 +9,7 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import WorkoutPage from './pages/WorkoutPage';
 import EditWorkoutPage from './pages/EditWorkoutPage';
+import Header from './components/Header';
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,10 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <Header/>
+    <div className='container h-screen mx-auto '>
+      <RouterProvider router={router}/>
+    </div>
   </React.StrictMode>
 );
 

@@ -65,7 +65,29 @@ export default function InputField(props: InputFieldProps) {
             />
         )
     }
-
+    else if(type === 'password') {
+        return(
+        <div>
+            <input
+                type={type}
+                placeholder={placeholder} 
+                autoComplete={autoComplete || "off"}
+                defaultValue={defaultValue || ""}
+                {
+                    ...register(name, {
+                        required,
+                        minLength,
+                        maxLength,
+                        pattern,
+                        validate
+                    })
+                }
+                className="py-2 rounded border border-solid hover:border-secondary duration-100 focus:outline-none focus:ring-2 focus:ring-primary w-full" //max-w-md
+            />
+            
+        </div>
+        )
+    }
     else {
         return(
             <input
@@ -82,6 +104,7 @@ export default function InputField(props: InputFieldProps) {
                         validate
                     })
                 }
+                className="py-2 rounded border border-solid hover:border-secondary duration-100 focus:outline-none focus:ring-2 focus:ring-primary w-full" //max-w-md
             />
         )
     }
