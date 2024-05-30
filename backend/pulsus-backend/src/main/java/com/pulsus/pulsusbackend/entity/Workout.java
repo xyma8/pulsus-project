@@ -37,6 +37,10 @@ public class Workout {
     private String typeSports;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "summary", referencedColumnName = "id")
+    private WorkoutSummary summary;
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_workout", referencedColumnName = "id")
     private FileOnServer fileWorkout;
 

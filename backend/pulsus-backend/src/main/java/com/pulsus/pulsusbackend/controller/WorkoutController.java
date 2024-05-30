@@ -1,9 +1,6 @@
 package com.pulsus.pulsusbackend.controller;
 
-import com.pulsus.pulsusbackend.dto.FITFileDto;
-import com.pulsus.pulsusbackend.dto.TrackSummaryDto;
-import com.pulsus.pulsusbackend.dto.TypeSportDto;
-import com.pulsus.pulsusbackend.dto.WorkoutDto;
+import com.pulsus.pulsusbackend.dto.*;
 import com.pulsus.pulsusbackend.service.WorkoutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +34,14 @@ public class WorkoutController {
         WorkoutDto workoutDto = workoutService.getInfoWorkout(getUserId(authentication), workoutId);
 
         return ResponseEntity.ok(workoutDto);
+    }
+
+    @GetMapping("/{workoutId}/summary")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<WorkoutSummaryDto> getSummaryWorkout(Authentication authentication, @PathVariable Long workoutId) {
+        WorkoutSummaryDto workoutSummaryDto = workoutService.getSummaryWorkout(getUserId(authentication), workoutId);
+
+        return ResponseEntity.ok(workoutSummaryDto);
     }
 
     @GetMapping("/{workoutId}/trackSummary")

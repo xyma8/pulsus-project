@@ -59,28 +59,6 @@ public class UserController {
         return ResponseEntity.ok(fileOnServerDto);
     }
 
-    @PostMapping("/uploadGPXFile")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<GPXFileDto> uploadGPXFile(Authentication authentication, @RequestParam("file") MultipartFile file) {
-        System.out.println(file.getOriginalFilename());
-        //GPXFileDto gpxInfoDto = fileOnServerService.readTrackGPX(file);
-
-        return null;
-    }
-
-    @PostMapping("/uploadFITFile")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<FITFileDto> uploadFITFile(Authentication authentication, @RequestParam("file") MultipartFile file) {
-        //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        //FITFileDto fitFileDto = fileOnServerService.readFIT(file);
-
-        //return ResponseEntity.ok(fitFileDto);
-        //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        //Long userId = Long.parseLong(userDetails.getUsername());
-        //WorkoutDto workoutDto = workoutService.createWorkout(file, userId);
-        return null;
-    }
-
     @GetMapping("/profile")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public String userProfile(Authentication authentication) {

@@ -100,18 +100,8 @@ public class FileOnServerServiceImpl implements FileOnServerService {
 
     @Override
     public String getTypeSport(MultipartFile file) {
-        InputStream isFile;
-        FitDecoder fitDecoder = new FitDecoder();
-        FitMessages fitMessages;
+        FitMessages fitMessages = getFitMessages(file);
 
-        try {
-            isFile = file.getInputStream();
-            fitMessages = fitDecoder.decode(isFile);
-            isFile.close();
-        }catch (Exception e){
-            System.out.println(e);
-            throw new InternalServerException("Internal error");
-        }
         if(fitMessages.getRecordMesgs().isEmpty()) {
             throw new InternalServerException(".fit file is empty");
         }
@@ -189,6 +179,23 @@ public class FileOnServerServiceImpl implements FileOnServerService {
         trackSummaryDto.setFitSessionData(fitSessionDataList);
 
         return trackSummaryDto;
+    }
+
+    private FitMessages getFitMessages(MultipartFile file) {
+        InputStream inputStream;
+        FitDecoder fitDecoder = new FitDecoder();
+        FitMessages fitMessages;
+
+        try {
+            inputStream = file.getInputStream();
+            fitMessages = fitDecoder.decode(inputStream);
+            inputStream.close();
+        } catch (IOException e) {
+            System.out.println(e);
+            throw new InternalServerException("Internal error");
+        }
+
+        return fitMessages;
     }
 
     private FitMessages getFitMessages(String filePath) {

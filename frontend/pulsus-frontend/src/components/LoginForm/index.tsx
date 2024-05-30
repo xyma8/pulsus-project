@@ -46,35 +46,35 @@ export default function LoginForm(props: LoginFormProps) {
     }
 
     return(
-    <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
-        <div className="auth-input">
+    <form className="flex flex-col items-center bg-block_background p-8 rounded shadow-md space-y-5 min-w-[320px] max-w-[320px]" onSubmit={handleSubmit(onSubmit)}>
+        <div className="w-full">
             <InputField 
                 register={register}
                 name="login"
                 type="text"
                 placeholder="Логин"
                 required="Введите логин"
-                minLength={{ value:4, message:"Минимум 4 символа" }}
-                maxLength={{ value:24, message:"Максимум 24 символа" }}
-                pattern={{ value:/^[a-zA-Z0-9_]+$/ , message:"Неправильный логин" }}
+                //minLength={{ value:4, message:"Минимум 4 символа" }}
+                //maxLength={{ value:24, message:"Максимум 24 символа" }}
+                //pattern={{ value:/^[a-zA-Z0-9_]+$/ , message:"Неправильный логин" }}
             />
-            {errors.login && <div className="error-message">{errors.login.message}</div>}
+            {errors.login && <div className="text-error text-[14px]">{errors.login.message}</div>}
         </div>
 
-        <div className="auth-input">
+        <div className="w-full">
             <InputField 
                 register={register}
                 name="password"
                 type="password"
                 placeholder="Пароль"
                 required="Обязательное поле"
-                minLength={{ value:8, message:"Минимум 8 символов" }}
+                //minLength={{ value:8, message:"Минимум 8 символов" }}
                 //pattern={{ value:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+\\|[\]{};:'",./?]).{8,}$/ , message:"Необходимо прописные, заглавные буквы, цифры и разрешенные символы" }}
             />
-            {errors.password && <div className="error-message">{errors.password.message}</div>}
+            {errors.password && <div className="text-error text-[14px]">{errors.password.message}</div>}
         </div>
 
-        <button type="submit">Войти</button>
+        <button type="submit" className="bg-secondary text-main_text_button font-bold py-2 px-4 rounded hover:bg-secondary_hover_button duration-100">Войти</button>
     </form>
     
     )

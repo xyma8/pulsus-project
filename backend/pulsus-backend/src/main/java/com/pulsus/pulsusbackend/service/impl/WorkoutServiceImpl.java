@@ -1,12 +1,6 @@
 package com.pulsus.pulsusbackend.service.impl;
-import com.pulsus.pulsusbackend.dto.FITFileDto;
-import com.pulsus.pulsusbackend.dto.TrackSummaryDto;
-import com.pulsus.pulsusbackend.dto.TypeSportDto;
-import com.pulsus.pulsusbackend.dto.WorkoutDto;
-import com.pulsus.pulsusbackend.entity.FileOnServer;
-import com.pulsus.pulsusbackend.entity.TypeSport;
-import com.pulsus.pulsusbackend.entity.User;
-import com.pulsus.pulsusbackend.entity.Workout;
+import com.pulsus.pulsusbackend.dto.*;
+import com.pulsus.pulsusbackend.entity.*;
 import com.pulsus.pulsusbackend.exception.*;
 import com.pulsus.pulsusbackend.mapper.TypeSportMapper;
 import com.pulsus.pulsusbackend.mapper.WorkoutMapper;
@@ -78,6 +72,24 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         WorkoutDto workoutDto = WorkoutMapper.mapToWorkoutDto(workout);
         return workoutDto;
+    }
+
+    @Override
+    public WorkoutSummaryDto getSummaryWorkout(Long userId, Long workoutId) {
+        Workout workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new NotFoundException("This workout does not exists"));
+
+        Integer accessType = workout.getAccessType();
+
+        if(accessType==2 && workout.getUser().getId() != userId) {
+            System.out.println("This workout does not exists");
+            throw new NotFoundException("This workout does not exists");
+        }
+
+        WorkoutSummary workoutSummary = workout.getSummary();
+        //нужна проверка на null?
+        WorkoutSummaryDto workoutSummaryDto = WorkoutMapper.mapToWorkoutSummaryDto(workoutSummary);
+        return workoutSummaryDto;
     }
 
     @Override

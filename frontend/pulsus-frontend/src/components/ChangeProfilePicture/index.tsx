@@ -42,7 +42,7 @@ export default function ChangeProfilePicture(props: ChangeProfilePicture) {
 
     return(
     <div className="change-profile-picture">
-        <ProfilePicture type={props.type} size={props.size}/>
+        <ProfilePicture size={props.size}/>
         <button onClick={changeProfilePicture}>Изменить фото профиля</button>
         <input accept=".jpg,.jpeg,.png,.gif" type="file" onChange={selectFile}/>
     </div>

@@ -52,7 +52,7 @@ export default function DashboardPage() {
     return(
     <div className="dashboard-page">
         hello in your account on dashboard
-        <ProfilePicture type={false} size={50} />
+        <ProfilePicture size={50} />
         <ChangeProfilePicture type={false} size={50} />
         <UploadTrackFile />
         <button onClick={exit}>Exit</button>

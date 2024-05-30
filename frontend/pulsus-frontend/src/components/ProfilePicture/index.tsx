@@ -3,7 +3,8 @@ import API from "../../services/API";
 import { useState, useEffect } from "react";
 
 type ProfilePictureProps = {
-    type: boolean,
+    rounded?: boolean,
+    clickable?: boolean,
     size: number
 }
 
@@ -36,6 +37,10 @@ export default function ProfilePicture(props: ProfilePictureProps) {
         })
     }
     
+    function navigateToUserPage() {
+
+    }
+
     if (!picture) {
         return ( 
         <div>
@@ -44,8 +49,10 @@ export default function ProfilePicture(props: ProfilePictureProps) {
     }
 
     return(
-    <div className="profile-picture">
-        <img src={picture} width={props.size} height={props.size} />
+    <div className="">
+        {props.clickable ?
+         <img src={picture} width={props.size} height={props.size} className="rounded-full cursor-pointer" onClick={navigateToUserPage}/> :
+         <img src={picture} width={props.size} height={props.size} className="rounded-full"/> }
     </div>
     )
 }

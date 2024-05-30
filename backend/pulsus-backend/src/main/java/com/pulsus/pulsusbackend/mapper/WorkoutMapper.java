@@ -1,7 +1,9 @@
 package com.pulsus.pulsusbackend.mapper;
 
 import com.pulsus.pulsusbackend.dto.WorkoutDto;
+import com.pulsus.pulsusbackend.dto.WorkoutSummaryDto;
 import com.pulsus.pulsusbackend.entity.Workout;
+import com.pulsus.pulsusbackend.entity.WorkoutSummary;
 
 public class WorkoutMapper {
 
@@ -13,6 +15,17 @@ public class WorkoutMapper {
                 workout.getTypeSports(),
                 workout.getAccessType(),
                 workout.getTimestamp()
+        );
+    }
+
+    public static WorkoutSummaryDto mapToWorkoutSummaryDto(WorkoutSummary workoutSummary) {
+        return new WorkoutSummaryDto(
+                workoutSummary.getId(),
+                workoutSummary.getTotalDistance(),
+                workoutSummary.getTotalEllapsedTime(),
+                workoutSummary.getTotalTimerTime(),
+                workoutSummary.getTotalAscent(),
+                workoutSummary.getStartTime()
         );
     }
 }
