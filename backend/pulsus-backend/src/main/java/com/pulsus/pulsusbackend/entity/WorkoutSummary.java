@@ -31,7 +31,7 @@ public class WorkoutSummary {
     private Float totalTimerTime;
 
     @Column(name = "total_ascent", nullable = false)
-    private Float totalAscent;
+    private Integer totalAscent;
 
     @Column(name = "start_time", nullable = false)
     private Date startTime;

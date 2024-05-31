@@ -4,9 +4,12 @@ import com.pulsus.pulsusbackend.entity.*;
 import com.pulsus.pulsusbackend.exception.*;
 import com.pulsus.pulsusbackend.mapper.TypeSportMapper;
 import com.pulsus.pulsusbackend.mapper.WorkoutMapper;
+import com.pulsus.pulsusbackend.mapper.WorkoutSummaryMapper;
 import com.pulsus.pulsusbackend.repository.TypeSportRepository;
 import com.pulsus.pulsusbackend.repository.WorkoutRepository;
+import com.pulsus.pulsusbackend.repository.WorkoutSummaryRepository;
 import com.pulsus.pulsusbackend.service.FileOnServerService;
+import com.pulsus.pulsusbackend.service.TrackFileService;
 import com.pulsus.pulsusbackend.service.UserService;
 import com.pulsus.pulsusbackend.service.WorkoutService;
 import com.pulsus.pulsusbackend.validator.WorkoutValidator;
@@ -31,7 +34,13 @@ public class WorkoutServiceImpl implements WorkoutService {
     TypeSportRepository typeSportRepository;
 
     @Autowired
+    WorkoutSummaryRepository workoutSummaryRepository;
+
+    @Autowired
     private FileOnServerService fileOnServerService;
+
+    @Autowired
+    TrackFileService trackFileService;
 
     @Autowired
     private UserService userService;
@@ -45,12 +54,19 @@ public class WorkoutServiceImpl implements WorkoutService {
         newWorkout.setName("Новая тренировка");
         newWorkout.setAccessType(2);
         newWorkout.setTimestamp(getTimestamp());
-        String typeSport = fileOnServerService.getTypeSport(file);
+
+        TrackSummaryDto trackSummaryDto = trackFileService.readTrackSummary(file);
+        String typeSport = trackSummaryDto.getFitSessionData().get(0).getSport().toString();
         if(!allowedTypeSport(typeSport)) {
             throw new BadRequestException("This type sport not allowed");
         }
         newWorkout.setTypeSports(typeSport);
         newWorkout.setUser(user);
+
+        WorkoutSummary workoutSummary = WorkoutSummaryMapper.mapToWorkoutSummary(trackSummaryDto);
+        workoutSummaryRepository.save(workoutSummary);
+        newWorkout.setSummary(workoutSummary);
+
         FileOnServer fileOnServer = fileOnServerService.addTrackFile(file, userId); // файл сохраняем после всех проверок
         newWorkout.setFileWorkout(fileOnServer);
 
@@ -141,7 +157,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         }
 
         FileOnServer fileOnServer = workout.getFileWorkout();
-        FITFileDto fitFileDto = fileOnServerService.readTrack(fileOnServer);
+        FITFileDto fitFileDto = trackFileService.readTrack(fileOnServer);
 
         return fitFileDto;
     }
@@ -159,7 +175,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         } //вынести в отдельную функцию
 
         FileOnServer fileOnServer = workout.getFileWorkout();
-        TrackSummaryDto trackSummaryDto = fileOnServerService.readTrackSummary(fileOnServer);
+        TrackSummaryDto trackSummaryDto = trackFileService.readTrackSummary(fileOnServer);
 
         return trackSummaryDto;
     }

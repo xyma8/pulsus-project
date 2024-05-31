@@ -1,5 +1,6 @@
 package com.pulsus.pulsusbackend.dto;
 
+import com.garmin.fit.DateTime;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class WorkoutSummaryDto {
 
     private Float totalTimerTime;
 
-    private Float totalAscent;
+    private Integer totalAscent;
 
     private Date startTime;
 }

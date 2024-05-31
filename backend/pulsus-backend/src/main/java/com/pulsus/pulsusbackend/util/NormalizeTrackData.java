@@ -3,6 +3,8 @@ package com.pulsus.pulsusbackend.util;
 public class NormalizeTrackData {
 
     public static Float normalizeLat(Integer posLat) {
+        if(posLat == null) return null;
+
         double positionLat = posLat * (180.0 / Math.pow(2, 31));
         Float normalLat = (float) positionLat;
 
@@ -10,6 +12,8 @@ public class NormalizeTrackData {
     }
 
     public static Float normalizeLong(Integer posLong) {
+        if(posLong == null) return null;
+
         double positionLong = posLong * (180.0 / Math.pow(2, 31));
         Float normalLong = (float) positionLong;
 
