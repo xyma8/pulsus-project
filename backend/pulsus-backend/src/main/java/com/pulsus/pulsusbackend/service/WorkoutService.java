@@ -8,9 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface WorkoutService {
+
+    Optional<Workout> findById(Long workoutId);
+
     WorkoutDto createWorkout(Long userId, MultipartFile file);
 
     WorkoutDto getInfoWorkout(Long userId, Long workoutId);

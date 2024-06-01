@@ -21,6 +21,8 @@ public class NormalizeTrackData {
     }
 
     public static Float speedMStoKPH(Float speedMS) {
+        if(speedMS == null) return null;
+
         Float speedKPH = speedMS * 3.6f;
 
         return speedKPH;

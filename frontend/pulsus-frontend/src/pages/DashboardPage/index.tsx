@@ -7,6 +7,7 @@ import ProfilePicture from "../../components/ProfilePicture";
 import ChangeProfilePicture from "../../components/ChangeProfilePicture";
 import UploadTrackFile from "../../components/UploadTrackFile";
 import TrackMap from "../../components/WorkoutTrackMap";
+import WorkoutPost from "../../components/WorkoutPost";
 
 interface UserData {
     name: string,
@@ -55,6 +56,7 @@ export default function DashboardPage() {
         <ProfilePicture size={50} />
         <ChangeProfilePicture type={false} size={50} />
         <UploadTrackFile />
+        <WorkoutPost workoutId={"1"}/>
         <button onClick={exit}>Exit</button>
     </div>
     )

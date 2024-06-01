@@ -34,7 +34,7 @@ public class Workout {
     private String description;
 
     @Column(name = "type_sport", nullable = false)
-    private String typeSports;
+    private String typeSports; //надо переименовать на typeSport
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "summary", referencedColumnName = "id")

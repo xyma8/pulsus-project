@@ -56,7 +56,10 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
                 const item = response.data.fitTrackData[i];
                 console.log(item);
                 initialTrackData.id.push(i)
-                initialTrackData.coordinates.push([item.positionLat, item.positionLong])
+                if (item.positionLat !== null && item.positionLong !== null) {
+                    initialTrackData.coordinates.push([item.positionLat, item.positionLong])
+                }
+                
                 initialTrackData.distance.push(item.distance)
                 initialTrackData.speed.push(item.enhancedSpeed)
                 initialTrackData.cadence.push(item.cadence)
@@ -144,7 +147,7 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
     <div className="workout-container">
         {trackDataArrays?.coordinates && <WorkoutTrackMap coordinates={trackDataArrays.coordinates} center={trackDataArrays.coordinates[0]} point={currentChartCoordindate}/>}
         <div className="workout-container-charts" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            {trackDataArrays?.id && trackDataArrays?.speed &&
+            {trackDataArrays?.id && trackDataArrays?.altitude &&
             <WorkoutInformationChart
                 type="area"
                 data={getDataForChart(trackDataArrays.id, trackDataArrays.altitude)}

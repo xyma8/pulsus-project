@@ -22,6 +22,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +45,10 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Autowired
     private UserService userService;
+
+    public Optional<Workout> findById(Long workoutId) {
+        return workoutRepository.findById(workoutId);
+    }
 
     @Override
     public WorkoutDto createWorkout(Long userId, MultipartFile file) {
@@ -76,7 +81,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public WorkoutDto getInfoWorkout(Long userId, Long workoutId) {
-        Workout workout = workoutRepository.findById(workoutId)
+        Workout workout = findById(workoutId)
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));
 
         Integer accessType = workout.getAccessType();
@@ -92,7 +97,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public WorkoutSummaryDto getSummaryWorkout(Long userId, Long workoutId) {
-        Workout workout = workoutRepository.findById(workoutId)
+        Workout workout = findById(workoutId)
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));
 
         Integer accessType = workout.getAccessType();
@@ -110,7 +115,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public WorkoutDto editInfoWorkout(Long userId, Long workoutId, WorkoutDto editedData) {
-        Workout workout = workoutRepository.findById(workoutId)
+        Workout workout = findById(workoutId)
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));
 
         if(workout.getUser().getId() != userId) {
@@ -146,7 +151,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public FITFileDto getTrackWorkout(Long userId, Long workoutId) {
-        Workout workout = workoutRepository.findById(workoutId)
+        Workout workout = findById(workoutId)
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));
 
         Integer accessType = workout.getAccessType();
@@ -164,7 +169,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public TrackSummaryDto getTrackSummaryWorkout(Long userId, Long workoutId) {
-        Workout workout = workoutRepository.findById(workoutId)
+        Workout workout = findById(workoutId)
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));
 
         Integer accessType = workout.getAccessType();
