@@ -26,7 +26,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDto getPost(Long userId, Long workoutId) {
         User user = userService.findById(userId)
-                .orElseThrow(() -> new UnauthorizedException("Login error"));
+                .orElseThrow(() -> new UnauthorizedException("Login error")); //может не нужно
 
         Workout workout = workoutService.findById(workoutId)
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));
@@ -38,7 +38,7 @@ public class PostServiceImpl implements PostService {
             throw new NotFoundException("This workout does not exists");
         }
 
-        PostDto postDto = PostMapper.mapToPostDto(workout, workout.getSummary());
+        PostDto postDto = PostMapper.mapToPostDto(workout.getUser(), workout, workout.getSummary());
 
         return postDto;
     }

@@ -5,13 +5,11 @@ import com.pulsus.pulsusbackend.exception.*;
 import com.pulsus.pulsusbackend.mapper.TypeSportMapper;
 import com.pulsus.pulsusbackend.mapper.WorkoutMapper;
 import com.pulsus.pulsusbackend.mapper.WorkoutSummaryMapper;
+import com.pulsus.pulsusbackend.model.FITTrackData;
 import com.pulsus.pulsusbackend.repository.TypeSportRepository;
 import com.pulsus.pulsusbackend.repository.WorkoutRepository;
 import com.pulsus.pulsusbackend.repository.WorkoutSummaryRepository;
-import com.pulsus.pulsusbackend.service.FileOnServerService;
-import com.pulsus.pulsusbackend.service.TrackFileService;
-import com.pulsus.pulsusbackend.service.UserService;
-import com.pulsus.pulsusbackend.service.WorkoutService;
+import com.pulsus.pulsusbackend.service.*;
 import com.pulsus.pulsusbackend.validator.WorkoutValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +44,9 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    FileService fileService;
+
     public Optional<Workout> findById(Long workoutId) {
         return workoutRepository.findById(workoutId);
     }
@@ -59,6 +60,23 @@ public class WorkoutServiceImpl implements WorkoutService {
         newWorkout.setName("Новая тренировка");
         newWorkout.setAccessType(2);
         newWorkout.setTimestamp(getTimestamp());
+
+        /*
+        FITFileDto fitFileDto = trackFileService.readTrack(file);
+        List<float[]> coordinates = new ArrayList<>();
+        List<FITTrackData> trackData = fitFileDto.getFitTrackData();
+        for(FITTrackData data: trackData) {
+            float[] coord = { data.getPositionLat(), data.getPositionLong() };
+            coordinates.add(coord);
+        }
+        String mapImage = "";
+        try {
+            mapImage = fileService.createMapImage(userId, coordinates);
+        }catch (Exception e){
+            System.out.println(e);
+            throw new InternalServerException("Internal error");
+        }
+        */
 
         TrackSummaryDto trackSummaryDto = trackFileService.readTrackSummary(file);
         String typeSport = trackSummaryDto.getFitSessionData().get(0).getSport().toString();

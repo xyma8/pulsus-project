@@ -44,7 +44,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Header/>
-    <div className='container h-screen mx-auto '>
+    <div className='max-w-[1200px] h-screen ml-auto mr-auto'>
       <RouterProvider router={router}/>
     </div>
   </React.StrictMode>

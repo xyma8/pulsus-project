@@ -76,6 +76,7 @@
 			<artifactId>mapbox-sdk-turf</artifactId>
 			<version>5.8.0</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>

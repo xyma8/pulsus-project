@@ -54,9 +54,10 @@ export default function DashboardPage() {
     <div className="dashboard-page">
         hello in your account on dashboard
         <ProfilePicture size={50} />
+        <ProfilePicture userId={"15"} size={50}/>
         <ChangeProfilePicture type={false} size={50} />
         <UploadTrackFile />
-        <WorkoutPost workoutId={"1"}/>
+        <WorkoutPost workoutId={"2"}/>
         <button onClick={exit}>Exit</button>
     </div>
     )

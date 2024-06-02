@@ -1,21 +1,55 @@
 import { useState, useEffect } from "react";
 import { getPost } from "../../services/postService";
+import API from '../../services/API';
+import ProfilePicture from "../ProfilePicture";
 
 type WorkoutPostProps = {
     workoutId: string | undefined
 }
 
+type UsualTime = {
+    hours: string,
+    minutes: string,
+    seconds: string
+}
+
+type WorkoutPost = {
+    workoutId: string,
+    userId:string,
+    username: string,
+    name: string,
+    typeSport: string,
+    totalDistance: string,
+    totalTime: UsualTime,
+    totalAscent: string,
+    startTime: string
+}
+
 export default function WorkoutPost(props: WorkoutPostProps) {
+    const [workoutPost, setWorkoutPost] = useState<WorkoutPost>();
+
 
     useEffect(() => {
         loadPost();
 
     }, []);
 
+    /* сделать потом вот так
+    const fetchWorkoutPost = async () => {
+        try {
+            const response = await API.get<WorkoutPost>(`/posts/${props.workoutId}`);
+            setWorkoutPost(response.data);
+        } catch (error) {
+            console.error('Ошибка при загрузке данных:', error);
+        }
+    };
+    */ 
+
     function loadPost() {
         getPost(props.workoutId)
         .then(response => {
             console.log(response.data)
+            setWorkoutPost(response.data)
         })
         .catch(error =>{
             console.error(error);
@@ -28,9 +62,46 @@ export default function WorkoutPost(props: WorkoutPostProps) {
         })
     }
 
+    if(!setWorkoutPost) {
+        return(
+        <div></div>
+        )
+    }
     return(
-    <div className="workout-post">
-        
+    <div className="flex flex-row items-left bg-block_background p-5 rounded shadow-md text-text ">
+        <ProfilePicture userId={workoutPost?.username} size={45} />
+        <div className="flex flex-col ml-5">
+            <p className="font-medium">{workoutPost?.username}</p>
+            <p className="text-sm">{workoutPost?.startTime}</p>
+            <p className="font-semibold text-2xl mt-2">{workoutPost?.name}</p>
+            <div className="flex flex-row gap-10 mt-3">
+                <div className="">
+                    <p className="text-sm">Расстояние</p>
+                    <p className="text-xl font-medium">{workoutPost?.totalDistance} км</p>
+                </div>
+                
+                <div className="">
+                    <p className="text-sm">Набор высоты</p>
+                    <p className="text-xl font-medium">{workoutPost?.totalAscent} м</p>
+                </div>
+
+                <div className="">
+                    <p className="text-sm">Время</p>
+                    <p className="text-xl font-medium">
+                        {workoutPost?.totalTime.hours != "0" && (
+                            <>
+                                {workoutPost?.totalTime.hours}ч.&nbsp;
+                            </>
+                        )}
+                        {workoutPost?.totalTime.minutes != "0" && (
+                            <>
+                                {workoutPost?.totalTime.minutes}м.&nbsp;
+                            </>
+                        )}
+                        {workoutPost?.totalTime.seconds}с.  </p>
+                </div>
+            </div>
+        </div>
     </div>
     )
 

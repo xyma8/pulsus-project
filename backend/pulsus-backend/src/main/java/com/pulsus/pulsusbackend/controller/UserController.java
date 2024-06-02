@@ -49,6 +49,13 @@ public class UserController {
         return ResponseEntity.ok(fileOnServerDto);
     }
 
+    @GetMapping("/profilePicture/{userId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<FileOnServerDto> getProfilePictureById(Authentication authentication, @PathVariable Long userId) {
+        FileOnServerDto fileOnServerDto = userService.getProfilePicture(userId);
+        return ResponseEntity.ok(fileOnServerDto);
+    }
+
     @PostMapping("/uploadProfilePicture")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<FileOnServerDto> uploadProfilePicture(Authentication authentication, @RequestParam("file") MultipartFile file) {

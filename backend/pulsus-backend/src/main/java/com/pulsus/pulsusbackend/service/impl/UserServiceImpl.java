@@ -4,10 +4,7 @@ import com.pulsus.pulsusbackend.dto.FileOnServerDto;
 import com.pulsus.pulsusbackend.dto.UserDto;
 import com.pulsus.pulsusbackend.entity.Role;
 import com.pulsus.pulsusbackend.entity.User;
-import com.pulsus.pulsusbackend.exception.BadRequestException;
-import com.pulsus.pulsusbackend.exception.ConflictException;
-import com.pulsus.pulsusbackend.exception.InternalServerException;
-import com.pulsus.pulsusbackend.exception.UnauthorizedException;
+import com.pulsus.pulsusbackend.exception.*;
 import com.pulsus.pulsusbackend.mapper.UserMapper;
 import com.pulsus.pulsusbackend.repository.UserRepository;
 import com.pulsus.pulsusbackend.service.FileService;
@@ -105,7 +102,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public FileOnServerDto getProfilePicture(Long userId) {
         User user = findById(userId)
-                .orElseThrow(() -> new UnauthorizedException("Login error")); //проверка не нужна?
+                .orElseThrow(() -> new NotFoundException("User don't exists")); //проверка не нужна?
 
         String path = fileService.profilePic(userId);
 

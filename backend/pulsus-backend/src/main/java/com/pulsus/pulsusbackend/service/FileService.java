@@ -7,14 +7,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.openstreetmap.gui.jmapviewer.JMapViewer;
+import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
+import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
+import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -106,8 +115,39 @@ public class FileService {
         return sb.toString();
     }
 
-    public String createMapImage(double[] coordinates) {
-        return null;
+    public String createMapImage(Long userId, List<float[]> coord)  throws IOException{
+        List<Coordinate> coordinates = new ArrayList<>();
+        for(float[] coordinate: coord) {
+            coordinates.add(new Coordinate(coordinate[0], coordinate[1]));
+        }
+
+        JMapViewer mapViewer = new JMapViewer();
+        mapViewer.setTileSource(new OsmTileSource.Mapnik());
+        mapViewer.setZoomContolsVisible(true);
+
+        for (Coordinate coordinate : coordinates) {
+            mapViewer.addMapMarker(new MapMarkerDot(coordinate));
+        }
+        System.out.println("kuku");
+        mapViewer.addMapPolygon(new MapPolygonImpl(coordinates));
+
+        BufferedImage image = new BufferedImage(1088, 436, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = image.createGraphics();
+        mapViewer.paint(g2d);
+        g2d.dispose();
+
+        String directoryPath = createPath(String.format("users/%s/workouts", userId));
+        String randomName = userId + UUID.randomUUID().toString();
+        String filePath = directoryPath + "/" + randomName +  ".jpg";
+
+        File file = new File(filePath);
+        ImageIO.write(image, "png", file);
+        //byte[] compressedImage = compressAndConvertPic(image);
+        //FileOutputStream fos = new FileOutputStream(filePath);
+        //fos.write(compressedImage);
+        //fos.close();
+
+        return filePath;
     }
 
     private String getAbsolutePath(String relative) {

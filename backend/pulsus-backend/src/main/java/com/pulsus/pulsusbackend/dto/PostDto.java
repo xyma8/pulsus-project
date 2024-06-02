@@ -1,5 +1,6 @@
 package com.pulsus.pulsusbackend.dto;
 
+import com.pulsus.pulsusbackend.model.UsualTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,15 +14,19 @@ import java.util.Date;
 @Getter
 public class PostDto {
 
+    private Long workoutId;
+
+    private Long userId;
+
+    private String username;
+
     private String name;
 
     private String typeSport;
 
     private Float totalDistance;
 
-    private Float totalEllapsedTime;
-
-    private Float totalTimerTime;
+    private UsualTime totalTime;
 
     private Integer totalAscent;
 

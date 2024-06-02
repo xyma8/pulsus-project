@@ -1,5 +1,7 @@
 package com.pulsus.pulsusbackend.util;
 
+import com.pulsus.pulsusbackend.model.UsualTime;
+
 public class NormalizeTrackData {
 
     public static Float normalizeLat(Integer posLat) {
@@ -35,5 +37,23 @@ public class NormalizeTrackData {
         value = value * factor;
         long tmp = Math.round(value);
         return (float) tmp / factor;
+    }
+
+    public static UsualTime toUsualTime(Float totalSec) {
+        if(totalSec == null) return null;
+
+        Integer hours = (int)(totalSec / 3600);
+        Integer minutes = (int)(totalSec % 3600) / 60;
+        Integer seconds = (int)(totalSec % 3600) % 60;
+
+        return new UsualTime(hours, minutes, seconds);
+    }
+
+    public static Float meterToKm(Float meter) {
+        if(meter == null) return null;
+
+        Float km = meter / 1000;
+
+        return km;
     }
 }
