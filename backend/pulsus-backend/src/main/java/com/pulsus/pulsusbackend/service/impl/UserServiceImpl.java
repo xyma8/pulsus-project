@@ -2,9 +2,11 @@ package com.pulsus.pulsusbackend.service.impl;
 
 import com.pulsus.pulsusbackend.dto.FileOnServerDto;
 import com.pulsus.pulsusbackend.dto.UserDto;
+import com.pulsus.pulsusbackend.dto.UserInfoDto;
 import com.pulsus.pulsusbackend.entity.Role;
 import com.pulsus.pulsusbackend.entity.User;
 import com.pulsus.pulsusbackend.exception.*;
+import com.pulsus.pulsusbackend.mapper.UserInfoDtoMapper;
 import com.pulsus.pulsusbackend.mapper.UserMapper;
 import com.pulsus.pulsusbackend.repository.UserRepository;
 import com.pulsus.pulsusbackend.service.FileService;
@@ -97,6 +99,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         fileService.createUserDirs(savedUser.getId());
 
         return UserMapper.mapToUserDto(savedUser);
+    }
+
+    @Override
+    public UserInfoDto getUserInfoByLogin(String login) {
+        User user = findByLogin(login)
+                .orElseThrow(() -> new NotFoundException("User don't exists"));
+
+        return UserInfoDtoMapper.mapToUserInfoDto(user);
+    }
+
+    @Override
+    public UserInfoDto getUserInfoById(Long userId) {
+        User user = findById(userId)
+                .orElseThrow(() -> new NotFoundException("User don't exists"));
+
+        return UserInfoDtoMapper.mapToUserInfoDto(user);
     }
 
     @Override

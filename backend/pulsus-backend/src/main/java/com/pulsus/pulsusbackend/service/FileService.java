@@ -7,11 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
+/*
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
+*/
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -115,6 +117,7 @@ public class FileService {
         return sb.toString();
     }
 
+    /*
     public String createMapImage(Long userId, List<float[]> coord)  throws IOException{
         List<Coordinate> coordinates = new ArrayList<>();
         for(float[] coordinate: coord) {
@@ -149,6 +152,7 @@ public class FileService {
 
         return filePath;
     }
+    */
 
     private String getAbsolutePath(String relative) {
         Path relativePath = Paths.get(relative);

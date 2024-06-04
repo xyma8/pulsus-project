@@ -72,6 +72,14 @@ CREATE TABLE `workouts_photos` (
     FOREIGN KEY (workout) REFERENCES workouts(id)
 )
 
+CREATE TABLE `subscriptions` (
+	`id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+	`follower` BIGINT NOT NULL,
+    `followed` BIGINT NOT NULL,
+    FOREIGN KEY (follower) REFERENCES users(id),
+    FOREIGN KEY (followed) REFERENCES users(id)
+)
+
 INSERT INTO `types_sports` (`name`, `description`)
 VALUES('CYCLING', 'cycling')
 

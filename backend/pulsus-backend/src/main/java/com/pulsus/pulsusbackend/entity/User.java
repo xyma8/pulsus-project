@@ -1,14 +1,12 @@
 package com.pulsus.pulsusbackend.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -50,6 +48,12 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Collection<Workout> workouts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
+    private Collection<Subscription> followers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "followed", cascade = CascadeType.ALL)
+    private Collection<Subscription> following = new ArrayList<>();
 
     public User(Long id, String name, String surname, String email, String login, String password) {
         this.id = id;

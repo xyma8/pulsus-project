@@ -66,12 +66,20 @@ public class UserController {
         return ResponseEntity.ok(fileOnServerDto);
     }
 
-    @GetMapping("/profile")
+    @GetMapping("/profile/{login}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public String userProfile(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+    public ResponseEntity<UserInfoDto> getUserInfoByLogin(Authentication authentication, @PathVariable String login) {
+        UserInfoDto userInfoDto = userService.getUserInfoByLogin(login);
 
-        return "Welcome to User Profile " + userDetails.getUsername();
+        return ResponseEntity.ok(userInfoDto);
+    }
+
+    @GetMapping("/profile/{userId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<UserInfoDto> getUserInfoByLogin(Authentication authentication, @PathVariable Long userId) {
+        UserInfoDto userInfoDto = userService.getUserInfoById(userId);
+
+        return ResponseEntity.ok(userInfoDto);
     }
 
     private Long getUserId(Authentication authentication) {

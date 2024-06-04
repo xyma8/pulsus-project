@@ -55,7 +55,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public WorkoutDto createWorkout(Long userId, MultipartFile file) {
         Workout newWorkout = new Workout();
         User user = userService.findById(userId)
-                .orElseThrow(() -> new UnauthorizedException("Login error"));
+                .orElseThrow(() -> new UnauthorizedException("Login error")); //проверка не нужна??
 
         newWorkout.setName("Новая тренировка");
         newWorkout.setAccessType(2);

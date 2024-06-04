@@ -65,6 +65,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests().requestMatchers("/api/posts/**").authenticated()
                 .and()
+                .authorizeHttpRequests().requestMatchers("/api/subscriptions/**").authenticated()
+                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
