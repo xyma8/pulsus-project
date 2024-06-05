@@ -1,5 +1,6 @@
 package com.pulsus.pulsusbackend.service.impl;
 
+import com.pulsus.pulsusbackend.dto.SubscriptionCountDto;
 import com.pulsus.pulsusbackend.dto.UserInfoDto;
 import com.pulsus.pulsusbackend.entity.Subscription;
 import com.pulsus.pulsusbackend.entity.User;
@@ -8,20 +9,23 @@ import com.pulsus.pulsusbackend.exception.UnauthorizedException;
 import com.pulsus.pulsusbackend.mapper.UserInfoDtoMapper;
 import com.pulsus.pulsusbackend.repository.SubscriptionRepository;
 import com.pulsus.pulsusbackend.service.SubscriptionService;
-import com.pulsus.pulsusbackend.service.UserInfoDetails;
 import com.pulsus.pulsusbackend.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Autowired
-    private UserService userService;
+    private SubscriptionRepository subscriptionRepository;
 
     @Autowired
-    private SubscriptionRepository subscriptionRepository;
+    private UserService userService;
 
     @Override
     public boolean changeSubscription(Long userId, Long followedId) {
@@ -31,7 +35,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         User followed = userService.findById(followedId)
                 .orElseThrow(() -> new NotFoundException("Followed user not found"));
 
-        Subscription subscription = subscriptionRepository.findByFollowerAndFollowed(userId, followedId);
+        Subscription subscription = subscriptionRepository.findByFollowerAndFollowed(user, followed);
 
         if(subscription != null) { // если подписка уже есть то значит пользователь отписывается -> удаляем запись
             subscriptionRepository.delete(subscription);
@@ -50,7 +54,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         User user = userService.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User don't exists"));
 
-        List<Subscription> subscriptions = subscriptionRepository.findByFollowed(userId);
+        List<Subscription> subscriptions = subscriptionRepository.findByFollowed(user);
         List<UserInfoDto> followers = new ArrayList<>();
 
         for(Subscription follower: subscriptions) {
@@ -65,7 +69,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         User user = userService.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User don't exists"));
 
-        List<Subscription> subscriptions = subscriptionRepository.findByFollower(userId);
+        List<Subscription> subscriptions = subscriptionRepository.findByFollower(user);
         List<UserInfoDto> following = new ArrayList<>();
 
         for(Subscription follower: subscriptions) {
@@ -76,17 +80,33 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public Integer getFollowersCount(Long userId) {
-        Integer countFollowers = subscriptionRepository.countByFollower(userId);
+    public Long getFollowersCount(Long userId) {
+        User user = userService.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User don't exists"));
 
+        Long countFollowers = subscriptionRepository.countByFollower(user);
+
+        if(countFollowers == null) countFollowers = 0L;
         return countFollowers;
     }
 
     @Override
-    public Integer getFollowingCount(Long userId) {
-        Integer countFollowing = subscriptionRepository.countByFollowed(userId);
+    public Long getFollowingCount(Long userId) {
+        User user = userService.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User don't exists"));
 
+        Long countFollowing = subscriptionRepository.countByFollowed(user);
+
+        if(countFollowing == null) countFollowing = 0L;
         return countFollowing;
+    }
+
+    @Override
+    public SubscriptionCountDto getSubscriptionsCount(Long userId) {
+        SubscriptionCountDto subscriptionCountDto =
+                new SubscriptionCountDto(getFollowersCount(userId), getFollowingCount(userId));
+
+        return subscriptionCountDto;
     }
 
 }

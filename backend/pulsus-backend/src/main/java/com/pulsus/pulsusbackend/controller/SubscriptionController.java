@@ -1,5 +1,6 @@
 package com.pulsus.pulsusbackend.controller;
 
+import com.pulsus.pulsusbackend.dto.SubscriptionCountDto;
 import com.pulsus.pulsusbackend.dto.UserInfoDto;
 import com.pulsus.pulsusbackend.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
@@ -46,16 +47,16 @@ public class SubscriptionController {
 
     @GetMapping("/followers/{userId}/count")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Integer> getFollowersCountByUserId(Authentication authentication, @PathVariable Long userId) {
-        Integer followersCount = subscriptionService.getFollowersCount(userId);
+    public ResponseEntity<Long> getFollowersCountByUserId(Authentication authentication, @PathVariable Long userId) {
+        Long followersCount = subscriptionService.getFollowersCount(userId);
 
         return new ResponseEntity<>(followersCount, HttpStatus.OK);
     }
 
     @GetMapping("/following/{userId}/count")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Integer> getFollowingCountByUserId(Authentication authentication, @PathVariable Long userId) {
-        Integer followingCount = subscriptionService.getFollowingCount(userId);
+    public ResponseEntity<Long> getFollowingCountByUserId(Authentication authentication, @PathVariable Long userId) {
+        Long followingCount = subscriptionService.getFollowingCount(userId);
 
         return new ResponseEntity<>(followingCount, HttpStatus.OK);
     }
@@ -78,18 +79,34 @@ public class SubscriptionController {
 
     @GetMapping("/followers/count")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Integer> getFollowersCount(Authentication authentication) {
-        Integer followersCount = subscriptionService.getFollowersCount(getUserId(authentication));
+    public ResponseEntity<Long> getFollowersCount(Authentication authentication) {
+        Long followersCount = subscriptionService.getFollowersCount(getUserId(authentication));
 
         return new ResponseEntity<>(followersCount, HttpStatus.OK);
     }
 
     @GetMapping("/following/count")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Integer> getFollowingCount(Authentication authentication) {
-        Integer followingCount = subscriptionService.getFollowingCount(getUserId(authentication));
+    public ResponseEntity<Long> getFollowingCount(Authentication authentication) {
+        Long followingCount = subscriptionService.getFollowingCount(getUserId(authentication));
 
         return new ResponseEntity<>(followingCount, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/count")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<SubscriptionCountDto> getSubscriptionsCountById(Authentication authentication, @PathVariable Long userId) {
+        SubscriptionCountDto subscriptionCountDto = subscriptionService.getSubscriptionsCount(userId);
+
+        return ResponseEntity.ok(subscriptionCountDto);
+    }
+
+    @GetMapping("/count")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<SubscriptionCountDto> getSubscriptionsCountById(Authentication authentication) {
+        SubscriptionCountDto subscriptionCountDto = subscriptionService.getSubscriptionsCount(getUserId(authentication));
+
+        return ResponseEntity.ok(subscriptionCountDto);
     }
 
     private Long getUserId(Authentication authentication) {

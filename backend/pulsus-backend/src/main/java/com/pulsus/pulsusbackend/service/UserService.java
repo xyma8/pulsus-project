@@ -1,6 +1,7 @@
 package com.pulsus.pulsusbackend.service;
 
 import com.pulsus.pulsusbackend.dto.FileOnServerDto;
+import com.pulsus.pulsusbackend.dto.UserCardInfoDto;
 import com.pulsus.pulsusbackend.dto.UserDto;
 import com.pulsus.pulsusbackend.dto.UserInfoDto;
 import com.pulsus.pulsusbackend.entity.User;
@@ -24,4 +25,5 @@ public interface UserService {
     Long getUserIdByLogin(String login);
 
     Optional<User> findById(Long userId);
+
 }

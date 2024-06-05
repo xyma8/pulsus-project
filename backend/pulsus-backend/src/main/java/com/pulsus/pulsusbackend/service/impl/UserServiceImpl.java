@@ -1,16 +1,17 @@
 package com.pulsus.pulsusbackend.service.impl;
 
-import com.pulsus.pulsusbackend.dto.FileOnServerDto;
-import com.pulsus.pulsusbackend.dto.UserDto;
-import com.pulsus.pulsusbackend.dto.UserInfoDto;
+import com.pulsus.pulsusbackend.dto.*;
 import com.pulsus.pulsusbackend.entity.Role;
 import com.pulsus.pulsusbackend.entity.User;
 import com.pulsus.pulsusbackend.exception.*;
+import com.pulsus.pulsusbackend.mapper.UserCardInfoMapper;
 import com.pulsus.pulsusbackend.mapper.UserInfoDtoMapper;
 import com.pulsus.pulsusbackend.mapper.UserMapper;
 import com.pulsus.pulsusbackend.repository.UserRepository;
 import com.pulsus.pulsusbackend.service.FileService;
+import com.pulsus.pulsusbackend.service.SubscriptionService;
 import com.pulsus.pulsusbackend.service.UserService;
+import com.pulsus.pulsusbackend.service.WorkoutService;
 import com.pulsus.pulsusbackend.util.FilePaths;
 import com.pulsus.pulsusbackend.validator.UserValidator;
 import jakarta.transaction.Transactional;
@@ -37,8 +38,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private FileService fileService;
-
-    private FilePaths filePaths;
 
 
     public Optional<User> findByLogin(String login) {

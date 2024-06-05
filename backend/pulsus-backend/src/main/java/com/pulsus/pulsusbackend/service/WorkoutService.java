@@ -15,7 +15,7 @@ public interface WorkoutService {
 
     Optional<Workout> findById(Long workoutId);
 
-    Integer getCountWorkouts(Long userId);
+    Long getCountWorkouts(Long userId);
 
     WorkoutDto createWorkout(Long userId, MultipartFile file);
 

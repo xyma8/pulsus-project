@@ -98,9 +98,13 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public Integer getCountWorkouts(Long userId) {
-        Integer countWorkouts = workoutRepository.countByUser(userId);
+    public Long getCountWorkouts(Long userId) {
+        User user = userService.findById(userId)
+                .orElseThrow(() -> new UnauthorizedException("Login error")); //проверка не нужна??
 
+        Long countWorkouts = workoutRepository.countByUser(user);
+
+        if(countWorkouts == null) countWorkouts = 0L;
         return countWorkouts;
     }
 

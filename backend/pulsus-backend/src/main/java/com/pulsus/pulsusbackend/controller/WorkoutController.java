@@ -31,8 +31,8 @@ public class WorkoutController {
 
     @GetMapping("/count")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Integer> getCountWorkouts(Authentication authentication, @PathVariable Long workoutId) {
-        Integer countWorkouts = workoutService.getCountWorkouts(getUserId(authentication));
+    public ResponseEntity<Long> getCountWorkouts(Authentication authentication, @PathVariable Long workoutId) {
+        Long countWorkouts = workoutService.getCountWorkouts(getUserId(authentication));
 
         return new ResponseEntity<>(countWorkouts, HttpStatus.OK);
     }

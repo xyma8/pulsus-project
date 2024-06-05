@@ -3,10 +3,7 @@ package com.pulsus.pulsusbackend.controller;
 import com.pulsus.pulsusbackend.dto.*;
 import com.pulsus.pulsusbackend.entity.AuthRequest;
 import com.pulsus.pulsusbackend.exception.ConflictException;
-import com.pulsus.pulsusbackend.service.FileOnServerService;
-import com.pulsus.pulsusbackend.service.JwtService;
-import com.pulsus.pulsusbackend.service.UserService;
-import com.pulsus.pulsusbackend.service.WorkoutService;
+import com.pulsus.pulsusbackend.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +25,8 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
+    private final UserProfileService userProfileService;
 
     private final FileOnServerService fileOnServerService;
 
@@ -80,6 +79,22 @@ public class UserController {
         UserInfoDto userInfoDto = userService.getUserInfoById(userId);
 
         return ResponseEntity.ok(userInfoDto);
+    }
+
+    @GetMapping("/profile")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<UserInfoDto> getUserInfo(Authentication authentication) {
+        UserInfoDto userInfoDto = userService.getUserInfoById(getUserId(authentication));
+
+        return ResponseEntity.ok(userInfoDto);
+    }
+
+    @GetMapping("/profileCard")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<UserCardInfoDto> getUserCardInfo(Authentication authentication) {
+        UserCardInfoDto userCardInfoDto = userProfileService.getUserCardInfo(getUserId(authentication));
+
+        return ResponseEntity.ok(userCardInfoDto);
     }
 
     private Long getUserId(Authentication authentication) {

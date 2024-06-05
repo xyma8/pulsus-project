@@ -1,5 +1,6 @@
 package com.pulsus.pulsusbackend.service;
 
+import com.pulsus.pulsusbackend.dto.SubscriptionCountDto;
 import com.pulsus.pulsusbackend.dto.UserInfoDto;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,9 @@ public interface SubscriptionService {
 
     List<UserInfoDto> getFollowing(Long userId);
 
-    Integer getFollowersCount(Long userId);
+    Long getFollowersCount(Long userId);
 
-    Integer getFollowingCount(Long userId);
+    Long getFollowingCount(Long userId);
 
-
+    SubscriptionCountDto getSubscriptionsCount(Long userId);
 }

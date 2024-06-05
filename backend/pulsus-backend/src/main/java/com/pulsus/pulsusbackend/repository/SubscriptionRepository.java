@@ -1,6 +1,7 @@
 package com.pulsus.pulsusbackend.repository;
 
 import com.pulsus.pulsusbackend.entity.Subscription;
+import com.pulsus.pulsusbackend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,13 +10,13 @@ import java.util.List;
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
 
-    Subscription findByFollowerAndFollowed(Long follower, Long followed);
+    Subscription findByFollowerAndFollowed(User follower, User followed);
 
-    List<Subscription> findByFollower(Long follower);
+    List<Subscription> findByFollower(User follower);
 
-    List<Subscription> findByFollowed(Long followed);
+    List<Subscription> findByFollowed(User followed);
 
-    Integer countByFollower(Long follower);
+    Long countByFollower(User follower);
 
-    Integer countByFollowed(Long followed);
+    Long countByFollowed(User followed);
 }
