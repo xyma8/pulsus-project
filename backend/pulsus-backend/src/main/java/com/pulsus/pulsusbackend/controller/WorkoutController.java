@@ -3,6 +3,7 @@ package com.pulsus.pulsusbackend.controller;
 import com.pulsus.pulsusbackend.dto.*;
 import com.pulsus.pulsusbackend.service.WorkoutService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -26,6 +27,14 @@ public class WorkoutController {
         WorkoutDto workoutDto = workoutService.createWorkout(getUserId(authentication), file);
 
         return ResponseEntity.ok(workoutDto);
+    }
+
+    @GetMapping("/count")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Integer> getCountWorkouts(Authentication authentication, @PathVariable Long workoutId) {
+        Integer countWorkouts = workoutService.getCountWorkouts(getUserId(authentication));
+
+        return new ResponseEntity<>(countWorkouts, HttpStatus.OK);
     }
 
     @GetMapping("/{workoutId}")

@@ -98,6 +98,13 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
+    public Integer getCountWorkouts(Long userId) {
+        Integer countWorkouts = workoutRepository.countByUser(userId);
+
+        return countWorkouts;
+    }
+
+    @Override
     public WorkoutDto getInfoWorkout(Long userId, Long workoutId) {
         Workout workout = findById(workoutId)
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));

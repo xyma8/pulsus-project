@@ -76,7 +76,7 @@ public class UserController {
 
     @GetMapping("/profile/{userId}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<UserInfoDto> getUserInfoByLogin(Authentication authentication, @PathVariable Long userId) {
+    public ResponseEntity<UserInfoDto> getUserInfoByUserId(Authentication authentication, @PathVariable Long userId) {
         UserInfoDto userInfoDto = userService.getUserInfoById(userId);
 
         return ResponseEntity.ok(userInfoDto);

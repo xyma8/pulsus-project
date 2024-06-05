@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface WorkoutRepository extends JpaRepository<Workout, Long> {
 
+    Integer countByUser(Long userId);
+
 }
