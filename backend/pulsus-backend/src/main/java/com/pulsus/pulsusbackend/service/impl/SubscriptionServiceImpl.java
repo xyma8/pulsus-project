@@ -4,6 +4,7 @@ import com.pulsus.pulsusbackend.dto.SubscriptionCountDto;
 import com.pulsus.pulsusbackend.dto.UserInfoDto;
 import com.pulsus.pulsusbackend.entity.Subscription;
 import com.pulsus.pulsusbackend.entity.User;
+import com.pulsus.pulsusbackend.exception.BadRequestException;
 import com.pulsus.pulsusbackend.exception.NotFoundException;
 import com.pulsus.pulsusbackend.exception.UnauthorizedException;
 import com.pulsus.pulsusbackend.mapper.UserInfoDtoMapper;
@@ -28,7 +29,32 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private UserService userService;
 
     @Override
+    public boolean checkSubscription(Long userId, Long followedId) {
+        if(userId == followedId) {
+            throw new BadRequestException("It is you");
+        }
+
+        User user = userService.findById(userId)
+                .orElseThrow(() -> new UnauthorizedException("Login error"));
+
+        User followed = userService.findById(followedId)
+                .orElseThrow(() -> new NotFoundException("Followed user not found"));
+
+        Subscription subscription = subscriptionRepository.findByFollowerAndFollowed(user, followed);
+
+        if(subscription != null){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public boolean changeSubscription(Long userId, Long followedId) {
+        if(userId == followedId) {
+            throw new BadRequestException("Can't subscribe to yourself");
+        }
+
         User user = userService.findById(userId)
                 .orElseThrow(() -> new UnauthorizedException("Login error"));
 
@@ -39,7 +65,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
         if(subscription != null) { // если подписка уже есть то значит пользователь отписывается -> удаляем запись
             subscriptionRepository.delete(subscription);
-            return true;
+            return false;
         } else {
             Subscription newSubscription = new Subscription();
             newSubscription.setFollower(user);

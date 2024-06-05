@@ -55,6 +55,9 @@ public class User {
     @OneToMany(mappedBy = "followed", cascade = CascadeType.ALL)
     private Collection<Subscription> following = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Collection<WorkoutLike> likes = new ArrayList<>();
+
     public User(Long id, String name, String surname, String email, String login, String password) {
         this.id = id;
         this.name = name;

@@ -1,0 +1,84 @@
+import { useState, useEffect } from "react";
+import API from "../../services/API";
+
+type UserSubscribeButtonProps = {
+    userId: string | undefined
+}
+
+export default function UserSubscribeButton(props: UserSubscribeButtonProps) {
+    const [subscription, setSubscription] = useState<boolean | null>();
+    
+    useEffect(() => {
+        loadSubscriptionInfo();
+
+    }, []);
+
+    function loadSubscriptionInfo() {
+        API.get(`/subscriptions/${props.userId}/check`, {
+            headers: {
+                Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
+            }
+        })
+        .then(response => {
+            console.log(response.data);
+            if(response.data.checkSubscription) {
+                setSubscription(true);
+            }
+            else{
+                setSubscription(false);
+            }
+        })
+        .catch(error =>{
+            console.error(error);
+            if(error.response.status == 404) {
+                alert("Workout not found");
+            }
+            else if(error.response.status == 400) {
+                console.log("400");
+                setSubscription(null);
+            }
+            else if(error.response.status != 200) {
+                alert("Internal error");
+            }
+        })
+    }
+
+    function changeSubscription() {
+        API.post(`/subscriptions/${props.userId}/change`, null, { //при post запросе обязательно передавать тело вторым параметром, либо null если оно не принимается
+            headers: {
+                Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
+            }
+        })
+        .then(response => {
+            console.log(response.data);
+            if(response.data.changeSubscription) {
+                setSubscription(true);
+            }
+            else{
+                setSubscription(false);
+            }
+        })
+        .catch(error =>{
+            console.error(error);
+            if(error.response.status == 404) {
+                alert("Workout not found");
+            }
+            else if(error.response.status != 200) {
+                alert("Internal error");
+            }
+        })
+    }
+
+    if(subscription == null) {
+        return(<></>)
+    }
+
+    return(
+    <div>
+        {subscription ?
+            <button className="bg-primary text-main_text_button font-bold py-2 px-4 rounded hover:bg-primary_hover_button duration-100" onClick={changeSubscription}>Вы подписаны</button>  :
+            <button className="bg-secondary text-main_text_button font-bold py-2 px-4 rounded hover:bg-secondary_hover_button duration-100" onClick={changeSubscription}>Подписаться</button>
+        }
+    </div>
+    )
+}

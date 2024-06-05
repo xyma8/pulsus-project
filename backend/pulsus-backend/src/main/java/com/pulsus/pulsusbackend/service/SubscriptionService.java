@@ -9,6 +9,8 @@ import java.util.List;
 @Service
 public interface SubscriptionService {
 
+    boolean checkSubscription(Long userId, Long followedId);
+
     boolean changeSubscription(Long userId, Long followedId);
 
     List<UserInfoDto> getFollowers(Long userId);

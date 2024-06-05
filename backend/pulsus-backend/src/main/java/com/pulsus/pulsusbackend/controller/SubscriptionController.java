@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -19,17 +20,26 @@ import java.util.List;
 @RequestMapping("/api/subscriptions")
 public class SubscriptionController {
 
-    private SubscriptionService subscriptionService;
 
-    @PostMapping("/changeSubscription")
+    private final SubscriptionService subscriptionService;
+
+    @GetMapping("/{userId}/check")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Void> changeSubscription(Authentication authentication, @RequestParam Long followedId) {
-        boolean changeSubscription = subscriptionService.changeSubscription(getUserId(authentication), followedId);
+    public ResponseEntity<Map<String, Boolean>> checkSubscription(Authentication authentication, @PathVariable Long userId) {
+        boolean checkSubscription = subscriptionService.checkSubscription(getUserId(authentication), userId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(Map.of("checkSubscription", checkSubscription));
     }
 
-    @GetMapping("/followers/{userId}")
+    @PostMapping("/{userId}/change")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Map<String, Boolean>> changeSubscription(Authentication authentication, @PathVariable Long userId) {
+        boolean changeSubscription = subscriptionService.changeSubscription(getUserId(authentication), userId);
+
+        return ResponseEntity.ok(Map.of("changeSubscription", changeSubscription));
+    }
+
+    @GetMapping("/{userId}/followers")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<List<UserInfoDto>> getFollowersByUserId(Authentication authentication, @PathVariable Long userId) {
         List<UserInfoDto> followers = subscriptionService.getFollowers(userId);
@@ -37,7 +47,7 @@ public class SubscriptionController {
         return ResponseEntity.ok(followers);
     }
 
-    @GetMapping("/following/{userId}")
+    @GetMapping("/{userId}/following")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<List<UserInfoDto>> getFollowingByUserId(Authentication authentication, @PathVariable Long userId) {
         List<UserInfoDto> following = subscriptionService.getFollowing(userId);
@@ -45,7 +55,7 @@ public class SubscriptionController {
         return ResponseEntity.ok(following);
     }
 
-    @GetMapping("/followers/{userId}/count")
+    @GetMapping("/{userId}/followers/count")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Long> getFollowersCountByUserId(Authentication authentication, @PathVariable Long userId) {
         Long followersCount = subscriptionService.getFollowersCount(userId);
@@ -53,7 +63,7 @@ public class SubscriptionController {
         return new ResponseEntity<>(followersCount, HttpStatus.OK);
     }
 
-    @GetMapping("/following/{userId}/count")
+    @GetMapping("/{userId}/following/count")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Long> getFollowingCountByUserId(Authentication authentication, @PathVariable Long userId) {
         Long followingCount = subscriptionService.getFollowingCount(userId);

@@ -57,4 +57,7 @@ public class Workout {
             inverseJoinColumns = @JoinColumn(name = "photo")
     )
     private Collection<FileOnServer> photos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
+    private Collection<WorkoutLike> likes = new ArrayList<>();
 }

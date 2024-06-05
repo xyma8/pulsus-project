@@ -10,6 +10,7 @@ import DashboardPage from './pages/DashboardPage';
 import WorkoutPage from './pages/WorkoutPage';
 import EditWorkoutPage from './pages/EditWorkoutPage';
 import Header from './components/Header';
+import UserPage from './pages/UserPage';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
   {
     path: '/workouts/:workoutId/edit',
     element: <EditWorkoutPage/>
+  },
+  {
+    path: '/users/:userId',
+    element: <UserPage />
   }
 ]);
 
