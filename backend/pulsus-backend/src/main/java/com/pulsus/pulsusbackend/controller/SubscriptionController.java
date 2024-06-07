@@ -20,7 +20,6 @@ import java.util.Map;
 @RequestMapping("/api/subscriptions")
 public class SubscriptionController {
 
-
     private final SubscriptionService subscriptionService;
 
     @GetMapping("/{userId}/check")

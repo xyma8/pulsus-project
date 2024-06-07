@@ -4,6 +4,7 @@ import com.pulsus.pulsusbackend.dto.*;
 import com.pulsus.pulsusbackend.entity.TypeSport;
 import com.pulsus.pulsusbackend.entity.Workout;
 import com.pulsus.pulsusbackend.entity.WorkoutSummary;
+import org.hibernate.jdbc.Work;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,5 +31,7 @@ public interface WorkoutService {
     FITFileDto getTrackWorkout(Long userId, Long workoutId);
 
     TrackSummaryDto getTrackSummaryWorkout(Long userId, Long workoutId);
+
+    Boolean checkAccess(Long userId, Workout workout);
 
 }

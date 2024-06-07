@@ -60,7 +60,7 @@ export default function EditWorkoutPage() {
         })
         .then(response => {
             console.log(response.data);
-            uploadWorkoutPhotos();
+            //uploadWorkoutPhotos();
         })
         .catch(error =>{
             console.error(error);

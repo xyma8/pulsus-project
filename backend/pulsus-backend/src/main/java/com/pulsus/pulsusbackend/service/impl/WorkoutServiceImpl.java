@@ -47,6 +47,10 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Autowired
     FileService fileService;
 
+    @Autowired
+    SubscriptionService subscriptionService;
+
+
     public Optional<Workout> findById(Long workoutId) {
         return workoutRepository.findById(workoutId);
     }
@@ -113,15 +117,27 @@ public class WorkoutServiceImpl implements WorkoutService {
         Workout workout = findById(workoutId)
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));
 
-        Integer accessType = workout.getAccessType();
-
-        if(accessType==2 && workout.getUser().getId() != userId) {
-            System.out.println("This workout does not exists");
+        if(!checkAccess(userId, workout)) {
             throw new NotFoundException("This workout does not exists");
         }
 
         WorkoutDto workoutDto = WorkoutMapper.mapToWorkoutDto(workout);
         return workoutDto;
+    }
+
+    @Override
+    public Boolean checkAccess(Long userId, Workout workout) {
+        Integer accessType = workout.getAccessType();
+        Long workoutUserId = workout.getUser().getId();
+
+        if(accessType == 0) return true;
+
+        if(userId == workoutUserId) return true;
+
+        if(accessType==1 &&
+                subscriptionService.checkSubscription(userId, workoutUserId)) return true;
+
+        return false;
     }
 
     @Override

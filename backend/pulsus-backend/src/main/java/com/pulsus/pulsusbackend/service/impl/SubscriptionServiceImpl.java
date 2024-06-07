@@ -11,6 +11,7 @@ import com.pulsus.pulsusbackend.mapper.UserInfoDtoMapper;
 import com.pulsus.pulsusbackend.repository.SubscriptionRepository;
 import com.pulsus.pulsusbackend.service.SubscriptionService;
 import com.pulsus.pulsusbackend.service.UserService;
+import com.pulsus.pulsusbackend.service.WorkoutLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Autowired
     private UserService userService;
+
 
     @Override
     public boolean checkSubscription(Long userId, Long followedId) {
@@ -110,10 +112,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         User user = userService.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User don't exists"));
 
-        Long countFollowers = subscriptionRepository.countByFollower(user);
 
-        if(countFollowers == null) countFollowers = 0L;
-        return countFollowers;
+        Long countFollowing = subscriptionRepository.countByFollowed(user);
+        if(countFollowing == null) countFollowing = 0L;
+        return countFollowing;
     }
 
     @Override
@@ -121,16 +123,15 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         User user = userService.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User don't exists"));
 
-        Long countFollowing = subscriptionRepository.countByFollowed(user);
-
-        if(countFollowing == null) countFollowing = 0L;
-        return countFollowing;
+        Long countFollowers = subscriptionRepository.countByFollower(user);
+        if(countFollowers == null) countFollowers = 0L;
+        return countFollowers;
     }
 
     @Override
     public SubscriptionCountDto getSubscriptionsCount(Long userId) {
         SubscriptionCountDto subscriptionCountDto =
-                new SubscriptionCountDto(getFollowersCount(userId), getFollowingCount(userId));
+                new SubscriptionCountDto(getFollowingCount(userId), getFollowersCount(userId));
 
         return subscriptionCountDto;
     }

@@ -89,9 +89,9 @@ public class WorkoutController {
         return ResponseEntity.ok("uploads");//можно возвращать просто OK
     }
 
-    @GetMapping("/workouts/typesSport")
+    @GetMapping("/typesSport")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<List<TypeSportDto>> getTypesSport() {
+    public ResponseEntity<List<TypeSportDto>> getTypesSport(Authentication authentication) {
         List<TypeSportDto> typeSportDtoList = workoutService.getTypesSport();
 
         return ResponseEntity.ok(typeSportDtoList);

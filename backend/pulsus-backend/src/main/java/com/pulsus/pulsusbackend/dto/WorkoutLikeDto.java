@@ -9,10 +9,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-public class SubscriptionCountDto {
+public class WorkoutLikeDto {
 
-    private Long following;
+    private Boolean isLike;
 
-    private Long followers;
-
+    private Long countLikes;
 }

@@ -31,4 +31,6 @@ public class PostDto {
     private Integer totalAscent;
 
     private Date startTime;
+
+    private WorkoutLikeDto likes;
 }

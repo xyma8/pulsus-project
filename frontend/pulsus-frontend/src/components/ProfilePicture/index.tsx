@@ -14,6 +14,7 @@ export default function ProfilePicture(props: ProfilePictureProps) {
 
     useEffect(() => {
 
+        //изменить так не работает
         if(!props.userId) {
             loadProfilePic();
         }
@@ -30,7 +31,6 @@ export default function ProfilePicture(props: ProfilePictureProps) {
             }
         })
         .then(response => {
-            console.log(response.data.path);
             setPicture(response.data.path);
         })
         .catch(error =>{
@@ -51,7 +51,6 @@ export default function ProfilePicture(props: ProfilePictureProps) {
             }
         })
         .then(response => {
-            console.log(response.data.path);
             setPicture(response.data.path);
         })
         .catch(error =>{

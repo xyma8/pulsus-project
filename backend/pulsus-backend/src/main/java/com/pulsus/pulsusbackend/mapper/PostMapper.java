@@ -1,9 +1,6 @@
 package com.pulsus.pulsusbackend.mapper;
 
-import com.pulsus.pulsusbackend.dto.PostDto;
-import com.pulsus.pulsusbackend.dto.UserDto;
-import com.pulsus.pulsusbackend.dto.WorkoutDto;
-import com.pulsus.pulsusbackend.dto.WorkoutSummaryDto;
+import com.pulsus.pulsusbackend.dto.*;
 import com.pulsus.pulsusbackend.entity.User;
 import com.pulsus.pulsusbackend.entity.Workout;
 import com.pulsus.pulsusbackend.entity.WorkoutSummary;
@@ -12,7 +9,7 @@ import org.springframework.security.core.parameters.P;
 
 public class PostMapper {
 
-    public static PostDto mapToPostDto(UserDto userDto, WorkoutDto workoutDto, WorkoutSummaryDto workoutSummaryDto) {
+    public static PostDto mapToPostDto(UserDto userDto, WorkoutDto workoutDto, WorkoutSummaryDto workoutSummaryDto, WorkoutLikeDto workoutLikeDto) {
         return new PostDto(
                 workoutDto.getId(),
                 userDto.getId(),
@@ -22,11 +19,12 @@ public class PostMapper {
                 NormalizeTrackData.roundFloat(NormalizeTrackData.meterToKm(workoutSummaryDto.getTotalDistance()),2),
                 NormalizeTrackData.toUsualTime(workoutSummaryDto.getTotalEllapsedTime()),
                 workoutSummaryDto.getTotalAscent(),
-                workoutSummaryDto.getStartTime()
+                workoutSummaryDto.getStartTime(),
+                new WorkoutLikeDto(workoutLikeDto.getIsLike(), workoutLikeDto.getCountLikes())
         );
     }
 
-    public static PostDto mapToPostDto(User user, Workout workout, WorkoutSummary workoutSummary) {
+    public static PostDto mapToPostDto(User user, Workout workout, WorkoutSummary workoutSummary, WorkoutLikeDto workoutLikeDto) {
         return new PostDto(
                 workout.getId(),
                 user.getId(),
@@ -36,7 +34,8 @@ public class PostMapper {
                 NormalizeTrackData.roundFloat(NormalizeTrackData.meterToKm(workoutSummary.getTotalDistance()),2),
                 NormalizeTrackData.toUsualTime(workoutSummary.getTotalEllapsedTime()),
                 workoutSummary.getTotalAscent(),
-                workoutSummary.getStartTime()
+                workoutSummary.getStartTime(),
+                new WorkoutLikeDto(workoutLikeDto.getIsLike(), workoutLikeDto.getCountLikes())
         );
     }
 }
