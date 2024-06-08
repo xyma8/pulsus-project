@@ -80,6 +80,14 @@ CREATE TABLE `subscriptions` (
     FOREIGN KEY (followed) REFERENCES users(id)
 )
 
+CREATE TABLE `workouts_likes` (
+	`id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+    `user` BIGINT NOT NULL,
+    `workout` BIGINT NOT NULL,
+    FOREIGN KEY (user) REFERENCES users(id),
+    FOREIGN KEY (workout) REFERENCES workouts(id)
+)
+
 INSERT INTO `types_sports` (`name`, `description`)
 VALUES('CYCLING', 'cycling')
 
@@ -97,3 +105,40 @@ VALUES(2,2)
 
 INSERT INTO `users_roles` (`user`, `role`)
 VALUES(3,1)
+
+
+
+
+DELIMITER //
+
+CREATE PROCEDURE get_workouts_for_posts(
+    IN p_userIds TEXT,
+    IN p_page INT,
+    IN p_size INT
+)
+BEGIN
+    DECLARE v_offset INT;
+
+    -- Calculate the offset for pagination
+    SET v_offset = (p_page - 1) * p_size;
+
+    -- Prepare dynamic SQL statement
+    SET @sql = CONCAT(
+        'SELECT w.id ',
+        'FROM workouts w ',
+        'JOIN workouts_summary ws ON w.summary = ws.id ',
+        'WHERE w.user IN (', p_userIds, ') ',
+        'ORDER BY ws.start_time DESC ',
+        'LIMIT ', v_offset, ', ', p_size
+    );
+
+    -- Execute the dynamic SQL statement
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END //
+
+DELIMITER ;
+
+
+CALL get_workouts_for_posts('14', 1, 5);

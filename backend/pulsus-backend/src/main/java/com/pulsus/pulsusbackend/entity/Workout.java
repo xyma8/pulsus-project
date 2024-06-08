@@ -15,6 +15,10 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
+@NamedStoredProcedureQuery(name = "workouts.get_workouts_for_posts", procedureName = "get_workouts_for_posts", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "p_userIds", type = String.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "p_page", type = Integer.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "p_size", type = Integer.class)})
 @Table(name = "workouts")
 public class Workout {
 

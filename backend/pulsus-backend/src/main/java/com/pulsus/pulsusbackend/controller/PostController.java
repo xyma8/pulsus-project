@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController
@@ -25,6 +27,30 @@ public class PostController {
         PostDto postDto = postService.getPost(getUserId(authentication), workoutId);
 
         return ResponseEntity.ok(postDto);
+    }
+
+    @GetMapping("/{page}/{size}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<List<Long>> getPosts(Authentication authentication, @PathVariable Integer page, @PathVariable Integer size) {
+        List<Long> postsUser = postService.getPosts(getUserId(authentication), page, size);
+
+        return ResponseEntity.ok(postsUser);
+    }
+
+    @GetMapping("/{userId}/{page}/{size}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<List<Long>> getPostsByUserId(Authentication authentication, @PathVariable Long userId, @PathVariable Integer page, @PathVariable Integer size) {
+        List<Long> postsUser = postService.getPostsByUserId(getUserId(authentication), userId, page, size);
+
+        return ResponseEntity.ok(postsUser);
+    }
+
+    @GetMapping("/feed/{page}/{size}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<List<Long>> getFeed(Authentication authentication, @PathVariable Integer page, @PathVariable Integer size) {
+        List<Long> postsUser = postService.getFeed(getUserId(authentication), page, size);
+
+        return ResponseEntity.ok(postsUser);
     }
 
 

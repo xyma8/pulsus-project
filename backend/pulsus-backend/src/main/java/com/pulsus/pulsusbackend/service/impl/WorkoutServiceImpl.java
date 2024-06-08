@@ -209,10 +209,10 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public Boolean checkAccess(Long userId, Workout workout) {
         Integer accessType = workout.getAccessType();
-        Long workoutUserId = workout.getUser().getId();
 
         if(accessType == 0) return true;
 
+        Long workoutUserId = workout.getUser().getId();
         if(userId == workoutUserId) return true;
 
         if(accessType==1 &&
