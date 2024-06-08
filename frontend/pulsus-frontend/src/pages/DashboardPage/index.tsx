@@ -9,6 +9,7 @@ import UploadTrackFile from "../../components/UploadTrackFile";
 import TrackMap from "../../components/WorkoutTrackMap";
 import WorkoutPost from "../../components/WorkoutPost";
 import ProfileCard from "../../components/ProfileCard";
+import WorkoutPostsFeed from "../../components/WorkoutPostsFeed";
 
 interface UserData {
     name: string,
@@ -60,6 +61,7 @@ export default function DashboardPage() {
         <UploadTrackFile />
         <WorkoutPost workoutId={"2"}/>
         <ProfileCard/>
+        <WorkoutPostsFeed size={5}/>
         <button onClick={exit}>Exit</button>
     </div>
     )

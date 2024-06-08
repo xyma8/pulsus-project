@@ -31,7 +31,7 @@ export default function ProfileCard() {
             }
         })
         .then(response => {
-            console.log(response.data);
+            //console.log(response.data);
             setCardInfo(response.data)
         })
         .catch(error =>{

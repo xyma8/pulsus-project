@@ -56,7 +56,7 @@ export default function WorkoutPost(props: WorkoutPostProps) {
     function loadPost() {
         getPost(props.workoutId)
         .then(response => {
-            console.log(response.data)
+            //console.log(response.data)
             setWorkoutPost(response.data)
         })
         .catch(error =>{

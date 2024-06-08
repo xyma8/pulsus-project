@@ -22,8 +22,9 @@ export default function UserPage() {
     }, []);
 
     function loadUserInfo() {
-
+        
     }
+
     return(
     <div className="">
         <UserSubscribeButton userId={userId} />
