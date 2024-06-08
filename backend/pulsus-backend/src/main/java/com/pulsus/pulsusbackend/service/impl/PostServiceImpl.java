@@ -36,9 +36,7 @@ public class PostServiceImpl implements PostService {
         Workout workout = workoutService.findById(workoutId)
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));
 
-        Integer accessType = workout.getAccessType(); //проверка возможно не нужна так как checkLike
-        if(accessType==2 && workout.getUser().getId() != userId) {
-            System.out.println("This workout does not exists");
+        if(!workoutService.checkAccess(userId, workout)) {
             throw new NotFoundException("This workout does not exists");
         }
 

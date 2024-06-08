@@ -3,6 +3,7 @@ import { getPost } from "../../services/postService";
 import API from '../../services/API';
 import ProfilePicture from "../ProfilePicture";
 import WorkoutPostLike from "../WorkoutPostLike";
+import { useNavigate } from "react-router"
 
 type WorkoutPostProps = {
     workoutId: string | undefined
@@ -34,7 +35,7 @@ type WorkoutPost = {
 
 export default function WorkoutPost(props: WorkoutPostProps) {
     const [workoutPost, setWorkoutPost] = useState<WorkoutPost>();
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         loadPost();
@@ -69,20 +70,28 @@ export default function WorkoutPost(props: WorkoutPostProps) {
         })
     }
 
+    function navigateToUserPage() {
+        navigate(`/users/${workoutPost?.userId}`);
+    }
+
+    function navigateToWorkoutPage() {
+        navigate(`/workouts/${workoutPost?.workoutId}`);
+    }
+
     if(!setWorkoutPost) {
-        return(
-        <></>
-        )
+        return(<></>)
     }
 
     return(
     <div className=" bg-block_background p-5 rounded shadow-md text-text ">
         <div className="flex flex-row items-left">
-            <ProfilePicture userId={workoutPost?.userId} size={45} />
+           {workoutPost?.userId && <ProfilePicture userId={workoutPost?.userId} size={45} clickable={true} /> }
             <div className="flex flex-col ml-5">
-                <p className="font-medium">{workoutPost?.username}</p>
+                <div className="font-medium flex">
+                    <p className="cursor-pointer hover:text-secondary duration-100" onClick={navigateToUserPage}>{workoutPost?.username}</p>
+                </div>
                 <p className="text-sm">{workoutPost?.startTime}</p>
-                <p className="font-semibold text-2xl mt-2">{workoutPost?.name}</p>
+                <p className="font-semibold text-2xl mt-2 cursor-pointer hover:text-secondary duration-100" onClick={navigateToWorkoutPage}>{workoutPost?.name}</p>
                 <div className="flex flex-row gap-10 mt-3">
                     <div className="">
                         <p className="text-sm">Расстояние</p>

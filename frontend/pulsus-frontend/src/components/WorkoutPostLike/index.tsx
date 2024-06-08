@@ -54,7 +54,7 @@ export default function WorkoutPostLike(props: WorkoutPostLikeProps) {
     <div className="">
 
         {likes?.isLike ?
-            <button onClick={clickLike} className="bg-secondary text-text font-bold py-2 px-4 rounded hover:bg-secondary_hover_button duration-100 shadow">
+            <button onClick={clickLike} className="bg-secondary text-main_text_button font-bold py-2 px-4 rounded hover:bg-secondary_hover_button duration-100 shadow">
                 👍{likes?.countLikes}
             </button>
             :

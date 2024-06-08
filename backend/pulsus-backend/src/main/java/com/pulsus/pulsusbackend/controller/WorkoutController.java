@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -67,6 +68,15 @@ public class WorkoutController {
         FITFileDto fitFileDto = workoutService.getTrackWorkout(getUserId(authentication), workoutId);
 
         return ResponseEntity.ok(fitFileDto);
+    }
+
+    @GetMapping("/{workoutId}/accessEditPage")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Map<String, Boolean>> getInfoWorkoutForEdit(Authentication authentication, @PathVariable Long workoutId) {
+
+        Boolean access = workoutService.checkAccessEditPage(getUserId(authentication), workoutId);
+
+        return ResponseEntity.ok(Map.of("access", access));
     }
 
     @PostMapping("/{workoutId}/edit")

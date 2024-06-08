@@ -7,6 +7,7 @@ type UserSubscribeButtonProps = {
 
 export default function UserSubscribeButton(props: UserSubscribeButtonProps) {
     const [subscription, setSubscription] = useState<boolean | null>();
+    const [buttonText, setButtonText] = useState<string>("Вы подписаны");
     
     useEffect(() => {
         loadSubscriptionInfo();
@@ -69,6 +70,14 @@ export default function UserSubscribeButton(props: UserSubscribeButtonProps) {
         })
     }
 
+    function handleMouseEnter() {
+        setButtonText("Отписаться");
+    }
+
+    function handleMouseLeave() {
+        setButtonText("Вы подписаны");
+    }
+
     if(subscription == null) {
         return(<></>)
     }
@@ -76,7 +85,10 @@ export default function UserSubscribeButton(props: UserSubscribeButtonProps) {
     return(
     <div>
         {subscription ?
-            <button className="bg-primary text-main_text_button font-bold py-2 px-4 rounded hover:bg-primary_hover_button duration-100" onClick={changeSubscription}>Вы подписаны</button>  :
+            <button className="bg-primary text-main_text_button font-bold py-2 px-4 rounded hover:bg-primary_hover_button duration-100"
+                onClick={changeSubscription}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}>{buttonText}</button>  :
             <button className="bg-secondary text-main_text_button font-bold py-2 px-4 rounded hover:bg-secondary_hover_button duration-100" onClick={changeSubscription}>Подписаться</button>
         }
     </div>

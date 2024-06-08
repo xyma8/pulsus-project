@@ -34,4 +34,6 @@ public interface WorkoutService {
 
     Boolean checkAccess(Long userId, Workout workout);
 
+    Boolean checkAccessEditPage(Long userId, Long workoutId);
+
 }

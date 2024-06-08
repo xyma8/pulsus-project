@@ -126,29 +126,11 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public Boolean checkAccess(Long userId, Workout workout) {
-        Integer accessType = workout.getAccessType();
-        Long workoutUserId = workout.getUser().getId();
-
-        if(accessType == 0) return true;
-
-        if(userId == workoutUserId) return true;
-
-        if(accessType==1 &&
-                subscriptionService.checkSubscription(userId, workoutUserId)) return true;
-
-        return false;
-    }
-
-    @Override
     public WorkoutSummaryDto getSummaryWorkout(Long userId, Long workoutId) {
         Workout workout = findById(workoutId)
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));
 
-        Integer accessType = workout.getAccessType();
-
-        if(accessType==2 && workout.getUser().getId() != userId) {
-            System.out.println("This workout does not exists");
+        if(!checkAccess(userId, workout)) {
             throw new NotFoundException("This workout does not exists");
         }
 
@@ -164,7 +146,7 @@ public class WorkoutServiceImpl implements WorkoutService {
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));
 
         if(workout.getUser().getId() != userId) {
-            throw new ForbiddenException("Access denied");
+            throw new NotFoundException("This workout does not exists");
         }
 
         String name = editedData.getName();
@@ -199,10 +181,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         Workout workout = findById(workoutId)
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));
 
-        Integer accessType = workout.getAccessType();
-
-        if(accessType==2 && workout.getUser().getId() != userId) {
-            System.out.println("This workout does not exists");
+        if(!checkAccess(userId, workout)) {
             throw new NotFoundException("This workout does not exists");
         }
 
@@ -217,17 +196,41 @@ public class WorkoutServiceImpl implements WorkoutService {
         Workout workout = findById(workoutId)
                 .orElseThrow(() -> new NotFoundException("This workout does not exists"));
 
-        Integer accessType = workout.getAccessType();
-
-        if(accessType==2 && workout.getUser().getId() != userId) {
-            System.out.println("This workout does not exists");
+        if(!checkAccess(userId, workout)) {
             throw new NotFoundException("This workout does not exists");
-        } //вынести в отдельную функцию
+        }
 
         FileOnServer fileOnServer = workout.getFileWorkout();
         TrackSummaryDto trackSummaryDto = trackFileService.readTrackSummary(fileOnServer);
 
         return trackSummaryDto;
+    }
+
+    @Override
+    public Boolean checkAccess(Long userId, Workout workout) {
+        Integer accessType = workout.getAccessType();
+        Long workoutUserId = workout.getUser().getId();
+
+        if(accessType == 0) return true;
+
+        if(userId == workoutUserId) return true;
+
+        if(accessType==1 &&
+                subscriptionService.checkSubscription(userId, workoutUserId)) return true;
+
+        return false;
+    }
+
+    @Override
+    public Boolean checkAccessEditPage(Long userId, Long workoutId) {
+        Workout workout = findById(workoutId)
+                .orElseThrow(() -> new NotFoundException("This workout does not exists"));
+
+        if(workout.getUser().getId() != userId) {
+            throw new NotFoundException("This workout does not exists");
+        }
+
+        return true;
     }
 
     @Override

@@ -7,7 +7,7 @@ type ProfileCardProps = {
 }
 
 type ProfileCardInfo = {
-    userId: string,
+    id: string,
     name: string,
     surname: string,
     login: string,
@@ -16,7 +16,7 @@ type ProfileCardInfo = {
     workoutsCount: number
 }
 
-export default function ProfileCard(props: ProfileCardProps) {
+export default function ProfileCard() {
     const [cardInfo, setCardInfo] = useState<ProfileCardInfo>();
 
     useEffect(() => {
@@ -45,9 +45,13 @@ export default function ProfileCard(props: ProfileCardProps) {
         })
     }
 
+    if(!setCardInfo) {
+        return(<></>)
+    }
+
     return(
     <div className="flex flex-col items-center bg-block_background p-5 rounded shadow-md text-text mt-5">
-        <ProfilePicture userId={cardInfo?.userId} size={75}/>
+        {cardInfo?.id && <ProfilePicture userId={cardInfo.id} size={75} clickable={true}/> }
         <div className="flex flex-row mt-3 font-semibold text-2xl">
             <p> {cardInfo?.name} </p>
             &nbsp;

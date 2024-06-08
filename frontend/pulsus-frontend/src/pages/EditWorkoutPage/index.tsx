@@ -21,7 +21,7 @@ export default function EditWorkoutPage() {
     const workoutPhotos = new FormData();
 
     useEffect(() => {
-        loadWorkoutInfo();
+        checkAccessForPage();
 
     }, []);
 
@@ -29,6 +29,27 @@ export default function EditWorkoutPage() {
         console.log("Inputs changed:", inputs);
     }, [inputs]); // Этот эффект сработает каждый раз, когда изменится inputs
 
+
+    function checkAccessForPage() {
+        API.get(`/workouts/${workoutId}/accessEditPage`, {
+            headers: {
+                Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
+            }
+        })
+        .then(response => {
+            if(response.data.access == true)
+                loadWorkoutInfo();
+        })
+        .catch(error =>{
+            console.error(error);
+            if(error.response.status == 404) {
+                alert("Workout not found");
+            }
+            else if(error.response.status != 200) {
+                alert("Internal error");
+            }
+        })
+    }
 
     function loadWorkoutInfo() {
         API.get(`/workouts/${workoutId}`, {

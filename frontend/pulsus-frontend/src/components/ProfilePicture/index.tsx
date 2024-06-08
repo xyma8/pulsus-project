@@ -1,5 +1,6 @@
 import "./style.css"
 import API from "../../services/API";
+import { useNavigate } from "react-router"
 import { useState, useEffect } from "react";
 
 type ProfilePictureProps = {
@@ -11,6 +12,7 @@ type ProfilePictureProps = {
 
 export default function ProfilePicture(props: ProfilePictureProps) {
     const [ picture, setPicture ]= useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -25,6 +27,7 @@ export default function ProfilePicture(props: ProfilePictureProps) {
     }, []);
 
     function loadProfilePic() {
+        console.log("load");
         API.get("/users/profilePicture", {
             headers: {
                 Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
@@ -65,7 +68,7 @@ export default function ProfilePicture(props: ProfilePictureProps) {
     }
     
     function navigateToUserPage() {
-
+        navigate(`/users/${props.userId}`);
     }
 
     if (!picture) {
