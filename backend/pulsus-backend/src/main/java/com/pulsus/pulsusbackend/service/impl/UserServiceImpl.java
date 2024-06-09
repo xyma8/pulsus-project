@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public FileOnServerDto getProfilePicture(Long userId) {
         User user = findById(userId)
-                .orElseThrow(() -> new NotFoundException("User don't exists")); //проверка не нужна?
+                .orElseThrow(() -> new NotFoundException("User don't exists"));
 
         String path = fileService.profilePic(userId);
 

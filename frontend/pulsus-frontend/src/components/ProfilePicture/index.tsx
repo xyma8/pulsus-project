@@ -77,12 +77,12 @@ export default function ProfilePicture(props: ProfilePictureProps) {
 
         </div>)
     }
-
+    //удалить символ /
     return(
     <div className="">
         {props.clickable ?
-         <img src={picture} width={props.size} height={props.size} className="rounded-full cursor-pointer" onClick={navigateToUserPage}/> :
-         <img src={picture} width={props.size} height={props.size} className="rounded-full"/> }
+         <img src={`/${picture}`} width={props.size} height={props.size} className="rounded-full cursor-pointer" onClick={navigateToUserPage}/> :
+         <img src={`/${picture}`} width={props.size} height={props.size} className="rounded-full"/> }
     </div>
     )
 }

@@ -65,7 +65,7 @@ public class UserController {
         return ResponseEntity.ok(fileOnServerDto);
     }
 
-    @GetMapping("/profile/{login}")
+    @GetMapping("/profile/byLogin/{login}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<UserInfoDto> getUserInfoByLogin(Authentication authentication, @PathVariable String login) {
         UserInfoDto userInfoDto = userService.getUserInfoByLogin(login);
@@ -73,7 +73,7 @@ public class UserController {
         return ResponseEntity.ok(userInfoDto);
     }
 
-    @GetMapping("/profile/{userId}")
+    @GetMapping("/profile/byId/{userId}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<UserInfoDto> getUserInfoByUserId(Authentication authentication, @PathVariable Long userId) {
         UserInfoDto userInfoDto = userService.getUserInfoById(userId);

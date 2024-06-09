@@ -49,7 +49,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Header/>
-    <div className='max-w-[1200px] h-screen ml-auto mr-auto'>
+    <div className='max-w-[1200px] h-screen ml-auto mr-auto py-5'>
       <RouterProvider router={router}/>
     </div>
   </React.StrictMode>

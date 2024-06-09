@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import API from "../../services/API";
 
 type UserSubscribeButtonProps = {
-    userId: string | undefined
+    userId: string | undefined,
+    isUserPage?: (isUser: boolean) => void
 }
 
 export default function UserSubscribeButton(props: UserSubscribeButtonProps) {
@@ -79,6 +80,9 @@ export default function UserSubscribeButton(props: UserSubscribeButtonProps) {
     }
 
     if(subscription == null) {
+        if(props.isUserPage) {
+            props.isUserPage(true);
+        }
         return(<></>)
     }
 

@@ -14,7 +14,7 @@ export default function WorkoutPage() {
     useEffect(() => {
         //getTrackInfo();
 
-    }, []);
+    }, [workoutId]);
 
 
     return(
