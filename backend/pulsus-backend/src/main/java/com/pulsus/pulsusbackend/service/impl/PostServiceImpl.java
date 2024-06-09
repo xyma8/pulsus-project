@@ -1,6 +1,7 @@
 package com.pulsus.pulsusbackend.service.impl;
 
 import com.pulsus.pulsusbackend.dto.PostDto;
+import com.pulsus.pulsusbackend.dto.UserInfoDto;
 import com.pulsus.pulsusbackend.dto.WorkoutLikeDto;
 import com.pulsus.pulsusbackend.entity.User;
 import com.pulsus.pulsusbackend.entity.Workout;
@@ -10,10 +11,7 @@ import com.pulsus.pulsusbackend.exception.UnauthorizedException;
 import com.pulsus.pulsusbackend.mapper.PostMapper;
 import com.pulsus.pulsusbackend.repository.WorkoutRepository;
 import com.pulsus.pulsusbackend.repository.WorkoutSummaryRepository;
-import com.pulsus.pulsusbackend.service.PostService;
-import com.pulsus.pulsusbackend.service.UserService;
-import com.pulsus.pulsusbackend.service.WorkoutLikeService;
-import com.pulsus.pulsusbackend.service.WorkoutService;
+import com.pulsus.pulsusbackend.service.*;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.jdbc.Work;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +35,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private WorkoutService workoutService;
+
+    @Autowired
+    private SubscriptionService subscriptionService;
 
     @Autowired
     private WorkoutLikeService workoutLikeService;
@@ -97,7 +98,32 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional()
     public List<Long> getFeed(Long userId, Integer page, Integer size) {
-        return null;
+
+        List<UserInfoDto> followingList = subscriptionService.getFollowing(userId);
+
+        String followedUserId = userId.toString();
+        for(UserInfoDto user: followingList) {
+            followedUserId = followedUserId + "," + user.getId();
+        }
+
+        List<Long> allPosts = workoutRepository.getWorkoutsForPosts(followedUserId, page, size);
+
+        List<Long> posts = new ArrayList<>();
+
+        for(Long post: allPosts) {
+            Optional<Workout> optionalWorkout = workoutService.findById(post);
+            if (optionalWorkout.isPresent()) {
+                Workout workout = optionalWorkout.get();
+                if (workoutService.checkAccess(userId, workout)) {
+                    posts.add(post);
+                }
+            } else {
+                continue;
+            }
+        }
+
+        return posts;
     }
 }

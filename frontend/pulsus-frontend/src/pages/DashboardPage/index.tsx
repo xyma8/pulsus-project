@@ -19,7 +19,7 @@ interface UserData {
 export default function DashboardPage() {
     //const navigate = useNavigate();
     //const [userData, setUserData] = useState<boolean>();
-    
+
     useEffect(() => {
         //getUserData();
         //checkToken();
@@ -70,7 +70,7 @@ export default function DashboardPage() {
         <UploadTrackFile />
         <WorkoutPost workoutId={"2"}/>
         <ProfileCard/>
-        <WorkoutPostsFeed size={5} loaderMessage="loading" endMessage="За последнее время больше не было тренировок."/>
+        <WorkoutPostsFeed size={5} loaderMessage="loading" endMessage="За последнее время больше не было тренировок." feed={true} />
         <button onClick={exit}>Exit</button>
     </div>
     )

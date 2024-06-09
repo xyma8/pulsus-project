@@ -54,10 +54,10 @@ public class PostController {
 
     @GetMapping("/feed/{page}/{size}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<List<Long>> getFeed(Authentication authentication, @PathVariable Integer page, @PathVariable Integer size) {
+    public ResponseEntity<Map<String, List<Long>>> getFeed(Authentication authentication, @PathVariable Integer page, @PathVariable Integer size) {
         List<Long> postsUser = postService.getFeed(getUserId(authentication), page, size);
 
-        return ResponseEntity.ok(postsUser);
+        return ResponseEntity.ok(Map.of("workoutIds", postsUser));
     }
 
 
