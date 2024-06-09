@@ -1,24 +1,35 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import UserSubscribeButton from '../../components/UserSubscribeButton';
 import API from "../../services/API";
 import ProfilePicture from '../../components/ProfilePicture';
 import WorkoutPostsFeed from '../../components/WorkoutPostsFeed';
+import UserSubscriptionList from '../../components/UserSubscriptionList';
 
 
-type userInfo = {
+type UserInfo = {
     id: string,
     name: string,
     surname: string,
     login: string
 }
 
+type UserSubscribersCount = {
+    following: string,
+    followers: string
+}
+
 export default function UserPage() {
     const { userId } = useParams();
-    const [userInfo, setUserInfo] = useState<userInfo>();
+    const [userInfo, setUserInfo] = useState<UserInfo>();
+    const [subscriptionCount, setSubscriptionCount] = useState<UserSubscribersCount>();
     const [isUserPage, setIsUserPage] = useState<boolean>();
     const [activeTab, setActiveTab] = useState('Тренировки');
     const tabs = ['Тренировки', 'Подписки', 'Подписчики'];
+
+    const workoutRef = useRef<HTMLDivElement | null>(null);
+    const followingRef = useRef<HTMLDivElement | null>(null);
+    const followersRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         loadUserInfo();
@@ -33,8 +44,20 @@ export default function UserPage() {
             }
         })
         .then(response => {
-            console.log(response.data)
+            //console.log(response.data)
             setUserInfo(response.data);
+        })
+        .catch(error => {
+            
+        })
+
+        API.get(`/subscriptions/${userId}/count`, {
+            headers: {
+                Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
+            }
+        })
+        .then(response => {
+            setSubscriptionCount(response.data);
         })
         .catch(error => {
             
@@ -42,12 +65,13 @@ export default function UserPage() {
     }
 
     function userPage(isUser: boolean) {
+        console.log("Sdasdasd");
         if(isUser) {
             setIsUserPage(true);
         }
     }
 
-    if(!setUserInfo) {
+    if(!setUserInfo && !setSubscriptionCount) {
         return(<></>)
     }
 
@@ -68,7 +92,7 @@ export default function UserPage() {
         </div>
 
         <div className='flex mt-10'>
-            <div className='flex-grow max-w-70'>
+            <div className='flex-grow max-w-[70%]'>
                 <ul className='flex space-x-4'>
                     {tabs.map((tab) => (
                     <li
@@ -76,21 +100,47 @@ export default function UserPage() {
                         className={`cursor-pointer py-2 px-4 rounded ${
                         activeTab === tab ? 'bg-primary text-main_text_button' : 'bg-main_background text-text hover:bg-gray-200 duration-100'
                         }`}
-                        onClick={() => setActiveTab(tab)}
-                    >
+                        onClick={() => setActiveTab(tab)} >
                         {tab}
                     </li>
                     ))}
                 </ul>
 
-                <div className="mt-4 p-4 border rounded">
+                <div className="mt-4 p-2 border rounded">
                     <h1 className="text-xl font-bold">{activeTab}</h1>
-                    {isUserPage ? <WorkoutPostsFeed size={3}/> : userInfo?.id && <WorkoutPostsFeed userId={userInfo?.id} size={3}/>}
+
+                    <div style={{ display: activeTab === "Тренировки" ? 'block' : 'none' }} ref={workoutRef}>
+                        {isUserPage ?
+                            <WorkoutPostsFeed size={3} loaderMessage="loading..." endMessage="" /> :
+                            userInfo?.id && <WorkoutPostsFeed userId={userInfo?.id} size={3} loaderMessage="loading..." endMessage="" />
+                        }
+                    </div>
+                    
+                    <div style={{ display: activeTab === "Подписки" ? 'block' : 'none' }} ref={followingRef}>
+                        {userInfo?.id && <UserSubscriptionList userId={userInfo.id} following={true} />}
+                    </div>
+
+                    <div style={{ display: activeTab === "Подписчики" ? 'block' : 'none' }} ref={followersRef}>
+                        {userInfo?.id && <UserSubscriptionList userId={userInfo.id} following={false} />}
+                    </div>
                 </div>
             </div>
             
-            <div className='flex-grow max-w-30'>
-                
+            <div className='flex-grow max-w-[30%]'>
+                <div className='flex flex-col items-center'>
+                    <p className="text-xl font-medium">Подписчики</p>
+                    <div className="flex gap-10 mt-3">
+                        <div className="flex flex-col items-center">
+                            <p className="text-sm">Подписки</p>
+                            <p className="text-xl font-medium cursor-pointer hover:text-secondary duration-100" onClick={() => setActiveTab('Подписки')}> {subscriptionCount?.following} </p>
+                        </div>
+
+                        <div className="flex flex-col items-center">
+                            <p className="text-sm">Подписчики</p>
+                            <p className="text-xl font-medium cursor-pointer hover:text-secondary duration-100" onClick={() => setActiveTab('Подписчики')}> {subscriptionCount?.followers} </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -11,6 +11,7 @@ import WorkoutPage from './pages/WorkoutPage';
 import EditWorkoutPage from './pages/EditWorkoutPage';
 import Header from './components/Header';
 import UserPage from './pages/UserPage';
+import { AuthProvider } from './contexts/AuthContext';
 
 const router = createBrowserRouter([
   {
@@ -48,10 +49,12 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <Header/>
-    <div className='max-w-[1200px] h-screen ml-auto mr-auto py-5'>
-      <RouterProvider router={router}/>
-    </div>
+    <AuthProvider>
+      <Header/>
+      <div className='max-w-[1200px] h-screen ml-auto mr-auto py-5'>
+        <RouterProvider router={router}/>
+      </div>
+    </AuthProvider>
   </React.StrictMode>
 );
 

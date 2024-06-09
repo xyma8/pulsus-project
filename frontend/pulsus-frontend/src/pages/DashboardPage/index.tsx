@@ -61,7 +61,7 @@ export default function DashboardPage() {
         <UploadTrackFile />
         <WorkoutPost workoutId={"2"}/>
         <ProfileCard/>
-        <WorkoutPostsFeed size={5}/>
+        <WorkoutPostsFeed size={5} loaderMessage="loading" endMessage="За последнее время больше не было тренировок."/>
         <button onClick={exit}>Exit</button>
     </div>
     )

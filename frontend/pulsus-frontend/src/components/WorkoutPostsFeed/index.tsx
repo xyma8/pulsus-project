@@ -5,8 +5,10 @@ import WorkoutPost from '../WorkoutPost';
 
 type WorkoutPostsFeedProps = {
     userId?: string,
-    feed?: boolean
-    size: number
+    feed?: boolean,
+    size: number,
+    loaderMessage: string,
+    endMessage: string
 }
 
 export default function WorkoutPostsFeed(props: WorkoutPostsFeedProps) {
@@ -59,16 +61,23 @@ export default function WorkoutPostsFeed(props: WorkoutPostsFeedProps) {
     }
     //сделать пропсами loader endMessage
     return(
-    <div className="text-text">
+    <div className="text-text py-5">
         <InfiniteScroll
             dataLength={workoutIds.length}
             next={fetchMoreWorkouts}
             hasMore={hasMore.current}
-            loader={<h4>Loading...</h4>}
-            endMessage={<p>No more posts</p>}>
+            loader={<h4>{props.loaderMessage}</h4>}
+            endMessage=
+                {props.feed ?
+                <p className='text-center'>{props.endMessage}</p> :
+                workoutIds.length==0 ?
+                    <p className='text-center'>Нет записей.</p> :
+                    <p className='text-center'>{props.endMessage}</p> }>
 
             {workoutIds.map(id => (
-                <WorkoutPost workoutId={id.toString()}/>
+                <div className='py-3'>
+                    <WorkoutPost workoutId={id.toString()}/>
+                </div>
             ))}
         </InfiniteScroll>
     </div>
