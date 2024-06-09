@@ -43,7 +43,7 @@ export default function ListTypesSport(props: ListTypesSportProps) {
                 alert("Not found");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }

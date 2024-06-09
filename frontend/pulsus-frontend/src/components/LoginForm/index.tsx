@@ -40,7 +40,7 @@ export default function LoginForm(props: LoginFormProps) {
                 alert("Incorrect login or password");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }

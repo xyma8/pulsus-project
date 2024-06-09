@@ -65,7 +65,7 @@ export default function WorkoutPost(props: WorkoutPostProps) {
                 alert("Not found");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }

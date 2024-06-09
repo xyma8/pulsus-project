@@ -33,7 +33,7 @@ export default function WorkoutTrackSummary(props: WorkoutTrackSummaryProps) {
                 alert("This track file already exists");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }

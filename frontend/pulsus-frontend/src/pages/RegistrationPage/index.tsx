@@ -1,11 +1,19 @@
 import RegistrationForm from "../../components/RegistrationForm"
 import "./style.css"
+import { useEffect } from "react"
 import { useNavigate } from "react-router"
 
 export default function RegistrationPage() {
     //container mx-auto flex flex-col items-center h-screen
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if(localStorage.getItem('jwtToken')) {
+            window.location.assign(`/dashboard`);
+        }
+
+    }, []);
+    
     function navigateLoginPage() {
         navigate('/login');
     }

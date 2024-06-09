@@ -1,6 +1,6 @@
 import "./style.css"
 import Cookies from 'js-cookie'
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from "../../services/API";
 import ProfilePicture from "../../components/ProfilePicture";
@@ -17,27 +17,30 @@ interface UserData {
 }
 
 export default function DashboardPage() {
-    const navigate = useNavigate();
-    const [userData, setUserData] = useState<UserData | null>(null);
+    //const navigate = useNavigate();
+    //const [userData, setUserData] = useState<boolean>();
+    
     useEffect(() => {
         //getUserData();
+        //checkToken();
 
     }, []); 
 
     function exit() {
-        Cookies.remove('token');
         localStorage.removeItem('jwtToken');
-        navigate('/login');
+        window.location.assign(`/login`);
     }
 
-    function checkCookie() {
-        if (!Cookies.get('token')) { 
-            navigate('/login');
+    /*
+    function checkToken() {
+        if(!localStorage.getItem('jwtToken')) {
+            console.log("not token")
+            window.location.assign(`/login`);
         }
     }
 
     function getUserData() {
-        //checkCookie();
+        checkToken();
 
         API.get("/users/profile", {
             headers: {
@@ -45,12 +48,18 @@ export default function DashboardPage() {
             }
         })
         .then(response => {
-            setUserData(response.data);
+            setUserData(true);
         })
         .catch(error => {
+            setUserData(false);
             exit();
         })
     }
+
+    if(!userData) {
+        return(<></>)
+    }
+    */
 
     return(
     <div className="dashboard-page">

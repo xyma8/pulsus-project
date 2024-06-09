@@ -17,6 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -52,5 +54,11 @@ public class AuthController {
             throw new UnauthorizedException("Login or password incorrect");
         }
 
+    }
+
+    @GetMapping("/checkToken")
+    public ResponseEntity<Map<String, Boolean>> checkToken(Authentication authentication) {
+
+        return ResponseEntity.ok(Map.of("validToken", true));
     }
 }

@@ -28,7 +28,7 @@ export default function ChangeProfilePicture(props: ChangeProfilePicture) {
                 alert("Error");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }

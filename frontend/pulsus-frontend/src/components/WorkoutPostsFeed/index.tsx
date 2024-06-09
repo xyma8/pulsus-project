@@ -23,7 +23,6 @@ export default function WorkoutPostsFeed(props: WorkoutPostsFeedProps) {
     }, []);
 
     function fetchMoreWorkouts() {
-        console.log(props.userId);
         pageRef.current += 1;
         var apiRequest: string = `/posts/${pageRef.current}/${props.size}`
 
@@ -55,7 +54,7 @@ export default function WorkoutPostsFeed(props: WorkoutPostsFeedProps) {
                 alert("Error");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }

@@ -2,9 +2,17 @@ import "./style.css"
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom';
 import LoginForm from "../../components/LoginForm"
+import { useState, useEffect } from "react";
 
 export default function LoginPage() {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if(localStorage.getItem('jwtToken')) {
+            window.location.assign(`/dashboard`);
+        }
+
+    }, []);
 
     function successLogin(token: string) {
         console.log(token); //delete

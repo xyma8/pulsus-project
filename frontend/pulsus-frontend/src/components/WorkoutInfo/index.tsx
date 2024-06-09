@@ -27,7 +27,7 @@ export default function WorkoutInfo(props: WorkoutInfoProps) {
                 alert("Workout not found");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }

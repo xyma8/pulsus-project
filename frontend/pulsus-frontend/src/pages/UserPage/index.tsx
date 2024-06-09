@@ -92,12 +92,12 @@ export default function UserPage() {
         </div>
 
         <div className='flex mt-10'>
-            <div className='flex-grow max-w-[70%]'>
-                <ul className='flex space-x-4'>
+            <div className='flex-grow max-w-[70%] border rounded'>
+                <ul className='flex space-x-1'>
                     {tabs.map((tab) => (
                     <li
                         key={tab}
-                        className={`cursor-pointer py-2 px-4 rounded ${
+                        className={`cursor-pointer py-2 px-6 rounded ${
                         activeTab === tab ? 'bg-primary text-main_text_button' : 'bg-main_background text-text hover:bg-gray-200 duration-100'
                         }`}
                         onClick={() => setActiveTab(tab)} >
@@ -106,7 +106,7 @@ export default function UserPage() {
                     ))}
                 </ul>
 
-                <div className="mt-4 p-2 border rounded">
+                <div className="p-2 border">
                     <h1 className="text-xl font-bold">{activeTab}</h1>
 
                     <div style={{ display: activeTab === "Тренировки" ? 'block' : 'none' }} ref={workoutRef}>
@@ -126,8 +126,8 @@ export default function UserPage() {
                 </div>
             </div>
             
-            <div className='flex-grow max-w-[30%]'>
-                <div className='flex flex-col items-center'>
+            <div className='flex-grow max-w-[30%] '>
+                <div className='flex flex-col items-center bg-block_background py-5 shadow-md rounded'>
                     <p className="text-xl font-medium">Подписчики</p>
                     <div className="flex gap-10 mt-3">
                         <div className="flex flex-col items-center">

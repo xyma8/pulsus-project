@@ -20,7 +20,7 @@ export default function Header(props: HeaderProps) {
     const [headerData, setHeaderData] = useState<HeaderData | null>();
 
     useEffect(() => {
-        fetchHeaderData();
+        //fetchHeaderData();
 
     }, []);
 
@@ -40,16 +40,20 @@ export default function Header(props: HeaderProps) {
         })
     }
 
+    function navigateToDashboard() {
+        window.location.assign(`/dashboard`);
+    }
+
     function exit() {
         localStorage.removeItem('jwtToken');
         setIsAuthenticated(true);
-        //navigate('/login');
+        window.location.assign(`/`);
     }
 
     return(
     <div className="bg-block_background h-[50px] rounded shadow-sm sticky top-0">
         <div className="max-w-[1200px] ml-auto mr-auto flex">
-            <img src={"https://free-png.ru/wp-content/uploads/2021/07/free-png.ru-53.png"} width={50} height={50} />
+            <img src={"https://free-png.ru/wp-content/uploads/2021/07/free-png.ru-53.png"} width={50} height={50} className="cursor-pointer" onClick={navigateToDashboard} />
 
             { isAuthenticated ? <></> : <div>hi</div>  }
             <button onClick={exit}>Exit</button>

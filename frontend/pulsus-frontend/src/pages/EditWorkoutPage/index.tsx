@@ -46,7 +46,7 @@ export default function EditWorkoutPage() {
                 alert("Workout not found");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }
@@ -68,7 +68,7 @@ export default function EditWorkoutPage() {
                 alert("Workout not found");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }
@@ -92,7 +92,7 @@ export default function EditWorkoutPage() {
                 alert("Access denied");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }
@@ -119,7 +119,7 @@ export default function EditWorkoutPage() {
                 alert("Access denied");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }

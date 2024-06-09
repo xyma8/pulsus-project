@@ -36,7 +36,7 @@ export default function UploadTrackFile() {
                 alert("This type sport not allowed");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }

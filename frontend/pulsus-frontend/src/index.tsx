@@ -12,6 +12,7 @@ import EditWorkoutPage from './pages/EditWorkoutPage';
 import Header from './components/Header';
 import UserPage from './pages/UserPage';
 import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -28,19 +29,19 @@ const router = createBrowserRouter([
   },
   {
     path: '/dashboard',
-    element: <DashboardPage/>
+    element: <ProtectedRoute element={<DashboardPage />} />
   },
   {
     path: '/workouts/:workoutId',
-    element: <WorkoutPage/>
+    element: <ProtectedRoute element={<WorkoutPage />} />
   },
   {
     path: '/workouts/:workoutId/edit',
-    element: <EditWorkoutPage/>
+    element: <ProtectedRoute element={<EditWorkoutPage />} />
   },
   {
     path: '/users/:userId',
-    element: <UserPage />
+    element: <ProtectedRoute element={<UserPage />} />
   }
 ]);
 

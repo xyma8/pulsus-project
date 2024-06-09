@@ -41,9 +41,6 @@ export default function ProfilePicture(props: ProfilePictureProps) {
             if(error.response.status == 403) {
                 alert("Error");
             }
-            else if(error.response.status != 200) {
-                alert("Internal error");
-            }
         })
     }
 
@@ -62,7 +59,7 @@ export default function ProfilePicture(props: ProfilePictureProps) {
                 alert("Error");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+
             }
         })
     }

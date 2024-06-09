@@ -1,5 +1,6 @@
 package com.pulsus.pulsusbackend.config;
 
+import com.pulsus.pulsusbackend.exception.JwtAuthenticationEntryPoint;
 import com.pulsus.pulsusbackend.filter.JwtAuthFilter;
 import com.pulsus.pulsusbackend.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
+
     private JwtAuthFilter authFilter;
+
+
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    public SecurityConfig(JwtAuthFilter authFilter, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
+        this.authFilter = authFilter;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -51,6 +60,30 @@ public class SecurityConfig {
     }
     */
 
+    @Bean
+    public SecurityFilterChain securityFilterChain1(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/users/signup", "/api/auth/generateToken", "/api/auth/checkToken").permitAll()
+                        .requestMatchers("/api/users/**").authenticated()
+                        .requestMatchers("/api/admin/**").authenticated()
+                        .requestMatchers("/api/workouts/**").authenticated()
+                        .requestMatchers("/api/posts/**").authenticated()
+                        .requestMatchers("/api/subscriptions/**").authenticated()
+                        .requestMatchers("/api/workoutsLikes/**").authenticated()
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+    /*
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -78,7 +111,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-
+*/
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

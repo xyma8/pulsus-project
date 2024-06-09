@@ -52,7 +52,7 @@ export default function RegistrationForm() {
                 alert("This login or email is already taken!");
             }
             else if(error.response.status != 200) {
-                alert("Error!");
+                
             }
         })
     }

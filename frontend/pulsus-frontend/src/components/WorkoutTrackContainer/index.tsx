@@ -77,7 +77,7 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
                 alert("This track file already exists");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }
