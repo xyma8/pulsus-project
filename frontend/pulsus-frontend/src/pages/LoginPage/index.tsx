@@ -17,7 +17,7 @@ export default function LoginPage() {
     function successLogin(token: string) {
         console.log(token); //delete
         localStorage.setItem('jwtToken', token);
-        navigate('/dashboard');
+        window.location.assign(`/dashboard`);
     }
 
     function navigateRegistrationPage() {

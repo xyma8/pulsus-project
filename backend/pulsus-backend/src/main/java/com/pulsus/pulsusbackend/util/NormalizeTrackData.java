@@ -30,7 +30,9 @@ public class NormalizeTrackData {
         return speedKPH;
     }
 
-    public static Float roundFloat(float value, int places) {
+    public static Float roundFloat(Float value, int places) {
+        if(value == null) return null;
+        
         if (places < 0) throw new IllegalArgumentException();
 
         long factor = (long) Math.pow(10, places);

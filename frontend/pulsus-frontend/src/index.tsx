@@ -16,6 +16,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import NotFoundPage from './pages/NotFoundPage';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import UploadTrackPage from './pages/UploadTrackPage';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: '/users/:userId',
     element: <ProtectedRoute element={<UserPage />} />
+  },
+  {
+    path: '/upload',
+    element: <ProtectedRoute element={<UploadTrackPage />} />
   },
   {
     path: '*',
