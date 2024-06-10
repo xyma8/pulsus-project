@@ -51,7 +51,7 @@ export default function Header(props: HeaderProps) {
     }
 
     return(
-    <div className="bg-block_background h-[50px] rounded shadow-sm sticky top-0">
+    <div className="bg-block_background h-[50px] rounded shadow-sm sticky top-0 z-[1001]">
         <div className="max-w-[1200px] ml-auto mr-auto flex">
             <img src={"https://free-png.ru/wp-content/uploads/2021/07/free-png.ru-53.png"} width={50} height={50} className="cursor-pointer" onClick={navigateToDashboard} />
 

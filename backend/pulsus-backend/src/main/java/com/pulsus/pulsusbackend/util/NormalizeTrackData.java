@@ -49,6 +49,24 @@ public class NormalizeTrackData {
         return new UsualTime(hours, minutes, seconds);
     }
 
+    public static String toUsualTimeString(Float totalSec) {
+        if(totalSec == null) return null;
+
+        Integer hours = (int)(totalSec / 3600);
+        Integer minutes = (int)(totalSec % 3600) / 60;
+        Integer seconds = (int)(totalSec % 3600) % 60;
+
+
+        String time = "";
+        if(hours > 0) time = time + (hours>9 ? hours : "0" + hours) + ":";
+
+        if(minutes > 0) time = time + (minutes>9 ? minutes : "0" + minutes) + ":";
+
+        time = time + (seconds>9 ? seconds : "0" + seconds);
+
+        return time;
+    }
+
     public static Float meterToKm(Float meter) {
         if(meter == null) return null;
 
@@ -56,4 +74,5 @@ public class NormalizeTrackData {
 
         return km;
     }
+
 }

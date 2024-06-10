@@ -16,6 +16,8 @@ public class WorkoutDto {
 
     private Long id;
 
+    private Long userId;
+
     private String name;
 
     private String description;

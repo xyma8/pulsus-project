@@ -62,7 +62,7 @@ export default function WorkoutPost(props: WorkoutPostProps) {
         .catch(error =>{
             console.error(error);
             if(error.response.status == 404) {
-                alert("Not found");
+                //alert("Not found");
             }
             else if(error.response.status != 200) {
                 

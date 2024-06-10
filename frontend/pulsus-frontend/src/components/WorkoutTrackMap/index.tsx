@@ -11,17 +11,24 @@ type TrackMapProps = {
 }
 
 const customIcon = new L.Icon({
-    iconUrl: 'https://i.pinimg.com/originals/7a/80/c9/7a80c9fbeb2158487b68c827a17bbbea.png',
+    iconUrl: '/uploads/assets/location.png',
     iconSize: [32, 32],
     iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+});
+
+const finishIcon = new L.Icon({
+    iconUrl: '/uploads/assets/finish.png',
+    iconSize: [32, 32],
+    iconAnchor: [0, 32],
     popupAnchor: [0, -32]
 });
 
 export default function WorkoutTrackMap(props: TrackMapProps) {
 
     return(
-    <div className="track-map">
-        <MapContainer center={props.center} zoom={13}>
+    <div className="w-100% h-[400px]">
+        <MapContainer center={props.center} zoom={13} scrollWheelZoom={false}>
             <TileLayer 
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -33,11 +40,17 @@ export default function WorkoutTrackMap(props: TrackMapProps) {
             />
 
         {(props.point !== undefined) &&
-        <Marker position={props.point}>
+        <Marker position={props.point} icon={customIcon}>
                 <Popup>
 
                 </Popup>
         </Marker> }
+
+        <Marker position={props.coordinates[props.coordinates.length - 1]} icon={finishIcon}>
+                <Popup>
+
+                </Popup>
+        </Marker>
         </MapContainer>
     </div>
     )

@@ -126,7 +126,7 @@ export default function UserPage() {
                 </div>
             </div>
             
-            <div className='flex-grow max-w-[30%] '>
+            <div className='flex-grow max-w-[30%] ml-4'>
                 <div className='flex flex-col items-center bg-block_background py-5 shadow-md rounded'>
                     <p className="text-xl font-medium">Подписчики</p>
                     <div className="flex gap-10 mt-3">

@@ -13,6 +13,9 @@ import Header from './components/Header';
 import UserPage from './pages/UserPage';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import NotFoundPage from './pages/NotFoundPage';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter([
   {
@@ -42,6 +45,10 @@ const router = createBrowserRouter([
   {
     path: '/users/:userId',
     element: <ProtectedRoute element={<UserPage />} />
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />
   }
 ]);
 
@@ -54,6 +61,7 @@ root.render(
       <Header/>
       <div className='max-w-[1200px] h-screen ml-auto mr-auto py-5'>
         <RouterProvider router={router}/>
+        <ToastContainer closeOnClick draggable autoClose={3500} />
       </div>
     </AuthProvider>
   </React.StrictMode>

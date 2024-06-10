@@ -7,14 +7,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class FITSessionData {
 
-    private DateTime timestamp;
-    private DateTime startTime;
+    private Date timestamp;
+    private Date startTime;
     private Sport sport;
     private Float totalEllapsedTime;
     private Float totalTimerTime;

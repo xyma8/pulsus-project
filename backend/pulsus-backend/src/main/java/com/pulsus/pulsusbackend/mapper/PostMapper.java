@@ -9,6 +9,7 @@ import org.springframework.security.core.parameters.P;
 
 public class PostMapper {
 
+    /*
     public static PostDto mapToPostDto(UserDto userDto, WorkoutDto workoutDto, WorkoutSummaryDto workoutSummaryDto, WorkoutLikeDto workoutLikeDto) {
         return new PostDto(
                 workoutDto.getId(),
@@ -23,6 +24,7 @@ public class PostMapper {
                 new WorkoutLikeDto(workoutLikeDto.getIsLike(), workoutLikeDto.getCountLikes())
         );
     }
+    */
 
     public static PostDto mapToPostDto(User user, Workout workout, WorkoutSummary workoutSummary, WorkoutLikeDto workoutLikeDto) {
         return new PostDto(

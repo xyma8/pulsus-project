@@ -136,7 +136,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         WorkoutSummary workoutSummary = workout.getSummary();
         //нужна проверка на null?
-        WorkoutSummaryDto workoutSummaryDto = WorkoutMapper.mapToWorkoutSummaryDto(workoutSummary);
+        WorkoutSummaryDto workoutSummaryDto = WorkoutSummaryMapper.mapToWorkoutSummaryDto(workoutSummary);
         return workoutSummaryDto;
     }
 

@@ -54,7 +54,7 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
 
             for (let i = 0; i < response.data.fitTrackData.length; i++) {
                 const item = response.data.fitTrackData[i];
-                console.log(item);
+                //console.log(item);
                 initialTrackData.id.push(i)
                 if (item.positionLat !== null && item.positionLong !== null) {
                     initialTrackData.coordinates.push([item.positionLat, item.positionLong])
@@ -74,7 +74,7 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
             console.error(error);
 
             if(error.response.status == 409) {
-                alert("This track file already exists");
+                //alert("This track file already exists");
             }
             else if(error.response.status != 200) {
                 
@@ -97,6 +97,12 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
     }
 
     function handleValueChange(id: string | undefined) {
+        if(id == undefined) {
+            setTooltipChartsActive(false);
+        }
+        else if(id === "on") {
+            setTooltipChartsActive(true);
+        }
         getCoordinateById(id);
         updateMainChartInfo(id);
     }
@@ -110,15 +116,6 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
         }
 
         setMainChartInfo(mainChartInfo)
-    }
-
-    function handleMouseEnter() {
-        setTooltipChartsActive(true);
-    }
-
-    function handleMouseLeave() {
-        setTooltipChartsActive(false);
-        getCoordinateById(undefined);
     }
 
     function findMaxArray(arr: number[]): number {
@@ -144,14 +141,14 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
     }
 
     return(
-    <div className="workout-container">
+    <div className="flex flex-col">
         {trackDataArrays?.coordinates && <WorkoutTrackMap coordinates={trackDataArrays.coordinates} center={trackDataArrays.coordinates[0]} point={currentChartCoordindate}/>}
-        <div className="workout-container-charts" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <div className="flex flex-col items-center mt-5">
             {trackDataArrays?.id && trackDataArrays?.altitude &&
             <WorkoutInformationChart
                 type="area"
-                data={getDataForChart(trackDataArrays.id, trackDataArrays.altitude)}
-                width={1000}
+                data={getDataForChart(trackDataArrays.distance, trackDataArrays.altitude)}
+                width={950}
                 height={150}
                 YLabel="Высота"
                 colorStroke="#808080"
@@ -165,7 +162,7 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
             <WorkoutInformationChart
                 type="line"
                 data={getDataForChart(trackDataArrays.id, trackDataArrays.speed)}
-                width={1000}
+                width={950}
                 height={150}
                 YLabel="Скорость"
                 colorStroke="#8884d8"
@@ -178,7 +175,7 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
             <WorkoutInformationChart
                 type="line"
                 data={getDataForChart(trackDataArrays.id, trackDataArrays.temperature)}
-                width={1000}
+                width={950}
                 height={150}
                 YLabel="Температура"
                 colorStroke="#008000"

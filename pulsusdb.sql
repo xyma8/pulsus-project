@@ -44,6 +44,7 @@ CREATE TABLE `workouts` (
     `summary` BIGINT NOT NULL,
     `file_workout` BIGINT NOT NULL,
     `access_type` INT NOT NULL,
+    `timestamp` DATETIME NOT NULL,
     FOREIGN KEY (user) REFERENCES users(id),
     FOREIGN KEY (summary) REFERENCES workouts_summary(id),
     FOREIGN KEY (file_workout) REFERENCES files_on_server(id)
@@ -142,3 +143,5 @@ DELIMITER ;
 
 
 CALL get_workouts_for_posts('14', 1, 5);
+
+CALL get_workouts_for_posts('14,', 1, 5);

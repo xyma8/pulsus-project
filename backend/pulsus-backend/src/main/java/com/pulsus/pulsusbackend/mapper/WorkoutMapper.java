@@ -10,6 +10,7 @@ public class WorkoutMapper {
     public static WorkoutDto mapToWorkoutDto(Workout workout) {
         return new WorkoutDto(
                 workout.getId(),
+                workout.getUser().getId(),
                 workout.getName(),
                 workout.getDescription(),
                 workout.getTypeSports(),
@@ -18,14 +19,4 @@ public class WorkoutMapper {
         );
     }
 
-    public static WorkoutSummaryDto mapToWorkoutSummaryDto(WorkoutSummary workoutSummary) {
-        return new WorkoutSummaryDto(
-                workoutSummary.getId(),
-                workoutSummary.getTotalDistance(),
-                workoutSummary.getTotalEllapsedTime(),
-                workoutSummary.getTotalTimerTime(),
-                workoutSummary.getTotalAscent(),
-                workoutSummary.getStartTime()
-        );
-    }
 }

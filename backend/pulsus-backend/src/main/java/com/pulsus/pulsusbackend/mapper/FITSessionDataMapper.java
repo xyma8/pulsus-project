@@ -9,8 +9,8 @@ public class FITSessionDataMapper {
 
     public static FITSessionData mapToFITSessionData(SessionMesg sessionMesg) {
         FITSessionData fitSessionData = new FITSessionData();
-        fitSessionData.setTimestamp(sessionMesg.getTimestamp());
-        fitSessionData.setStartTime(sessionMesg.getStartTime());
+        fitSessionData.setTimestamp(sessionMesg.getTimestamp().getDate());
+        fitSessionData.setStartTime(sessionMesg.getStartTime().getDate());
         fitSessionData.setSport(sessionMesg.getSport());
         fitSessionData.setTotalEllapsedTime(sessionMesg.getTotalElapsedTime());
         fitSessionData.setTotalTimerTime(sessionMesg.getTotalTimerTime());

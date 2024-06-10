@@ -19,9 +19,18 @@ export default function WorkoutPage() {
 
     return(
     <div className="workout-page">
-        <WorkoutInfo workoutId={workoutId} />
-        <WorkoutTrackSummary workoutId={workoutId} />
-        <WorkoutTrackContainer workoutId={workoutId}/>
+        <div className="flex bg-block_background rounded shadow-md">
+            <div className="flex-grow max-w-[50%] border p-3">
+                <WorkoutInfo workoutId={workoutId} />
+            </div>
+
+            <div className="flex-grow max-w-[50%] border p-3">
+                <WorkoutTrackSummary workoutId={workoutId} />
+            </div>
+        </div>
+        <div className="flex flex-col bg-block_background rounded shadow-md mt-3 border">
+            <WorkoutTrackContainer workoutId={workoutId}/>
+        </div>
     </div>
     )
 }

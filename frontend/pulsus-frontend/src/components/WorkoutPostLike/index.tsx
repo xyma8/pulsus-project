@@ -31,16 +31,16 @@ export default function WorkoutPostLike(props: WorkoutPostLikeProps) {
             }
         })
         .then(response => {
-            console.log(response.data);
+            //console.log(response.data);
             setLikes(response.data)
         })
         .catch(error =>{
             console.error(error);
             if(error.response.status == 404) {
-                alert("Workout not found");
+                //navigate("*");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }

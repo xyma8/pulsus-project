@@ -6,6 +6,7 @@ import EditInfoWorkoutForm from "../../components/EditInfoWorkoutForm";
 import ListTypesSport from "../../components/ListTypesSport";
 import UploadImage from "../../components/UploadImage";
 import { workerData } from "worker_threads";
+import { useNavigate } from 'react-router-dom';
 
 type Inputs = {
     name: string,
@@ -17,6 +18,7 @@ type Inputs = {
 export default function EditWorkoutPage() {
     const { workoutId } = useParams();
     const [inputs, setInputs] = useState<Partial<Inputs>>();
+    const navigate = useNavigate();
     //const [workoutData, setWorkoutData] = useState<FormData>();
     const workoutPhotos = new FormData();
 
@@ -43,7 +45,7 @@ export default function EditWorkoutPage() {
         .catch(error =>{
             console.error(error);
             if(error.response.status == 404) {
-                alert("Workout not found");
+                navigate("*")
             }
             else if(error.response.status != 200) {
                 
@@ -65,7 +67,7 @@ export default function EditWorkoutPage() {
         .catch(error =>{
             console.error(error);
             if(error.response.status == 404) {
-                alert("Workout not found");
+                navigate("*")
             }
             else if(error.response.status != 200) {
                 
@@ -86,10 +88,10 @@ export default function EditWorkoutPage() {
         .catch(error =>{
             console.error(error);
             if(error.response.status == 404) {
-                alert("Workout not found");
+                navigate("*")
             }
             if(error.response.status == 403) {
-                alert("Access denied");
+                //alert("Access denied");
             }
             else if(error.response.status != 200) {
                 

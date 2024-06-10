@@ -2,6 +2,8 @@ import "./style.css"
 import InputField from "../InputField"
 import { useForm, SubmitHandler } from "react-hook-form"
 import API from "../../services/API";
+import axios from "axios"
+import { ToastContainer, toast } from 'react-toastify';
 
 type Inputs = {
     login: string,
@@ -30,14 +32,21 @@ export default function LoginForm(props: LoginFormProps) {
 
 
     function sendDataLogin(data: Inputs) {
-        API.post("/auth/generateToken", data)
+        axios.create({
+            baseURL: 'http://localhost:8080/api',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            responseType: "json"
+        }).post("/auth/generateToken", data)
         .then(response => {
             props.onSuccessLogin(response.data.token);
         })
         .catch(error =>{
             console.error(error);
-            if(error.response.status == 403) {
-                alert("Incorrect login or password");
+            if(error.response.status == 401) {
+                toast.error('Неправильный логин или пароль!');
+
             }
             else if(error.response.status != 200) {
                 

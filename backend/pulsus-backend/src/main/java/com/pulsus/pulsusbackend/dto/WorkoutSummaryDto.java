@@ -19,9 +19,9 @@ public class WorkoutSummaryDto {
 
     private Float totalDistance;
 
-    private Float totalEllapsedTime;
+    private String totalEllapsedTime;
 
-    private Float totalTimerTime;
+    private String totalTimerTime;
 
     private Integer totalAscent;
 

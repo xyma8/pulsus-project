@@ -1,5 +1,5 @@
 import "./style.css"
-import { LineChart, Line, XAxis, YAxis, Tooltip, AreaChart, Area } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, AreaChart, Area, ResponsiveContainer } from 'recharts';
 import { InformationChart } from "../../utils/projectTypes";
 import { useState } from "react";
 import CustomTooltipChart from "../CustomTooltipChart";
@@ -20,14 +20,23 @@ type WorkoutInformationChartProps = {
 }
 
 export default function WorkoutInformationChart(props: WorkoutInformationChartProps) {
-    const [valueY, setValueY] = useState<string | undefined>();
+    const [valueY, setValueY] = useState<string | undefined>("--");
 
-    function handleCurrentValueX(value: string) {
+    function handleCurrentValueX(value: string | undefined) {
         props.onValueChange(value);
     }
 
     function handleCurrentValueY(value: string) {
         setValueY(value)
+    }
+
+    function handleMouseEnter() {
+        handleCurrentValueX("on");
+    }
+
+    function handleMouseLeave() {
+        setValueY("--");
+        handleCurrentValueX(undefined);
     }
 
     function renderTooltip() {
@@ -37,7 +46,9 @@ export default function WorkoutInformationChart(props: WorkoutInformationChartPr
             )
         }
         else{
-            
+            if(valueY !== "--" ) {
+                setValueY("--");
+            }
             return null;
         }
     }
@@ -45,33 +56,50 @@ export default function WorkoutInformationChart(props: WorkoutInformationChartPr
     function renderChart() {
         if(props.type === "line") {
             return(
-            <>
-            <div className="workout-chart-info">
-                {props.YLabel}
+            <div className="flex items-center p-4 text-text ">
+                
+                <div className="flex-1" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                    <div className="flex  justify-between">
+                        <div className="font-semibold">
+                            {props.YLabel}
+                        </div>
+                        <div className="font-semibold">
+                            <CustomTooltipChart value={valueY} label={props.unit}/>
+                        </div>
+                    </div>
+                    <LineChart width = {props.width} height = {130} data={props.data} syncId={props.syncId}>
+                        <Line connectNulls type="monotone" dataKey="YAxis" name={props.YLabel} stroke={props.colorStroke} dot={false} />
+                        <XAxis dataKey="XAxis" label={props.XLabel} tick={false} />
+                        <YAxis />
+                        {renderTooltip()}
+                    </LineChart>
+
+                    
+                </div>
+
+                
             </div>
-            <LineChart width={props.width} height={props.height} data={props.data} syncId={props.syncId}>
-                <Line connectNulls type="monotone" dataKey="YAxis" name={props.YLabel} stroke={props.colorStroke} dot={false} />
-                <XAxis dataKey="XAxis" label={props.XLabel} />
-                <YAxis />
-                {renderTooltip()}
-            </LineChart>
-            <CustomTooltipChart value={valueY} label={props.unit}/>
-            </>
             )
         } else if(props.type === "area") {
             return(
-            <AreaChart width={props.width} height={props.height} data={props.data} syncId={props.syncId}>
-                <Area connectNulls type="monotone" dataKey="YAxis" name={props.YLabel} stroke={props.colorStroke} fill={props.colorStroke} dot={false} />
-                <XAxis dataKey="XAxis" label={props.XLabel} />
-                <YAxis domain={props.yDomain} />
-                {renderTooltip()}
-             </AreaChart>
+            <div className="flex items-center space-x-4 p-4 text-text">
+                
+                <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                    <AreaChart width={props.width} height={props.height} data={props.data} syncId={props.syncId}>
+                        <Area connectNulls type="monotone" dataKey="YAxis" name={props.YLabel} stroke={props.colorStroke} fill={props.colorStroke} dot={false} />
+                        <XAxis dataKey="XAxis" label={props.XLabel} tick={false} />
+                        <YAxis domain={props.yDomain} />
+                        {renderTooltip()}
+                    </AreaChart>
+                </div>
+
+             </div>
             )
         }
     }
 
     return(
-    <div className="information-chart">
+    <div className="">
         {renderChart()}
     </div>
     )

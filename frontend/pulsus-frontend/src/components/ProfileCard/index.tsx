@@ -77,7 +77,7 @@ export default function ProfileCard() {
 
             <div className="flex flex-col items-center">
                 <p className="text-sm">Тренировки</p>
-                <p className="text-xl font-medium hover:text-secondary cursor-pointer duration-100"> {cardInfo?.workoutsCount} </p>
+                <p className="text-xl font-medium hover:text-secondary cursor-pointer duration-100" onClick={navigateToUserPage}> {cardInfo?.workoutsCount} </p>
             </div>
         </div>
     </div>

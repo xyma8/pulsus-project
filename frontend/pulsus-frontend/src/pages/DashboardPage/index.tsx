@@ -26,11 +26,6 @@ export default function DashboardPage() {
 
     }, []); 
 
-    function exit() {
-        localStorage.removeItem('jwtToken');
-        window.location.assign(`/login`);
-    }
-
     /*
     function checkToken() {
         if(!localStorage.getItem('jwtToken')) {
@@ -62,16 +57,14 @@ export default function DashboardPage() {
     */
 
     return(
-    <div className="dashboard-page">
-        hello in your account on dashboard
-        <ProfilePicture size={50} />
-        <ProfilePicture userId={"15"} size={50}/>
-        <ChangeProfilePicture type={false} size={50} />
-        <UploadTrackFile />
-        <WorkoutPost workoutId={"2"}/>
-        <ProfileCard/>
-        <WorkoutPostsFeed size={5} loaderMessage="loading" endMessage="За последнее время больше не было тренировок." feed={true} />
-        <button onClick={exit}>Exit</button>
+    <div className="flex flex-row">
+        <div className="flex h-[100%] mt-3">
+            <ProfileCard/>
+        </div>
+        
+        <div className="ml-6 w-[100%]">
+            <WorkoutPostsFeed size={5} loaderMessage="loading" endMessage="За последнее время больше не было тренировок." feed={true} />
+        </div>
     </div>
     )
 }

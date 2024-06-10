@@ -2,6 +2,9 @@ import "./style.css"
 import InputField from "../InputField"
 import { useForm, SubmitHandler } from "react-hook-form"
 import API from "../../services/API";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 type Inputs = {
     name: string,
@@ -42,10 +45,14 @@ export default function RegistrationForm() {
         sendDataRegistration(user_data);
     }
 
+    const navigate = useNavigate();
+    const notifySuccess = () => toast.success('Вы зарегистрированы!');
+
     function sendDataRegistration(data: UserData) {
         API.post("/users/signup", data)
         .then(response => {
-            alert('Registration success!');
+            notifySuccess();
+            navigate("/login")
         })
         .catch(error => {
             if(error.response.status==409) {
@@ -152,6 +159,7 @@ export default function RegistrationForm() {
         </fieldset>
 
         <button type="submit" className="bg-secondary text-main_text_button font-bold py-2 px-4 rounded hover:bg-secondary_hover_button duration-100">Регистрация</button>
+        
     </form>
     )
     /*

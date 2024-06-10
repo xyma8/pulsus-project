@@ -104,8 +104,15 @@ public class PostServiceImpl implements PostService {
         List<UserInfoDto> followingList = subscriptionService.getFollowing(userId);
 
         String followedUserId = userId.toString();
+        int i = 0;
         for(UserInfoDto user: followingList) {
+            i++;
             followedUserId = followedUserId + "," + user.getId();
+        }
+
+        if(i == 0) { // если пользователь ни на кого не подписан нет смысла проверять на access к его же тренировкам, для этого есть просто getPosts()
+            List<Long> allPosts = getPosts(userId, page, size);
+            return  allPosts;
         }
 
         List<Long> allPosts = workoutRepository.getWorkoutsForPosts(followedUserId, page, size);
