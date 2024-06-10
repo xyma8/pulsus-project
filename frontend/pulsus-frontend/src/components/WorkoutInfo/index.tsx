@@ -5,7 +5,8 @@ import ProfilePicture from "../ProfilePicture";
 import { useNavigate } from 'react-router-dom';
 
 type WorkoutInfoProps = {
-    workoutId: string | undefined
+    workoutId: string | undefined,
+    isEdit?: boolean
 }
 
 type WorkoutInfo = {
@@ -55,10 +56,17 @@ export default function WorkoutInfo(props: WorkoutInfoProps) {
     
     return(
     <div className="flex flex-row text-text items-center">
-        {workoutInfo?.userId && <ProfilePicture userId={workoutInfo.userId} size={95} clickable={true} /> }
-        <div className="flex flex-col items-start ml-6">
-            <p className="text-3xl font-bold">{workoutInfo?.name}</p>
-            <p className="mt-2">{workoutInfo?.description}</p>
+        {workoutInfo?.userId && <ProfilePicture userId={workoutInfo.userId} size={90} clickable={true} /> }
+        <div className="flex flex-row justify-between w-[100%]">
+            <div className="flex flex-col items-start ml-5">
+                <div className="flex flex-row  items-center">
+                    <p className="text-2xl font-bold">{workoutInfo?.name} </p>
+                    {workoutInfo?.accessType === 2 && <p className="ml-1 text-xl" title="Только вы можете просматривать данные этой тренировки">🔒</p> }
+                </div>
+                <p className="mt-2">{workoutInfo?.description}</p>
+            </div>
+            {props.isEdit 
+            && <button className="bg-primary text-main_text_button font-bold py-1 px-4 rounded hover:bg-primary_hover_button text-lduration-100 h-[40px]" onClick={() => navigate(`/workouts/${props.workoutId}/edit`)}>✏️</button> }
         </div>
     </div>
     )

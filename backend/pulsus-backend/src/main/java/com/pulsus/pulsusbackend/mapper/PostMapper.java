@@ -30,9 +30,10 @@ public class PostMapper {
         return new PostDto(
                 workout.getId(),
                 user.getId(),
-                user.getName(),
+                user.getName() + " " + user.getSurname(),
                 workout.getName(),
                 workout.getTypeSports(),
+                workout.getAccessType(),
                 NormalizeTrackData.roundFloat(NormalizeTrackData.meterToKm(workoutSummary.getTotalDistance()),2),
                 NormalizeTrackData.toUsualTime(workoutSummary.getTotalEllapsedTime()),
                 workoutSummary.getTotalAscent(),

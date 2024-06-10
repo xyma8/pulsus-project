@@ -19,7 +19,7 @@ public class WorkoutValidator {
 
         if(name.length() < 2) return false;
 
-        if(name.length() > 50) return false;
+        if(name.length() > 30) return false;
 
         return true;
     }

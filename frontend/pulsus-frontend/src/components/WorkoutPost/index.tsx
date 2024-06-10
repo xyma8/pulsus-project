@@ -4,6 +4,7 @@ import API from '../../services/API';
 import ProfilePicture from "../ProfilePicture";
 import WorkoutPostLike from "../WorkoutPostLike";
 import { useNavigate } from "react-router"
+import { dateToFormatted } from "../../utils/usualTime";
 
 type WorkoutPostProps = {
     workoutId: string | undefined
@@ -26,6 +27,7 @@ type WorkoutPost = {
     username: string,
     name: string,
     typeSport: string,
+    accessType: number
     totalDistance: string,
     totalTime: UsualTime,
     totalAscent: string,
@@ -90,8 +92,11 @@ export default function WorkoutPost(props: WorkoutPostProps) {
                 <div className="font-medium flex">
                     <p className="cursor-pointer hover:text-secondary duration-100" onClick={navigateToUserPage}>{workoutPost?.username}</p>
                 </div>
-                <p className="text-sm">{workoutPost?.startTime}</p>
-                <p className="font-semibold text-2xl mt-2 cursor-pointer hover:text-secondary duration-100" onClick={navigateToWorkoutPage}>{workoutPost?.name}</p>
+                {workoutPost?.startTime && <p className="text-sm">{dateToFormatted(workoutPost.startTime)}</p> }
+                <div className="flex flex-row items-center">
+                    <p className="font-semibold text-2xl mt-2 cursor-pointer hover:text-secondary duration-100" onClick={navigateToWorkoutPage}>{workoutPost?.name}</p>
+                    {workoutPost?.accessType == 2 && <p className="ml-1 text-xl mt-2" title="Только вы можете просматривать данные этой тренировки">🔒</p>}
+                </div>
                 <div className="flex flex-row gap-10 mt-3">
                     <div className="">
                         <p className="text-sm">Расстояние</p>

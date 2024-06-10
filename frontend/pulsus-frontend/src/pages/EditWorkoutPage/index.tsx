@@ -5,8 +5,8 @@ import API from "../../services/API";
 import EditInfoWorkoutForm from "../../components/EditInfoWorkoutForm";
 import ListTypesSport from "../../components/ListTypesSport";
 import UploadImage from "../../components/UploadImage";
-import { workerData } from "worker_threads";
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 
 type Inputs = {
     name: string,
@@ -29,6 +29,7 @@ export default function EditWorkoutPage() {
 
     useEffect(() => {
         console.log("Inputs changed:", inputs);
+
     }, [inputs]); // Этот эффект сработает каждый раз, когда изменится inputs
 
 
@@ -83,6 +84,8 @@ export default function EditWorkoutPage() {
         })
         .then(response => {
             console.log(response.data);
+            toast.success('Информация успешно изменена!');
+            navigate(`/workouts/${workoutId}`)
             //uploadWorkoutPhotos();
         })
         .catch(error =>{
@@ -149,11 +152,9 @@ export default function EditWorkoutPage() {
 
     return(
     <div className="edit-workout-page">
-        Редактировать тренировку
-        <EditInfoWorkoutForm inputs={inputs} onInputChange={handleInputChange}/>
-        <ListTypesSport defaultTypeSport={inputs.typeSport} onSelectChange={handleTypeSportChange}/>
-        <UploadImage onDropChange={handleImagesChange}/>
-        <button onClick={updateWorkoutInfo}>Сохранить</button>
+        <p className="text-2xl font-bold mb-5">Редактировать тренировку</p>
+        {workoutId && <EditInfoWorkoutForm workoutId={workoutId} inputs={inputs} onInputChange={handleInputChange}/> }
+        
     </div>
     )
 }

@@ -32,7 +32,7 @@ public class NormalizeTrackData {
 
     public static Float roundFloat(Float value, int places) {
         if(value == null) return null;
-        
+
         if (places < 0) throw new IllegalArgumentException();
 
         long factor = (long) Math.pow(10, places);

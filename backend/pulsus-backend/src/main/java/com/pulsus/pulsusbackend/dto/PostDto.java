@@ -24,6 +24,8 @@ public class PostDto {
 
     private String typeSport;
 
+    private Integer accessType;
+
     private Float totalDistance;
 
     private UsualTime totalTime;

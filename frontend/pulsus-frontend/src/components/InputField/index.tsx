@@ -46,6 +46,7 @@ export default function InputField(props: InputFieldProps) {
                         validate
                     })
                 }
+                
             />
         )
     }
@@ -62,6 +63,7 @@ export default function InputField(props: InputFieldProps) {
                         validate
                     })
                 }
+                className="form-radio h-4 w-4 text-blue-600 transition duration-100 ease-in-out cursor-pointer"
             />
         )
     }
