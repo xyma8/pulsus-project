@@ -82,9 +82,21 @@ export default function WorkoutInformationChart(props: WorkoutInformationChartPr
             )
         } else if(props.type === "area") {
             return(
-            <div className="flex items-center space-x-4 p-4 text-text">
-                
-                <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            <div className="flex items-center p-4 text-text">
+            
+
+                <div className="flex-1" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                    <div className="flex  justify-between">
+                            <div className="font-semibold">
+                                {props.YLabel}
+                            </div>
+                            
+                            <div className="font-semibold">
+                                <CustomTooltipChart value={valueY} label={props.unit}/>
+                            </div>
+                    </div>
+
+
                     <AreaChart width={props.width} height={props.height} data={props.data} syncId={props.syncId}>
                         <Area connectNulls type="monotone" dataKey="YAxis" name={props.YLabel} stroke={props.colorStroke} fill={props.colorStroke} dot={false} />
                         <XAxis dataKey="XAxis" label={props.XLabel} tick={false} />

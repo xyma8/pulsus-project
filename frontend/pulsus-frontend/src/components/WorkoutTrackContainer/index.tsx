@@ -4,6 +4,7 @@ import { getWorkoutTrack } from "../../services/workoutService";
 import { Coordinates, InformationChart, TrackData, Coordinate } from "../../utils/projectTypes";
 import WorkoutTrackMap from "../WorkoutTrackMap";
 import WorkoutInformationChart from "../WorkoutInformationChart";
+import CustomTooltipChart from "../CustomTooltipChart";
 
 type WorkoutTrackContainerProps = {
     workoutId: string | undefined
@@ -144,6 +145,15 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
     <div className="flex flex-col">
         {trackDataArrays?.coordinates && <WorkoutTrackMap coordinates={trackDataArrays.coordinates} center={trackDataArrays.coordinates[0]} point={currentChartCoordindate}/>}
         <div className="flex flex-col items-center mt-5">
+            <div className="flex justify-between">
+                    <div className="font-semibold">
+                        {"Дистанция"}
+                    </div>
+                    &nbsp;
+                    <div className="font-semibold">
+                        <CustomTooltipChart value={mainChartInfo?.distance?.toString()} label={"м"}/>
+                    </div>
+            </div>
             {trackDataArrays?.id && trackDataArrays?.altitude && trackDataArrays.altitude.length > 0 &&
             <WorkoutInformationChart
                 type="area"

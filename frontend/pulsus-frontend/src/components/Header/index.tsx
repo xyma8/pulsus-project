@@ -88,7 +88,7 @@ export default function Header(props: HeaderProps) {
         <div className="bg-block_background h-[50px] rounded shadow-sm sticky top-0 z-[1001]">
             <div className="max-w-[1200px] ml-auto mr-auto flex ">
                 <div className="flex flex-row justify-between w-[100%] items-center">
-                    <img src={"https://free-png.ru/wp-content/uploads/2021/07/free-png.ru-53.png"} width={50} height={50} className="cursor-pointer" onClick={navigateToDashboard} />
+                    <img src={"https://upload.wikimedia.org/wikipedia/commons/6/60/Logo-logosu.png"} width={90} height={100} className="cursor-pointer" onClick={navigateToDashboard} />
                     
                     
                     <div className="relative inline-block text-left text-text" 
@@ -152,7 +152,7 @@ export default function Header(props: HeaderProps) {
         <div className="bg-block_background h-[50px] rounded shadow-sm sticky top-0 z-[1001]">
             <div className="max-w-[1200px] ml-auto mr-auto flex">
                 <div className="flex flex-row justify-between w-[100%] items-center">
-                    <img src={"https://free-png.ru/wp-content/uploads/2021/07/free-png.ru-53.png"} width={50} height={50} className="cursor-pointer" />
+                    <img src={"https://upload.wikimedia.org/wikipedia/commons/6/60/Logo-logosu.png"} width={90} height={100} className="cursor-pointer" />
 
                     <button className="bg-primary text-main_text_button py-1 px-4 rounded hover:bg-primary_hover_button duration-100 h-[35px]" onClick={navigateToLogin}>Войти</button>
                 </div>
