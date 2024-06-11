@@ -7,10 +7,14 @@ import com.pulsus.pulsusbackend.entity.WorkoutLike;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface WorkoutLikeRepository extends JpaRepository<WorkoutLike, Long> {
 
     WorkoutLike findByUserAndWorkout(User user, Workout workout);
+
+    List<WorkoutLike> findByWorkout(Workout workout);
 
     Long countByWorkout(Workout workout);
 }

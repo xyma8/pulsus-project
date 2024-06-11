@@ -6,14 +6,13 @@ import com.pulsus.pulsusbackend.mapper.TypeSportMapper;
 import com.pulsus.pulsusbackend.mapper.WorkoutMapper;
 import com.pulsus.pulsusbackend.mapper.WorkoutSummaryMapper;
 import com.pulsus.pulsusbackend.model.FITTrackData;
-import com.pulsus.pulsusbackend.repository.TypeSportRepository;
-import com.pulsus.pulsusbackend.repository.WorkoutRepository;
-import com.pulsus.pulsusbackend.repository.WorkoutSummaryRepository;
+import com.pulsus.pulsusbackend.repository.*;
 import com.pulsus.pulsusbackend.service.*;
 import com.pulsus.pulsusbackend.validator.WorkoutValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
@@ -33,7 +32,13 @@ public class WorkoutServiceImpl implements WorkoutService {
     TypeSportRepository typeSportRepository;
 
     @Autowired
+    FileOnServerRepository fileOnServerRepository;
+
+    @Autowired
     WorkoutSummaryRepository workoutSummaryRepository;
+
+    @Autowired
+    WorkoutLikeRepository workoutLikeRepository;
 
     @Autowired
     private FileOnServerService fileOnServerService;
@@ -56,6 +61,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
+    @Transactional
     public WorkoutDto createWorkout(Long userId, MultipartFile file) {
         Workout newWorkout = new Workout();
         User user = userService.findById(userId)
@@ -204,6 +210,27 @@ public class WorkoutServiceImpl implements WorkoutService {
         TrackSummaryDto trackSummaryDto = trackFileService.readTrackSummary(fileOnServer);
 
         return trackSummaryDto;
+    }
+
+    @Override
+    @Transactional
+    public Boolean deleteWorkout(Long userId, Long workoutId) {
+        Workout workout = findById(workoutId)
+                .orElseThrow(() -> new NotFoundException("This workout does not exists"));
+
+        if(workout.getUser().getId() != userId) {
+            throw new NotFoundException("This workout does not exists");
+        }
+
+        List<WorkoutLike> workoutLikes = workoutLikeRepository.findByWorkout(workout);
+        for(WorkoutLike workoutLike: workoutLikes) {
+            workoutLikeRepository.delete(workoutLike);
+        }
+        workoutRepository.delete(workout);
+        fileOnServerRepository.delete(workout.getFileWorkout());
+        workoutSummaryRepository.delete(workout.getSummary());
+
+        return true;
     }
 
     @Override

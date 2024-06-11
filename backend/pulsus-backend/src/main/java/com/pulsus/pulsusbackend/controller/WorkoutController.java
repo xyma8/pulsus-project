@@ -87,6 +87,14 @@ public class WorkoutController {
         return ResponseEntity.ok(updatedWorkout);//можно возвращать просто OK
     }
 
+    @PostMapping("/{workoutId}/delete")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Map<String, Boolean>> deleteWorkout(Authentication authentication, @PathVariable Long workoutId) {
+        Boolean deletedWorkout = workoutService.deleteWorkout(getUserId(authentication), workoutId);
+
+        return ResponseEntity.ok(Map.of("deletedWorkout", deletedWorkout));
+    }
+
     @PostMapping("/{workoutId}/uploadPhotos")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<String> uploadWorkoutPhotos(Authentication authentication, @PathVariable Long workoutId, @RequestParam("images") MultipartFile[] files) {

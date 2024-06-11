@@ -85,6 +85,11 @@ export default function UserSubscribeButton(props: UserSubscribeButtonProps) {
         }
         return(<></>)
     }
+    else{
+        if(props.isUserPage) {
+            props.isUserPage(false);
+        }
+    }
 
     return(
     <div>

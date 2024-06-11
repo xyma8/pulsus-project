@@ -25,7 +25,7 @@ export default function UserPage() {
     const { userId } = useParams();
     const [userInfo, setUserInfo] = useState<UserInfo>();
     const [subscriptionCount, setSubscriptionCount] = useState<UserSubscribersCount>();
-    const [isUserPage, setIsUserPage] = useState<boolean>();
+    const [isUserPage, setIsUserPage] = useState<boolean>(false);
     const [activeTab, setActiveTab] = useState('Тренировки');
     const tabs = ['Тренировки', 'Подписки', 'Подписчики'];
 
@@ -67,8 +67,10 @@ export default function UserPage() {
     }
 
     function userPage(isUser: boolean) {
-        if(isUser) {
+        if(isUser == true) {
             setIsUserPage(true);
+        }else{
+            setIsUserPage(false)
         }
     }
 
@@ -80,9 +82,9 @@ export default function UserPage() {
     <div className="flex flex-col">
         <div className='flex flex-col items-center'>
             <div className='flex flex-col items-center'>
-                {userInfo?.id && userId !== userInfo.id && (<ProfilePicture userId={userInfo?.id} size={130} clickable={false} />) }
+                {(userInfo?.id && !isUserPage) && userInfo.id && (<ProfilePicture userId={userInfo?.id} size={130} clickable={false} />) }
                 
-                {userInfo?.id && userId === userInfo.id && (<ChangeProfilePicture size={130} />) }
+                {(userInfo?.id && isUserPage) && (<ChangeProfilePicture size={130} />) }
 
                 <div className='flex mt-3 text-2xl font-bold'>
                     <p>{userInfo?.name}</p>

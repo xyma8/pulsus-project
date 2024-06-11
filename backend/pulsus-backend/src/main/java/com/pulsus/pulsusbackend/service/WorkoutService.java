@@ -32,6 +32,8 @@ public interface WorkoutService {
 
     TrackSummaryDto getTrackSummaryWorkout(Long userId, Long workoutId);
 
+    Boolean deleteWorkout(Long userId, Long workoutId);
+
     Boolean checkAccess(Long userId, Workout workout);
 
     Boolean checkAccessEditPage(Long userId, Long workoutId);

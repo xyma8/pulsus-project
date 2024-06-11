@@ -18,6 +18,7 @@ type Inputs = {
 export default function EditWorkoutPage() {
     const { workoutId } = useParams();
     const [inputs, setInputs] = useState<Partial<Inputs>>();
+    const [deleteButton, setDeleteButton] = useState<boolean>();
     const navigate = useNavigate();
     //const [workoutData, setWorkoutData] = useState<FormData>();
     const workoutPhotos = new FormData();
@@ -144,6 +145,31 @@ export default function EditWorkoutPage() {
        
     }
 
+    function deleteWorkout() {
+        API.post(`/workouts/${workoutId}/delete`, null, {
+            headers: {
+                Authorization: 'Bearer '+ localStorage.getItem('jwtToken')
+            }
+        })
+        .then(response => {
+            //console.log(response.data);
+
+            if(response.data.deletedWorkout) {
+                toast.success('Тренировка удалена!');
+                navigate('/dashboard')
+            }
+        })
+        .catch(error =>{
+            console.error(error);
+            if(error.response.status == 404) {
+                navigate("*")
+            }
+            else{
+                toast.error('Произошла ошибка при удалении!');
+            }
+        })
+    }
+
     if (!inputs) {
         return ( 
         <div>
@@ -151,8 +177,22 @@ export default function EditWorkoutPage() {
     }
 
     return(
-    <div className="edit-workout-page">
-        <p className="text-2xl font-bold mb-5">Редактировать тренировку</p>
+    <div className="edit-workout-page items-center">
+        <div className="flex justify-between">
+            <p className="text-2xl font-bold mb-5">Редактировать тренировку</p>
+            <div className="flex flex-col items-center">
+                <button className="bg-danger text-main_text_button font-bold py-1 px-3 rounded hover:bg-danger_hover duration-100 text-s" onClick={() => setDeleteButton(true)}>
+                    Удалить тренировку
+                </button>
+                {deleteButton ?
+                <div className="flex flex-row">
+                    <p>Удалить?</p>&nbsp;
+                    <p className="underline text-text cursor-pointer hover:text-danger duration-100" onClick={deleteWorkout}>Да</p> &nbsp;
+                    <p className="underline text-text cursor-pointer hover:text-secondary duration-100" onClick={() => setDeleteButton(false)}>Нет</p> 
+                 </div>:
+                  <></> }
+            </div>
+        </div>
         {workoutId && <EditInfoWorkoutForm workoutId={workoutId} inputs={inputs} onInputChange={handleInputChange}/> }
         
     </div>

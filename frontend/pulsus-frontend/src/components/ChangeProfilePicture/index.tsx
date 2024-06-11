@@ -2,6 +2,7 @@ import ProfilePicture from "../ProfilePicture"
 import "./style.css"
 import API from "../../services/API";
 import { useState, useEffect, useRef } from "react";
+import { ToastContainer, toast } from 'react-toastify';
 
 type ChangeProfilePicture = {
     type?: boolean,
@@ -20,17 +21,13 @@ export default function ChangeProfilePicture(props: ChangeProfilePicture) {
             }
         })
         .then(response => {
-            console.log(response.data.path);
+            //console.log(response.data.path);
+            toast.success('Аватарка изменена!');
             //setPicture(response.data.path);
         })
         .catch(error => {
             console.error(error);
-            if(error.response.status == 403) {
-                alert("Error");
-            }
-            else if(error.response.status != 200) {
-                
-            }
+            toast.error('Произошла ошибка при смене аватарки!');
         })
     }
 
