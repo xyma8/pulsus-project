@@ -50,6 +50,7 @@ export default function WorkoutPage() {
                 <WorkoutTrackSummary workoutId={workoutId} />
             </div>
         </div>
+        
         <div className="flex flex-col bg-block_background rounded shadow-md mt-3 border">
             <WorkoutTrackContainer workoutId={workoutId}/>
         </div>

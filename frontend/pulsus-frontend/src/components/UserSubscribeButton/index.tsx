@@ -40,7 +40,7 @@ export default function UserSubscribeButton(props: UserSubscribeButtonProps) {
                 setSubscription(null);
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }
@@ -66,7 +66,7 @@ export default function UserSubscribeButton(props: UserSubscribeButtonProps) {
                 alert("Workout not found");
             }
             else if(error.response.status != 200) {
-                alert("Internal error");
+                
             }
         })
     }

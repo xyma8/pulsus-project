@@ -5,6 +5,8 @@ import API from "../../services/API";
 import ProfilePicture from '../../components/ProfilePicture';
 import WorkoutPostsFeed from '../../components/WorkoutPostsFeed';
 import UserSubscriptionList from '../../components/UserSubscriptionList';
+import ChangeProfilePicture from '../../components/ChangeProfilePicture';
+import UserStatistic from '../../components/UserStatistic';
 
 
 type UserInfo = {
@@ -78,7 +80,10 @@ export default function UserPage() {
     <div className="flex flex-col">
         <div className='flex flex-col items-center'>
             <div className='flex flex-col items-center'>
-                {userInfo?.id && <ProfilePicture userId={userInfo?.id} size={130} clickable={false} /> }
+                {userInfo?.id && userId !== userInfo.id && (<ProfilePicture userId={userInfo?.id} size={130} clickable={false} />) }
+                
+                {userInfo?.id && userId === userInfo.id && (<ChangeProfilePicture size={130} />) }
+
                 <div className='flex mt-3 text-2xl font-bold'>
                     <p>{userInfo?.name}</p>
                     &nbsp;
@@ -140,7 +145,14 @@ export default function UserPage() {
                         </div>
                     </div>
                 </div>
+
+                <div className='flex flex-col  bg-block_background py-5 shadow-md rounded mt-3'>
+                    <p className="text-xl font-medium text-center">Статистика</p>
+                    <UserStatistic userId={userId} allTime={true}/>
+                    <UserStatistic userId={userId} allTime={false}/>
+                </div>
             </div>
+
         </div>
     </div>
     )

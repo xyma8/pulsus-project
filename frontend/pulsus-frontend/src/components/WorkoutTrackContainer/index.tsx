@@ -144,11 +144,11 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
     <div className="flex flex-col">
         {trackDataArrays?.coordinates && <WorkoutTrackMap coordinates={trackDataArrays.coordinates} center={trackDataArrays.coordinates[0]} point={currentChartCoordindate}/>}
         <div className="flex flex-col items-center mt-5">
-            {trackDataArrays?.id && trackDataArrays?.altitude &&
+            {trackDataArrays?.id && trackDataArrays?.altitude && trackDataArrays.altitude.length > 0 &&
             <WorkoutInformationChart
                 type="area"
-                data={getDataForChart(trackDataArrays.distance, trackDataArrays.altitude)}
-                width={950}
+                data={getDataForChart(trackDataArrays.id, trackDataArrays.altitude)}
+                width={1000}
                 height={150}
                 YLabel="Высота"
                 colorStroke="#808080"
@@ -158,11 +158,11 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
                 tooltipActive = {tooltipChartsActive}
                 onValueChange={handleValueChange}/>}
 
-            {trackDataArrays?.id && trackDataArrays?.speed &&
+            {trackDataArrays?.id && trackDataArrays?.speed && trackDataArrays.speed.length > 0 &&
             <WorkoutInformationChart
                 type="line"
                 data={getDataForChart(trackDataArrays.id, trackDataArrays.speed)}
-                width={950}
+                width={1000}
                 height={150}
                 YLabel="Скорость"
                 colorStroke="#8884d8"
@@ -171,11 +171,11 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
                 tooltipActive = {tooltipChartsActive}
                 onValueChange={handleValueChange}/>}
 
-            {trackDataArrays?.id && trackDataArrays?.temperature &&
+            {trackDataArrays?.id && trackDataArrays?.temperature && trackDataArrays.temperature.length > 0 &&
             <WorkoutInformationChart
                 type="line"
                 data={getDataForChart(trackDataArrays.id, trackDataArrays.temperature)}
-                width={950}
+                width={1000}
                 height={150}
                 YLabel="Температура"
                 colorStroke="#008000"
@@ -183,6 +183,7 @@ export default function WorkoutTrackContainer(props: WorkoutTrackContainerProps)
                 unit="℃"
                 tooltipActive = {tooltipChartsActive}
                 onValueChange={handleValueChange}/>}
+
         </div>
     </div>
     )

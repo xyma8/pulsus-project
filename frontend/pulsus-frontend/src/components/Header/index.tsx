@@ -10,7 +10,7 @@ type HeaderProps = {
 }
 
 type HeaderData = {
-    userId: string
+    id: string
     name: string,
     surname: string,
     login: string
@@ -19,11 +19,13 @@ type HeaderData = {
 export default function Header(props: HeaderProps) {
     //const { isAuthenticated, setIsAuthenticated } = useAuth();
     const [headerData, setHeaderData] = useState<HeaderData | null>();
-    
+    const [isOpen, setIsOpen] = useState(false);
+
     useEffect(() => {
         fetchHeaderData();
 
     }, []);
+    
 
     function fetchHeaderData() {
         axios.create({
@@ -47,6 +49,14 @@ export default function Header(props: HeaderProps) {
         })
     }
 
+    function navigateToUserPage() {
+        window.location.assign(`/users/${headerData?.id}`);
+    }
+
+    function navigateToUploadPage() {
+        window.location.assign('/upload');
+    }
+
     function navigateToDashboard() {
         window.location.assign(`/dashboard`);
     }
@@ -59,47 +69,81 @@ export default function Header(props: HeaderProps) {
         window.location.assign(`/upload`);
     }
 
-
-
     function exit() {
         localStorage.removeItem('jwtToken');
         //setIsAuthenticated(true);
         window.location.assign(`/`);
     }
 
+    const openMenu = () => {
+        setIsOpen(true);
+    };
+    
+    const closeMenu = () => {
+        setIsOpen(false);
+    };
+
     if(headerData != null) {
         return(
         <div className="bg-block_background h-[50px] rounded shadow-sm sticky top-0 z-[1001]">
-            <div className="max-w-[1200px] ml-auto mr-auto flex">
+            <div className="max-w-[1200px] ml-auto mr-auto flex ">
                 <div className="flex flex-row justify-between w-[100%] items-center">
                     <img src={"https://free-png.ru/wp-content/uploads/2021/07/free-png.ru-53.png"} width={50} height={50} className="cursor-pointer" onClick={navigateToDashboard} />
                     
                     
-                        <ul className="flex items-center space-x-4">
-                        <li className="text-white">
-                            <div className="relative group">
-                                <button className="py-2 px-4 bg-gray-700 rounded-md">
-                                    Меню
+                    <div className="relative inline-block text-left text-text" 
+                    onMouseEnter={openMenu}
+                    >
+                        <div>
+                            <button
+                            type="button"
+                            className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium hover:bg-gray-50 focus:outline-none"
+                            onClick={navigateToUserPage}
+                            >
+                            Профиль
+                            </button>
+                        </div>
+
+                        {isOpen && (
+                            <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5" onMouseLeave={closeMenu}>
+                            <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                <button
+                                className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
+                                role="menuitem"
+                                onClick={navigateToUserPage}
+                                >
+                                Мой профиль
                                 </button>
-                                <ul className="absolute hidden group-hover:block mt-2 w-48 bg-white shadow-lg rounded-md">
-                                    <li className="border-b">
-                                    <a href="/profile" className="block px-4 py-2 hover:bg-gray-100">Мой профиль</a>
-                                    </li>
-                                    <li className="border-b">
-                                    <a href="/settings" className="block px-4 py-2 hover:bg-gray-100">Настройки</a>
-                                    </li>
-                                    <li>
-                                    <a href="/logout" className="block px-4 py-2 hover:bg-gray-100">Выйти</a>
-                                    </li>
-                                </ul>
+                                <button
+                                className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
+                                role="menuitem"
+                                onClick={navigateToUploadPage}
+                                >
+                                Загрузить тренировку
+                                </button>
+                                <button
+                                className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
+                                role="menuitem"
+                                onClick={navigateToUploadPage}
+                                >
+                                Найти друзей
+                                </button>
+                                <button
+                                className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
+                                role="menuitem"
+                                onClick={exit}
+                                >
+                                Выход
+                                </button>
                             </div>
-                        </li>
-                        </ul>
+                            </div>
+                        )}
+                    </div>
                     
 
                 </div>
-                <button onClick={exit}>Exit</button>
-                <button className="text-4xl text-text hover:text-secondary_hover_button duration-100"onClick={navigateToAddWorkout}>+</button>
+
+                <button className="text-4xl text-text hover:text-secondary_hover_button duration-100 ml-3 mb-1"onClick={navigateToAddWorkout}>+</button>
             </div>
         </div>
         )

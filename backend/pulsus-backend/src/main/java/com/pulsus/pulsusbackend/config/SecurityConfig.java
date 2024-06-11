@@ -71,6 +71,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/posts/**").authenticated()
                         .requestMatchers("/api/subscriptions/**").authenticated()
                         .requestMatchers("/api/workoutsLikes/**").authenticated()
+                        .requestMatchers("/api/statistics/**").authenticated()
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)

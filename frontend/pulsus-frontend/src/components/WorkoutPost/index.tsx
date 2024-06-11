@@ -73,7 +73,7 @@ export default function WorkoutPost(props: WorkoutPostProps) {
     }
 
     function navigateToUserPage() {
-        navigate(`/users/${workoutPost?.userId}`);
+        window.location.assign(`/users/${workoutPost?.userId}`);
     }
 
     function navigateToWorkoutPage() {
